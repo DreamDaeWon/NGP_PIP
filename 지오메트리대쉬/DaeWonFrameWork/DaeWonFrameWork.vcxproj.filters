@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\MainGame">
+      <UniqueIdentifier>{22ea60e5-35a0-40fd-9a41-1d0e53b47a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{bc1d8eb1-05f6-4788-b0a5-f39bc4a08503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Object">
+      <UniqueIdentifier>{a9d0288f-dae2-473b-a1b2-78cc09227df5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{83e5f3fe-6bcf-4f5c-aa07-ba6fe7e67bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\ObjManager">
+      <UniqueIdentifier>{c7a3c816-8738-4c67-9a44-87200e17cac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage">
+      <UniqueIdentifier>{d02f8663-74f8-43cf-bcdd-2fdaa45aa181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Player">
+      <UniqueIdentifier>{fce587a7-9196-4f22-8fd9-d1071d3c4b94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\One">
+      <UniqueIdentifier>{dfd660fa-8c70-4c2a-81ac-b1936e29ba61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Monster">
+      <UniqueIdentifier>{16a4a45e-518a-4a8c-a636-4b66e5d5bdd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\CameraManager">
+      <UniqueIdentifier>{10b90714-bd56-4d3a-848c-dddf2c8d8f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\KeyManager">
+      <UniqueIdentifier>{396756a1-c4f0-4f3e-8c8d-d869eeef8160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\ToolCamera">
+      <UniqueIdentifier>{d02fef94-903f-4ff3-a85b-ae744d8d16f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\ToolStage">
+      <UniqueIdentifier>{c8b08f7a-017a-48bf-93f3-66177e840e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Tile">
+      <UniqueIdentifier>{0800c5ff-7fd9-40d5-a6f8-09398379fe89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\ToolMouse">
+      <UniqueIdentifier>{ef9f4a11-d0bc-475d-b18e-cd70fa8e288a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\StageCamera">
+      <UniqueIdentifier>{9825ff8a-4021-4f4d-bd70-d586a9d347c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\CollisionManager">
+      <UniqueIdentifier>{32a48e09-475b-4d8d-8b74-5a6ba1f0b6b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\MenuStage">
+      <UniqueIdentifier>{895a566a-8d0f-4f66-81e8-2338c6c51e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button">
+      <UniqueIdentifier>{85230f5a-8f7e-41a9-8da7-9896e24ff4c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\GoStageOneButton">
+      <UniqueIdentifier>{02c48242-b5dd-42c0-a0a4-21adf9e523de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\SoundManager">
+      <UniqueIdentifier>{ced68a49-efcb-4b0e-9396-92cc31c8d5a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\ToolPlayStage">
+      <UniqueIdentifier>{d4fa51d6-a62a-41df-a35c-9053c5641637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\MainStage">
+      <UniqueIdentifier>{d7a11476-ef11-4f2e-a457-d15db74d5c26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\ToolButton">
+      <UniqueIdentifier>{a9c7db52-7472-44e0-9827-1e0e9535e4ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\StageManager">
+      <UniqueIdentifier>{503005ad-18ff-4602-8619-2d1f854442f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Land">
+      <UniqueIdentifier>{59d4adbe-7046-49c7-b0f8-4c3209ec93df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\ResumeButton">
+      <UniqueIdentifier>{29f68511-32ee-434f-a1c2-4012490ded20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\GoBackButton">
+      <UniqueIdentifier>{f7f2217b-5e2f-4040-983c-17d6c939bdab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\GoTutorialButton">
+      <UniqueIdentifier>{aee4f53b-7207-4f62-a591-ae8f66a31398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Button\GoOneButton">
+      <UniqueIdentifier>{35f13902-c0fb-403f-b73d-6f1198ba61b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\MainCamera">
+      <UniqueIdentifier>{29d5c581-5f08-4e98-aaed-f264f5661d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\Tutorial">
+      <UniqueIdentifier>{41c92ef2-47c0-49a3-85aa-0e332310f6e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Private\MainGame.cpp">
+      <Filter>소스 파일\MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object.cpp">
+      <Filter>소스 파일\Object\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ObjManager.cpp">
+      <Filter>소스 파일\Manager\ObjManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Stage.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DaeWonMain.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player.cpp">
+      <Filter>소스 파일\Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StageOne.cpp">
+      <Filter>소스 파일\Stage\One</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>소스 파일\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CameraManager.cpp">
+      <Filter>소스 파일\Manager\CameraManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\KeyManager.cpp">
+      <Filter>소스 파일\Manager\KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ToolStage.cpp">
+      <Filter>소스 파일\Stage\ToolStage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ToolCamera.cpp">
+      <Filter>소스 파일\Object\ToolCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tile.cpp">
+      <Filter>소스 파일\Object\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ToolMouse.cpp">
+      <Filter>소스 파일\Object\ToolMouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StageCamera.cpp">
+      <Filter>소스 파일\Object\StageCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CollisionManager.cpp">
+      <Filter>소스 파일\Manager\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MenuStage.cpp">
+      <Filter>소스 파일\Stage\MenuStage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoStageButton.cpp">
+      <Filter>소스 파일\Object\Button\GoStageOneButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CSoundManager.cpp">
+      <Filter>소스 파일\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ToolPlayStage.cpp">
+      <Filter>소스 파일\Stage\ToolPlayStage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MainStage.cpp">
+      <Filter>소스 파일\Stage\MainStage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoToolButton.cpp">
+      <Filter>소스 파일\Object\Button\ToolButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StageManager.cpp">
+      <Filter>소스 파일\Manager\StageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Land.cpp">
+      <Filter>소스 파일\Object\Land</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ResumeButton.cpp">
+      <Filter>소스 파일\Object\Button\ResumeButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoBackButton.cpp">
+      <Filter>소스 파일\Object\Button\GoBackButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoTutorialStageButton.cpp">
+      <Filter>소스 파일\Object\Button\GoTutorialButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoOneStageButton.cpp">
+      <Filter>소스 파일\Object\Button\GoOneButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MainCamera.cpp">
+      <Filter>소스 파일\Object\MainCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StageTutorial.cpp">
+      <Filter>소스 파일\Stage\Tutorial</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Public\Default.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainGame.h">
+      <Filter>소스 파일\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object.h">
+      <Filter>소스 파일\Object\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ObjManager.h">
+      <Filter>소스 파일\Manager\ObjManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Stage.h">
+      <Filter>소스 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
+      <Filter>소스 파일\Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StageOne.h">
+      <Filter>소스 파일\Stage\One</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>소스 파일\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CameraManager.h">
+      <Filter>소스 파일\Manager\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\KeyManager.h">
+      <Filter>소스 파일\Manager\KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ToolStage.h">
+      <Filter>소스 파일\Stage\ToolStage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ToolCamera.h">
+      <Filter>소스 파일\Object\ToolCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tile.h">
+      <Filter>소스 파일\Object\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ToolMouse.h">
+      <Filter>소스 파일\Object\ToolMouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StageCamera.h">
+      <Filter>소스 파일\Object\StageCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CollisionManager.h">
+      <Filter>소스 파일\Manager\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MenuStage.h">
+      <Filter>소스 파일\Stage\MenuStage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoStageButton.h">
+      <Filter>소스 파일\Object\Button\GoStageOneButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CSoundManager.h">
+      <Filter>소스 파일\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ToolPlayStage.h">
+      <Filter>소스 파일\Stage\ToolPlayStage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainStage.h">
+      <Filter>소스 파일\Stage\MainStage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoToolButton.h">
+      <Filter>소스 파일\Object\Button\ToolButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StageManager.h">
+      <Filter>소스 파일\Manager\StageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Land.h">
+      <Filter>소스 파일\Object\Land</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ResumeButton.h">
+      <Filter>소스 파일\Object\Button\ResumeButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoBackButton.h">
+      <Filter>소스 파일\Object\Button\GoBackButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoTutorialStageButton.h">
+      <Filter>소스 파일\Object\Button\GoTutorialButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoOneStageButton.h">
+      <Filter>소스 파일\Object\Button\GoOneButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainCamera.h">
+      <Filter>소스 파일\Object\MainCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StageTutorial.h">
+      <Filter>소스 파일\Stage\Tutorial</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
