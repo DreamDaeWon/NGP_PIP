@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CMainGame" Collapsed="true">
+    <Position X="47.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAACBAAAAAIAAAAAAAAAAAIBAAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\MainGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObject" Collapsed="true">
+    <Position X="23.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBJAAQAAIgAAAACIAAIBAAAQAAQAAAAFACAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPlayer" Collapsed="true">
+    <Position X="15.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIREBAAEAoEAgIBAAAawcAAABBAgAAAACBIECIZAGAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMonster" Collapsed="true">
+    <Position X="24.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAIIFAQIAAAAAAMIAAAAAAQAAACBAAAAIAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Monster.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CToolCamera" Collapsed="true">
+    <Position X="33.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAEAAAAAAAMAAAAAAAgAAAABAAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ToolCamera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTile" Collapsed="true">
+    <Position X="40.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAIAAAAAAAAAEICAAAAAEQAAAABIIAAAAAhI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Tile.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CToolMouse" Collapsed="true">
+    <Position X="2" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABgAIAACIgADAAAAAIAAAAAIAAAAAARIAAAACBAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ToolMouse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStageCamera" Collapsed="true">
+    <Position X="8.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwABAAAAAAAAAAAAAAAMAAAAAAAAAAAABAgAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\StageCamera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoStageButton" Collapsed="true">
+    <Position X="17.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQABAAAIAAAAAAAAAAAIAAAAAAAAAIAABIgAAAIAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\GoStageButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoToolButton" Collapsed="true">
+    <Position X="26.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQABIAAIAAAAAAAAAAAIAAAIAAAAAAAABIAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\GoToolButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CResumeButton" Collapsed="true">
+    <Position X="35.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQABIAAAAAAAAAAAAAAICAAAAAAAAAAABIEAAACAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ResumeButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoBackButton" Collapsed="true">
+    <Position X="42.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIRABIAAAAAEAAAAAAAAIAAAAAAAAAAAABIAAAACAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\GoBackButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoTutorialStageButton" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQABAAAAAFAAAAAAACAMAAgAAAAAAAAABICAABAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\GoTutorialStageButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoOneStageButton" Collapsed="true">
+    <Position X="11" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQABAAAAAEAAAAAAADAMAAAAAAAAAAAABICAABAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\GoOneStageButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLand" Collapsed="true">
+    <Position X="20" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAgIEBAIAAAACAMAAAAAAAAABAABICAABAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Land.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMainCamera" Collapsed="true">
+    <Position X="29" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAEAQAAAAAAAIAAAAAAAAAAAABAAAAAAAAM=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\MainCamera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObjManager" Collapsed="true">
+    <Position X="38" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAAAAAAAAAIAAAJIAQAABAABAAAAAAAAY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ObjManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCameraManager" Collapsed="true">
+    <Position X="44.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgDEEACgEASAAAAAEAKEAYFAQEAAQEABAAAAAEAIY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\CameraManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CKeyManager" Collapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAABgAAAEAhAIAAABABAAAAAABAAgBAAAAY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCollisionManager" Collapsed="true">
+    <Position X="13.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQABgAIAAABAAAAAAAAIAAABAAAAAAAABAAAAAAABY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\CollisionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSoundManager" Collapsed="true">
+    <Position X="22.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQABAAAAAAIAAAQAAEIICAIBiAAAACAABAAAAACAAY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\CSoundManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStageManager" Collapsed="true">
+    <Position X="31.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMQABEAAAAAEEAAABAAkIAAABCAAAQAAgJAAAAAAAAY=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\StageManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStage" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAAAAAAAAAIAAAAAAAAAAAEDAAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\Stage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStageOne" Collapsed="true">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAEAAAAAACAIAAAAAgIAgAAABAACAAAAQI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\StageOne.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CToolStage" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAQAQAIAwAAIAAAGAgAAgCAABAAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ToolStage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMenuStage" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAgAAAAAAAAIAAAAACgAAAAABIAAAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\MenuStage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CToolPlayStage" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAEAAAAAAACIAAAAAgAAgAAABAECAAAAQI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\ToolPlayStage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMainStage" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAAAAQAQAAIAAAAAAAAAAAAhAACAAAAAI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\MainStage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStageTutorial" Collapsed="true">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUABAAAAAAEAAAAAAAAIAAAAAgCAgAAABAACAAAAQI=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Public\StageTutorial.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TIME">
+    <Position X="47.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Github\NGP_PIP\지오메트리대쉬\Private\DaeWonMain.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

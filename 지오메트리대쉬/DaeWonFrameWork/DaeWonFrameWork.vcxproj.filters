@@ -294,4 +294,7 @@
       <Filter>소스 파일\Stage\Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>
