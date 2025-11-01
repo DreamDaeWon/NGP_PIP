@@ -3,13 +3,14 @@
 #include <WS2tcpip.h>
 
 #include <cstdio>
+#include <vector>
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib 링크
 
 constexpr int SERVERPORT = 9000;
 
 // 소켓 함수 오류 출력 후 종료
-void err_quit(const char* msg)
+inline void err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;
 	FormatMessageA(
@@ -23,7 +24,7 @@ void err_quit(const char* msg)
 }
 
 // 소켓 함수 오류 출력
-void err_display(const char* msg)
+inline void err_display(const char* msg)
 {
 	LPVOID lpMsgBuf;
 	FormatMessageA(
@@ -36,7 +37,7 @@ void err_display(const char* msg)
 }
 
 // 소켓 함수 오류 출력
-void err_display(int errcode)
+inline void err_display(int errcode)
 {
 	LPVOID lpMsgBuf;
 	FormatMessageA(
