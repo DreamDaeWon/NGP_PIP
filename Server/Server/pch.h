@@ -4,6 +4,7 @@
 
 #include <cstdio>
 #include <vector>
+#include <concurrent_queue.h>
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 
