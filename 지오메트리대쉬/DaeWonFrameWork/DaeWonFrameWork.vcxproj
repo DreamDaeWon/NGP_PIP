@@ -114,7 +114,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>../Public/;../Private/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\NGP_PIP\Common;../Public/;../Private/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp23</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -179,6 +180,7 @@
     <ClCompile Include="ClientPakcetHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\Packet.h" />
     <ClInclude Include="..\Public\CameraManager.h" />
     <ClInclude Include="..\Public\CollisionManager.h" />
     <ClInclude Include="..\Public\CSoundManager.h" />
