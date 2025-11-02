@@ -4,7 +4,7 @@
 // #include "Session.h"
 // #include "Time.h"
 
-enum RoomGameMode
+enum class RoomGameMode
 {
 	SinglePlayer,
 	MutiPlayer,
@@ -12,7 +12,7 @@ enum RoomGameMode
 };
 
 // DW질문 : Player 구초제 관련 애들 어디에 정의해두어야 하지?
-enum Player_State
+enum class Player_State
 {
 	IDLE,
 	DIE,
@@ -25,10 +25,26 @@ struct Player
 {
 	float x{};
 	float y{};
-	Player_State state{ PLAYER_STATE_END };
+	Player_State state{ Player_State::PLAYER_STATE_END };
 	float Rotate{};
+	size_t id{};
 };
 
+
+struct AllPlayerState_Packet_S2C
+{
+	float x[4]{0.f,0.f,0.f,0.f};
+	float y[4]{0.f,0.f,0.f,0.f};
+	Player_State state[4]
+	{ 
+		Player_State::PLAYER_STATE_END,
+		Player_State::PLAYER_STATE_END,
+		Player_State::PLAYER_STATE_END,
+		Player_State::PLAYER_STATE_END 
+	};
+	float Rotate[4]{0.f,0.f,0.f,0.f};
+	enum PacketType; // = MovePacket_s2c
+};
 
 
 
@@ -44,7 +60,7 @@ public:
 	void RemovePlayer();
 	void StartGame();
 	void UpdateGame();
-	void BroadcastPacket();
+	void BroadcastPacket(AllPlayerState_Packet_S2C all_player);
 
 
 private:
@@ -57,8 +73,11 @@ private:
 	class Time* timer = nullptr;
 
 	// DW질문 : 이거 어카지?
-	// ConcurrentQueue incomingQueue;
+	Concurrency::concurrent_queue<size_t> incomingQueue;
 
-	RoomGameMode mode{ ROOM_MODE_MAX };
+	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
+
+	CRITICAL_SECTION cs;
+
 };
 
