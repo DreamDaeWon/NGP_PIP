@@ -16,11 +16,11 @@
     <Filter Include="소스 파일\Room">
       <UniqueIdentifier>{9b97a18b-2e87-437a-92b0-46b38d685abd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Packet">
-      <UniqueIdentifier>{4f5b36c8-3472-4aac-a6bb-7b0864376fc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Common">
-      <UniqueIdentifier>{cc45da5a-4477-4afc-a7aa-a54b7d323acd}</UniqueIdentifier>
+      <UniqueIdentifier>{ae4e53b2-ceab-4e5a-92f4-ad2dfba867f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ServerPacket">
+      <UniqueIdentifier>{4f5b36c8-3472-4aac-a6bb-7b0864376fc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,11 +36,11 @@
     <ClCompile Include="Room.cpp">
       <Filter>소스 파일\Room</Filter>
     </ClCompile>
-    <ClCompile Include="PacketManager.cpp">
-      <Filter>소스 파일\Packet</Filter>
+    <ClCompile Include="ServerPacketManager.cpp">
+      <Filter>소스 파일\ServerPacket</Filter>
     </ClCompile>
-    <ClCompile Include="PacketHandler.cpp">
-      <Filter>소스 파일\Packet</Filter>
+    <ClCompile Include="ServerPacketHandler.cpp">
+      <Filter>소스 파일\ServerPacket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,13 +53,13 @@
     <ClInclude Include="Room.h">
       <Filter>소스 파일\Room</Filter>
     </ClInclude>
-    <ClInclude Include="PacketManager.h">
-      <Filter>소스 파일\Packet</Filter>
+    <ClInclude Include="ServerPacketManager.h">
+      <Filter>소스 파일\ServerPacket</Filter>
     </ClInclude>
-    <ClInclude Include="PacketHandler.h">
-      <Filter>소스 파일\Packet</Filter>
+    <ClInclude Include="ServerPacketHandler.h">
+      <Filter>소스 파일\ServerPacket</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
+    <ClInclude Include="..\..\Common\Packet.h">
       <Filter>소스 파일\Common</Filter>
     </ClInclude>
   </ItemGroup>
