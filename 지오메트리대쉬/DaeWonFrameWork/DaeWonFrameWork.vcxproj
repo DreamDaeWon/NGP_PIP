@@ -175,6 +175,8 @@
     <ClCompile Include="..\Private\ToolMouse.cpp" />
     <ClCompile Include="..\Private\ToolPlayStage.cpp" />
     <ClCompile Include="..\Private\ToolStage.cpp" />
+    <ClCompile Include="ClientPacketManager.cpp" />
+    <ClCompile Include="ClientPakcetHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\CameraManager.h" />
@@ -207,6 +209,8 @@
     <ClInclude Include="..\Public\ToolMouse.h" />
     <ClInclude Include="..\Public\ToolPlayStage.h" />
     <ClInclude Include="..\Public\ToolStage.h" />
+    <ClInclude Include="ClientPacketManager.h" />
+    <ClInclude Include="ClientPakcetHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

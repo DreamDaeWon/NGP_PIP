@@ -109,6 +109,9 @@
     <Filter Include="소스 파일\Stage\Tutorial">
       <UniqueIdentifier>{41c92ef2-47c0-49a3-85aa-0e332310f6e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ClientPacket">
+      <UniqueIdentifier>{c7903a2f-2d41-4ab2-9361-f28d4e411f51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainGame.cpp">
@@ -201,6 +204,12 @@
     <ClCompile Include="..\Private\StageTutorial.cpp">
       <Filter>소스 파일\Stage\Tutorial</Filter>
     </ClCompile>
+    <ClCompile Include="ClientPakcetHandler.cpp">
+      <Filter>소스 파일\ClientPacket</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPacketManager.cpp">
+      <Filter>소스 파일\ClientPacket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Default.h">
@@ -292,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\StageTutorial.h">
       <Filter>소스 파일\Stage\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPacketManager.h">
+      <Filter>소스 파일\ClientPacket</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPakcetHandler.h">
+      <Filter>소스 파일\ClientPacket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
