@@ -42,6 +42,9 @@
     <ClCompile Include="ServerPacketHandler.cpp">
       <Filter>소스 파일\ServerPacket</Filter>
     </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -61,6 +64,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">
       <Filter>소스 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

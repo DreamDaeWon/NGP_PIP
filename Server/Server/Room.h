@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Player.h"
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
 // #include "Session.h"
 // #include "Time.h"
@@ -11,38 +12,26 @@ enum class RoomGameMode
 	ROOM_MODE_MAX
 };
 
-// DW질문 : Player 구초제 관련 애들 어디에 정의해두어야 하지?
-enum class Player_State
-{
-	IDLE,
-	DIE,
-	WAIT,
-	SPACESHIP,
-	ZIGZAG,
-	PLAYER_STATE_END
-};
-struct Player
-{
-	float x{};
-	float y{};
-	Player_State state{ Player_State::PLAYER_STATE_END };
-	float Rotate{};
-	size_t id{};
-};
+// DW질문 : Player 구조제 관련 애들 어디에 정의해두어야 하지?
+// KJ 해답 : 파일하나 만들어서 Player.h로 정의해두는게 좋을듯
 
 
+// KJ 질문 : 이게 뭐임
+// DW 답변 : 브로드 캐스트밖에 안할꺼니까 묶어서 보내자, 이동 패킷을 바꾸자
+// KJ 해답 : 아하 알겠음
+using Common::packet::Player_State;
 struct AllPlayerState_Packet_S2C
 {
-	float x[4]{0.f,0.f,0.f,0.f};
-	float y[4]{0.f,0.f,0.f,0.f};
-	Player_State state[4]
+	float x[3]{0.f,0.f,0.f};
+	float y[3]{0.f,0.f,0.f};
+	
+	Player_State state[3]
 	{ 
 		Player_State::PLAYER_STATE_END,
 		Player_State::PLAYER_STATE_END,
 		Player_State::PLAYER_STATE_END,
-		Player_State::PLAYER_STATE_END 
 	};
-	float Rotate[4]{0.f,0.f,0.f,0.f};
+	float Rotate[3]{0.f,0.f,0.f};
 	enum PacketType; // = MovePacket_s2c
 };
 
@@ -77,7 +66,7 @@ private:
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 
-	CRITICAL_SECTION cs;
+	CRITICAL_SECTION cs; 
 
 };
 
