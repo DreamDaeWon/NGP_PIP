@@ -47,7 +47,7 @@ namespace Common::packet
 		PLAYER_STATE_END
 	};
 	// 1바이트 크기로 정렬
-	#pragma pack(push, 1)
+#pragma pack(push, 1)
 
 	struct PacketHeader
 	{
@@ -130,5 +130,5 @@ namespace Common::packet
 	struct S2C_RoomLeavePacket : public PacketHeader {
 		int romID;
 	};
-#pragma pack(pop)
+#pragma pack (pop)
 }

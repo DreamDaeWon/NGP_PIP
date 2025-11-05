@@ -1,5 +1,7 @@
 ﻿#pragma once
+
 #include "Player.h"
+#include "Room.h"
 
 enum class ClientState
 {
@@ -34,8 +36,11 @@ private:
 	SOCKET _socket;
 	ClientState _state;
 	Player _player;
+	Room* _currentRoom{ nullptr };
+
 	std::array<char, 1024> _recvBuffer;
 	std::array<char, 1024> _sendBuffer;
 
-	concurrency::concurrent_queue<Common::packet::PacketHeader*> sendQueue;
+	std::mutex _sendMutex;
+	std::queue<Common::packet::PacketHeader*> _sendQueue;
 };
