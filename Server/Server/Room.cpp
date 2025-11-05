@@ -42,6 +42,13 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 	size_t in_player_id{};
 	while (incomingQueue.try_pop(in_player_id))
 	{
+		// DW생각 : 플레이어가 3명 이하라면 이 UpdateGame루프는 무시
+		//			왜냐? -> 이것은 게임이 시작된 후에 달리는 루프이기 때문이다. 대기방이 아님.
+		if (Players.size() < 3)
+		{
+			continue;
+		}
+
 		Session* player_session = Players[in_player_id];
 
 		// DW예정 : session 클래스가 추가 된다면 플레이어 정보 받아올 예정
