@@ -113,6 +113,7 @@ void Session::SendPacket()
 			break;
 		total_sent_len += retval;
 	}
+	delete packetToSend;
 }
 
 void Session::RecvPacket()
