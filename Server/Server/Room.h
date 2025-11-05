@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "Player.h"
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
-// #include "Session.h"
+#include "Session.h"
 // #include "Time.h"
 
 enum class RoomGameMode
@@ -45,8 +45,8 @@ public:
 
 public:
 	// DW예정 : 리턴 타입 및 매개변수 구현 때 하나 씩 수정할 예정
-	void AddPlayer();
-	void RemovePlayer();
+	void AddPlayer(Session* player);
+	void RemovePlayer(Session* player);
 	void StartGame();
 	void UpdateGame();
 	void BroadcastPacket(AllPlayerState_Packet_S2C all_player);
@@ -54,7 +54,7 @@ public:
 
 private:
 	long long CurrentMapSize{};
-	std::vector<class Session*> Players{};
+	std::vector<Session*> Players{};
 
 	// DW생각 : 2vs2 모드가 없어졌기에 필요가 있나?
 	// int Camera_ID;

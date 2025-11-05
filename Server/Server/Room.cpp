@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Room.h"
 
-
 // DW예정 : 일단 다 제작만 해둠 하나씩 바꿔나갈 예정
 Room::Room() :
 	CurrentMapSize{ 0 },
@@ -15,16 +14,23 @@ Room::~Room()
 	DeleteCriticalSection(&cs);
 }
 
-void Room::AddPlayer()
+void Room::AddPlayer(Session* player)
 {
+	Players.push_back(player);
 }
 
-void Room::RemovePlayer()
+void Room::RemovePlayer(Session* player)
 {
+	auto iter = std::find(Players.begin(), Players.end(), player);
+	if(iter != Players.end())
+	{
+		Players.erase(iter);
+	}
 }
 
 void Room::StartGame()
 {
+
 }
 
 void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
@@ -42,7 +48,7 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 		Player player{};
 		// player = player_session->player;
 
-		// DW생각 : 플레이어가 4명밖에 없기 때문에 모든 플레이어의 상태를 한번에 갱신하는
+		// DW생각 : 플레이어가 3명밖에 없기 때문에 모든 플레이어의 상태를 한번에 갱신하는
 		//			패킷을 만드는 것이 더 괜찮지 않을까?
 
 		// 모든 플레이어의 상태 패킷을 하나로 만든다고 가정
@@ -74,6 +80,6 @@ void Room::BroadcastPacket(AllPlayerState_Packet_S2C all_player)
 		// player->SendPacket(all_player);
 	}
 
-	// criticalsection 헤제
+	// criticalsection 해제
 	LeaveCriticalSection(&cs);
 }

@@ -7,6 +7,7 @@
 #include <array>
 #include <thread>
 #include <concurrent_queue.h>
+#include <mutex>
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 
