@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Session.h"
+#include "Room.h"
 
 #include "ServerPacketManager.h"
 
@@ -113,6 +114,7 @@ void Session::SendPacket()
 			break;
 		total_sent_len += retval;
 	}
+	delete packetToSend;
 }
 
 void Session::RecvPacket()
