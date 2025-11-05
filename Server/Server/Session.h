@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Player.h"
-#include "Room.h"
+class Room; // 전방 선언
 
 enum class ClientState
 {

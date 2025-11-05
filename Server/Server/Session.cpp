@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Session.h"
+#include "Room.h"
 
 #include "ServerPacketManager.h"
 
