@@ -30,8 +30,10 @@ public:
 	void RecvPacket();
 	void Disconnect();
 
-	Player& getPlayer() { return _player; }
+	void EnqueuePacket(Common::packet::PacketHeader* packet);
 
+
+	Player& getPlayer() { return _player; }
 	uint32_t getId() const { return _id; }
 private:
 	uint32_t _id;
