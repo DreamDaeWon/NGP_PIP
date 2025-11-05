@@ -13,7 +13,9 @@ namespace Common::packet
 
 		// Move관련 패킷은 10번 대
 		MovePacket_s2c = 10, 
-		MovePacket_c2s = 11, 
+		AllPlayerMovePacket_s2c = 11,
+		MovePacket_c2s = 12, 
+
 
 		// Login/out관련 패킷은 20번 대
 		LoginAcceptPacket_s2c = 20,
@@ -102,6 +104,20 @@ namespace Common::packet
 		float x, y;
 		float rotate;
 		Player_State player_state; // <- CJ : Player_State 제작 후 주석 해제
+	};
+
+	struct S2C_AllPlayerMovePacket : public PacketHeader
+	{
+		float x[3]{ 0.f,0.f,0.f };
+		float y[3]{ 0.f,0.f,0.f };
+
+		Player_State state[3]
+		{
+			Player_State::PLAYER_STATE_END,
+			Player_State::PLAYER_STATE_END,
+			Player_State::PLAYER_STATE_END,
+		};
+		float Rotate[3]{ 0.f,0.f,0.f };
 	};
 
 	struct S2C_LoginRequestPacket : public PacketHeader {

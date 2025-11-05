@@ -1,7 +1,6 @@
 #pragma once
 #include "pch.h"
 #include "Player.h"
-#include "Session.h"
 #include "Packet.h"
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
 
@@ -21,23 +20,8 @@ enum class RoomGameMode
 // KJ 질문 : 이게 뭐임
 // DW 답변 : 브로드 캐스트밖에 안할꺼니까 묶어서 보내자, 이동 패킷을 바꾸자
 // KJ 해답 : 아하 알겠음
-using Common::packet::Player_State;
-struct AllPlayerState_Packet_S2C
-{
-	float x[3]{0.f,0.f,0.f};
-	float y[3]{0.f,0.f,0.f};
-	
-	Player_State state[3]
-	{ 
-		Player_State::PLAYER_STATE_END,
-		Player_State::PLAYER_STATE_END,
-		Player_State::PLAYER_STATE_END,
-	};
-	float Rotate[3]{0.f,0.f,0.f};
-	Common::packet::PacketType MovePacketType = Common::packet::PacketType::MovePacket_s2c;
-};
 
-
+class Session; // DW설명 : 전방 선언
 
 class Room
 {
@@ -51,7 +35,7 @@ public:
 	void RemovePlayer(Session* player);
 	void StartGame();
 	void UpdateGame();
-	void BroadcastPacket(AllPlayerState_Packet_S2C all_player);
+	void BroadcastPacket(Common::packet::S2C_AllPlayerMovePacket all_player);
 
 	void EnqueuePacket(Common::packet::PacketHeader* packet);
 	
@@ -66,7 +50,7 @@ private:
 	class Time* timer = nullptr;
 
 	// DW질문 : 이거 어카지?
-	Concurrency::concurrent_queue<Common::packet::PacketHeader*> incomingQueue;
+	std::queue<Common::packet::PacketHeader*> incomingQueue;
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 

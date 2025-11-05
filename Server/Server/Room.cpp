@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Session.h"
 #include "Room.h"
 
 // DW예정 : 일단 다 제작만 해둠 하나씩 바꿔나갈 예정
@@ -36,12 +37,17 @@ void Room::StartGame()
 void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 {
 	// 모든 플레이어의 상태 패킷 -> 이건 여기서만 갱신이 일어나기에 static으로 들고있기
-	static AllPlayerState_Packet_S2C all_player_state{};
+	static Common::packet::S2C_AllPlayerMovePacket all_player_state{};
 
 	// 플레이어 정보 (위치,상태,회전,id) 정보 받기
 	Common::packet::PacketHeader* in_move_packet{};
-	while (incomingQueue.try_pop(in_move_packet))
+	while (true)
 	{
+		EnterCriticalSection(&cs);
+		in_move_packet = incomingQueue.front();
+		incomingQueue.pop();
+		LeaveCriticalSection(&cs);
+
 		// DW생각 : 플레이어가 3명 이하라면 이 UpdateGame루프는 무시
 		//			왜냐? -> 이것은 게임이 시작된 후에 달리는 루프이기 때문이다. 대기방이 아님.
 		if (Players.size() < 3)
@@ -60,8 +66,7 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 		// DW생각 : 플레이어가 3명밖에 없기 때문에 모든 플레이어의 상태를 한번에 갱신하는
 		//			패킷을 만드는 것이 더 괜찮지 않을까?
 
-		// 모든 플레이어의 상태 패킷을 하나로 만든다고 가정
-		// 이게 MovePacket_s2c 이게 된다.
+		// 모든 플레이어의 상태 패킷을 하나로 만든다고 가정 -> 이게 S2C_AllPlayerMovePacket 이게 된다.
 
 		player.x = move_packet->x;
 		player.y = move_packet->y;
@@ -72,30 +77,27 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 		all_player_state.y[player.id] = player.y;
 		all_player_state.state[player.id] = player.state;
 		all_player_state.Rotate[player.id] = player.Rotate;
+
+
+		// DW생각 : 메모리 누수 방지 왜냐? new 로 패킷을 보내기 때문
+		delete in_move_packet;
 	}
 
 	// 모든 플레이어의 상태를 담은 패킷을 브로드 캐스팅
 	BroadcastPacket(all_player_state);
 }
 
-void Room::BroadcastPacket(AllPlayerState_Packet_S2C all_player)
+void Room::BroadcastPacket(Common::packet::S2C_AllPlayerMovePacket all_player)
 {
-	/*아마 이 방의 모든 상태를 담은 패킷을 전송할 예정*/
-	
-	// 스레드가 하나이므로 괜찮음
-	// criticalsection 걸기
-	//EnterCriticalSection(&cs);
+	Common::packet::PacketHeader* out_move_packet = new Common::packet::S2C_AllPlayerMovePacket();
+	memcpy(out_move_packet, &all_player, sizeof(Common::packet::S2C_AllPlayerMovePacket));
 
+	/*이 방의 모든 상태를 담은 패킷을 전송*/
 	for (Session* player : Players)
 	{
 		// all_player 패킷 전송 부분
-
-		/* Session이 만들어지면 제작할 예정 */
-		// player->SendPacket(all_player);
+		player->EnqueuePacket(reinterpret_cast<Common::packet::PacketHeader*>(&all_player));
 	}
-
-	// criticalsection 해제
-	//LeaveCriticalSection(&cs);
 }
 
 void Room::EnqueuePacket(Common::packet::PacketHeader* packet)
