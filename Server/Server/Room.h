@@ -1,8 +1,10 @@
 #pragma once
 #include "pch.h"
 #include "Player.h"
-// DW예정 : 추후에 추가되면 추가할 예정인 헤더들
 #include "Session.h"
+#include "Packet.h"
+// DW예정 : 추후에 추가되면 추가할 예정인 헤더들
+
 // #include "Time.h"
 
 enum class RoomGameMode
@@ -32,7 +34,7 @@ struct AllPlayerState_Packet_S2C
 		Player_State::PLAYER_STATE_END,
 	};
 	float Rotate[3]{0.f,0.f,0.f};
-	enum PacketType; // = MovePacket_s2c
+	Common::packet::PacketType MovePacketType = Common::packet::PacketType::MovePacket_s2c;
 };
 
 
@@ -51,6 +53,8 @@ public:
 	void UpdateGame();
 	void BroadcastPacket(AllPlayerState_Packet_S2C all_player);
 
+	void EnqueuePacket(Common::packet::PacketHeader* packet);
+	
 
 private:
 	long long CurrentMapSize{};
@@ -62,7 +66,7 @@ private:
 	class Time* timer = nullptr;
 
 	// DW질문 : 이거 어카지?
-	Concurrency::concurrent_queue<size_t> incomingQueue;
+	Concurrency::concurrent_queue<Common::packet::PacketHeader*> incomingQueue;
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 

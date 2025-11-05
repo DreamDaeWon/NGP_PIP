@@ -30,6 +30,8 @@ public:
 	void RecvPacket();
 	void Disconnect();
 
+	Player& getPlayer() { return _player; }
+
 	uint32_t getId() const { return _id; }
 private:
 	uint32_t _id;
