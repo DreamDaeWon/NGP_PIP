@@ -39,8 +39,8 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 	static AllPlayerState_Packet_S2C all_player_state{};
 
 	// 플레이어 정보 (위치,상태,회전,id) 정보 받기
-	size_t in_player_id{};
-	while (incomingQueue.try_pop(in_player_id))
+	Common::packet::PacketHeader* in_move_packet{};
+	while (incomingQueue.try_pop(in_move_packet))
 	{
 		// DW생각 : 플레이어가 3명 이하라면 이 UpdateGame루프는 무시
 		//			왜냐? -> 이것은 게임이 시작된 후에 달리는 루프이기 때문이다. 대기방이 아님.
@@ -49,17 +49,24 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 			continue;
 		}
 
-		Session* player_session = Players[in_player_id];
+		Common::packet::C2S_MovePacket* move_packet = reinterpret_cast<Common::packet::C2S_MovePacket*>(in_move_packet);
+
+		Session* player_session = Players[move_packet->id];
 
 		// DW예정 : session 클래스가 추가 된다면 플레이어 정보 받아올 예정
 		Player player{};
-		// player = player_session->player;
+		player = player_session->getPlayer();
 
 		// DW생각 : 플레이어가 3명밖에 없기 때문에 모든 플레이어의 상태를 한번에 갱신하는
 		//			패킷을 만드는 것이 더 괜찮지 않을까?
 
 		// 모든 플레이어의 상태 패킷을 하나로 만든다고 가정
 		// 이게 MovePacket_s2c 이게 된다.
+
+		player.x = move_packet->x;
+		player.y = move_packet->y;
+		player.state = move_packet->player_state;
+		player.Rotate = move_packet->rotate;
 
 		all_player_state.x[player.id] = player.x;
 		all_player_state.y[player.id] = player.y;
@@ -77,7 +84,7 @@ void Room::BroadcastPacket(AllPlayerState_Packet_S2C all_player)
 	
 	// 스레드가 하나이므로 괜찮음
 	// criticalsection 걸기
-	EnterCriticalSection(&cs);
+	//EnterCriticalSection(&cs);
 
 	for (Session* player : Players)
 	{
@@ -88,5 +95,12 @@ void Room::BroadcastPacket(AllPlayerState_Packet_S2C all_player)
 	}
 
 	// criticalsection 해제
+	//LeaveCriticalSection(&cs);
+}
+
+void Room::EnqueuePacket(Common::packet::PacketHeader* packet)
+{
+	EnterCriticalSection(&cs);
+	incomingQueue.push(packet);
 	LeaveCriticalSection(&cs);
 }
