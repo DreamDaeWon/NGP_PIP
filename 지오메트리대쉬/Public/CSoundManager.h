@@ -1,5 +1,5 @@
 #pragma once
-//#pragma comment (lib, "fmod_vc.lib")
+#pragma comment (lib, "fmod_vc.lib")
 #include "fmod.hpp"
 #include "fmod_errors.h"
 #include "Object.h"
