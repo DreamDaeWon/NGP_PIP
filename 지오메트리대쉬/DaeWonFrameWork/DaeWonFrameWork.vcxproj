@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Packet.h" />
+    <ClInclude Include="..\..\common\Singleton.h" />
     <ClInclude Include="..\Public\CameraManager.h" />
     <ClInclude Include="..\Public\CollisionManager.h" />
     <ClInclude Include="..\Public\CSoundManager.h" />

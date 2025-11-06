@@ -4,7 +4,7 @@
 
 // CJ : 공용 구조체, 패킷 정의하는 곳
 
-namespace Common::packet 
+namespace common::packet 
 {
 	enum class PacketType : uint16_t {
 		ErrorPacket = 0,

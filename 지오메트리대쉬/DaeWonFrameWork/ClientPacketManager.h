@@ -1,12 +1,13 @@
 #pragma once
 #include "Packet.h"
+#include "Singleton.h"
 #include <functional>
 #include <unordered_map>
 
 // CJ : Packet 처리 엔진
 
 using ClientPacketHandlerFunc = std::function<void(char*)>; // unordered_map에서 다양한 함수를 등록 받기 위해
-using namespace Common::packet;
+using common::packet::PacketType;
 
 
 class ClientPacketManager

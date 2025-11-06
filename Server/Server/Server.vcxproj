@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Packet.h" />
+    <ClInclude Include="..\..\common\Singleton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ServerPacketHandler.h" />
     <ClInclude Include="ServerPacketManager.h" />

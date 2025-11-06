@@ -112,7 +112,7 @@
     <Filter Include="소스 파일\ClientPacket">
       <UniqueIdentifier>{c7903a2f-2d41-4ab2-9361-f28d4e411f51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Common">
+    <Filter Include="소스 파일\common">
       <UniqueIdentifier>{6f47527d-4574-4174-a0a2-558bb7762d90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -312,7 +312,10 @@
       <Filter>소스 파일\ClientPacket</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">
-      <Filter>소스 파일\Common</Filter>
+      <Filter>소스 파일\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Singleton.h">
+      <Filter>소스 파일\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
