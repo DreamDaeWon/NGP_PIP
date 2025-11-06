@@ -186,6 +186,9 @@
     <ClCompile Include="..\Private\ToolStage.cpp" />
     <ClCompile Include="ClientPacketManager.cpp" />
     <ClCompile Include="ClientPakcetHandler.cpp" />
+    <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Packet.h" />
@@ -222,6 +225,9 @@
     <ClInclude Include="..\Public\ToolStage.h" />
     <ClInclude Include="ClientPacketManager.h" />
     <ClInclude Include="ClientPakcetHandler.h" />
+    <ClInclude Include="MapManager.h" />
+    <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

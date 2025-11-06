@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\MainGame">
-      <UniqueIdentifier>{22ea60e5-35a0-40fd-9a41-1d0e53b47a20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{bc1d8eb1-05f6-4788-b0a5-f39bc4a08503}</UniqueIdentifier>
     </Filter>
@@ -115,6 +112,18 @@
     <Filter Include="소스 파일\common">
       <UniqueIdentifier>{6f47527d-4574-4174-a0a2-558bb7762d90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\MainGame">
+      <UniqueIdentifier>{22ea60e5-35a0-40fd-9a41-1d0e53b47a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\TimerManager">
+      <UniqueIdentifier>{2b35c08c-a3c7-48f2-b8e8-fcebd9baf0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\MapManager">
+      <UniqueIdentifier>{81b56945-8750-454d-9497-ce35d07af30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\UIManager">
+      <UniqueIdentifier>{492025cd-e013-4950-9c46-59ed73641b07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainGame.cpp">
@@ -212,6 +221,15 @@
     </ClCompile>
     <ClCompile Include="ClientPacketManager.cpp">
       <Filter>소스 파일\ClientPacket</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerManager.cpp">
+      <Filter>소스 파일\Manager\TimerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>소스 파일\Manager\MapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>소스 파일\Manager\UIManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +334,15 @@
     </ClInclude>
     <ClInclude Include="..\..\common\Singleton.h">
       <Filter>소스 파일\common</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerManager.h">
+      <Filter>소스 파일\Manager\TimerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>소스 파일\Manager\MapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>소스 파일\Manager\UIManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
