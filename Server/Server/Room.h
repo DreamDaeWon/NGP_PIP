@@ -35,9 +35,9 @@ public:
 	void RemovePlayer(Session* player);
 	void StartGame();
 	void UpdateGame();
-	void BroadcastPacket(Common::packet::S2C_AllPlayerMovePacket all_player);
+	void BroadcastPacket(common::packet::S2C_AllPlayerMovePacket all_player);
 
-	void EnqueuePacket(Common::packet::PacketHeader* packet);
+	void EnqueuePacket(common::packet::PacketHeader* packet);
 	
 
 private:
@@ -50,7 +50,7 @@ private:
 	class Time* timer = nullptr;
 
 	// DW질문 : 이거 어카지?
-	std::queue<Common::packet::PacketHeader*> incomingQueue;
+	std::queue<common::packet::PacketHeader*> incomingQueue;
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 

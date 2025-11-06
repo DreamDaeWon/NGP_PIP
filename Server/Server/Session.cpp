@@ -56,26 +56,26 @@ void Session::ProcessPacket()
 	// _recvBuffer를 사용하여 받은 데이터를 처리
 	// TODO: 받은 데이터 패킷으로 재조립
 	// TODO: 패킷 타입에 따라 적절한 처리 수행
-	using namespace Common::packet;
-	Common::packet::PacketHeader* header = reinterpret_cast<Common::packet::PacketHeader*>(_recvBuffer.data());
+	using namespace common::packet;
+	common::packet::PacketHeader* header = reinterpret_cast<common::packet::PacketHeader*>(_recvBuffer.data());
 	PacketHeader* deserializedPacket = nullptr;
 	switch (header->type)
 	{
 	case PacketType::LoginRequestPacket_c2s:
-		deserializedPacket = new Common::packet::C2S_LoginAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(Common::packet::C2S_LoginAcceptPacket));
+		deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
+		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
 		break;
 	case PacketType::LogoutPacket_c2s:
-		deserializedPacket = new Common::packet::C2S_LoginAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(Common::packet::C2S_LoginAcceptPacket));
+		deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
+		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
 		break;
 	case PacketType::RoomEnterPacket_c2s:
-		deserializedPacket = new Common::packet::C2S_RoomEnterAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(Common::packet::C2S_RoomEnterAcceptPacket));
+		deserializedPacket = new common::packet::C2S_RoomEnterAcceptPacket();
+		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_RoomEnterAcceptPacket));
 		break;
 	case PacketType::MovePacket_c2s:
-		deserializedPacket = new Common::packet::C2S_MovePacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(Common::packet::C2S_MovePacket));
+		deserializedPacket = new common::packet::C2S_MovePacket();
+		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_MovePacket));
 		break;
 	case PacketType::ErrorPacket:
 		__debugbreak();
@@ -93,7 +93,7 @@ void Session::ProcessPacket()
 
 void Session::SendPacket()
 {
-	Common::packet::PacketHeader* packetToSend = nullptr;
+	common::packet::PacketHeader* packetToSend = nullptr;
 	{
 		std::lock_guard<std::mutex> lock(_sendMutex);
 		if (_sendQueue.empty())
@@ -120,10 +120,10 @@ void Session::SendPacket()
 void Session::RecvPacket()
 {
 	// 클라에서 준 패킷 데이터를 _recvBuffer에 저장
-	int recv_bytes = recv(_socket, _recvBuffer.data(), static_cast<int>(sizeof(Common::packet::PacketHeader)),
+	int recv_bytes = recv(_socket, _recvBuffer.data(), static_cast<int>(sizeof(common::packet::PacketHeader)),
 		MSG_WAITALL);
 	
-	Common::packet::PacketHeader* header = reinterpret_cast<Common::packet::PacketHeader*>(_recvBuffer.data());
+	common::packet::PacketHeader* header = reinterpret_cast<common::packet::PacketHeader*>(_recvBuffer.data());
 
 	unsigned long long total_recv_len = 0;
 	int retval = 0;
@@ -146,7 +146,7 @@ void Session::Disconnect()
 	_state = ClientState::Disconnected;
 }
 
-void Session::EnqueuePacket(Common::packet::PacketHeader* packet)
+void Session::EnqueuePacket(common::packet::PacketHeader* packet)
 {
 	std::lock_guard<std::mutex> lock(_sendMutex);
 	_sendQueue.push(packet);

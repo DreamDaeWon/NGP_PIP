@@ -30,7 +30,7 @@ public:
 	void RecvPacket();
 	void Disconnect();
 
-	void EnqueuePacket(Common::packet::PacketHeader* packet);
+	void EnqueuePacket(common::packet::PacketHeader* packet);
 
 
 	Player& getPlayer() { return _player; }
@@ -46,5 +46,5 @@ private:
 	std::array<char, 1024> _sendBuffer;
 
 	std::mutex _sendMutex;
-	std::queue<Common::packet::PacketHeader*> _sendQueue;
+	std::queue<common::packet::PacketHeader*> _sendQueue;
 };

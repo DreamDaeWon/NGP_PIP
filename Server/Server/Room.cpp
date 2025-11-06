@@ -37,10 +37,10 @@ void Room::StartGame()
 void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 {
 	// 모든 플레이어의 상태 패킷 -> 이건 여기서만 갱신이 일어나기에 static으로 들고있기
-	static Common::packet::S2C_AllPlayerMovePacket all_player_state{};
+	static common::packet::S2C_AllPlayerMovePacket all_player_state{};
 
 	// 플레이어 정보 (위치,상태,회전,id) 정보 받기
-	Common::packet::PacketHeader* in_move_packet{};
+	common::packet::PacketHeader* in_move_packet{};
 	while (true)
 	{
 		EnterCriticalSection(&cs);
@@ -55,7 +55,7 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 			continue;
 		}
 
-		Common::packet::C2S_MovePacket* move_packet = reinterpret_cast<Common::packet::C2S_MovePacket*>(in_move_packet);
+		common::packet::C2S_MovePacket* move_packet = reinterpret_cast<common::packet::C2S_MovePacket*>(in_move_packet);
 
 		Session* player_session = Players[move_packet->id];
 
@@ -87,20 +87,20 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 	BroadcastPacket(all_player_state);
 }
 
-void Room::BroadcastPacket(Common::packet::S2C_AllPlayerMovePacket all_player)
+void Room::BroadcastPacket(common::packet::S2C_AllPlayerMovePacket all_player)
 {
-	Common::packet::PacketHeader* out_move_packet = new Common::packet::S2C_AllPlayerMovePacket();
-	memcpy(out_move_packet, &all_player, sizeof(Common::packet::S2C_AllPlayerMovePacket));
+	common::packet::PacketHeader* out_move_packet = new common::packet::S2C_AllPlayerMovePacket();
+	memcpy(out_move_packet, &all_player, sizeof(common::packet::S2C_AllPlayerMovePacket));
 
 	/*이 방의 모든 상태를 담은 패킷을 전송*/
 	for (Session* player : Players)
 	{
 		// all_player 패킷 전송 부분
-		player->EnqueuePacket(reinterpret_cast<Common::packet::PacketHeader*>(&all_player));
+		player->EnqueuePacket(reinterpret_cast<common::packet::PacketHeader*>(&all_player));
 	}
 }
 
-void Room::EnqueuePacket(Common::packet::PacketHeader* packet)
+void Room::EnqueuePacket(common::packet::PacketHeader* packet)
 {
 	EnterCriticalSection(&cs);
 	incomingQueue.push(packet);

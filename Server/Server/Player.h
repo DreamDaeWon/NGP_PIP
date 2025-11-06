@@ -5,7 +5,7 @@ struct Player
 {
 	float x{};
 	float y{};
-	Common::packet::Player_State state{ Common::packet::Player_State::PLAYER_STATE_END };
+	common::packet::Player_State state{ common::packet::Player_State::PLAYER_STATE_END };
 	float Rotate{};
 	size_t id{};
 };
