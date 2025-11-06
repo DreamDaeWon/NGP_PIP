@@ -22,6 +22,9 @@
     <Filter Include="소스 파일\ServerPacket">
       <UniqueIdentifier>{4f5b36c8-3472-4aac-a6bb-7b0864376fc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Time">
+      <UniqueIdentifier>{fce65ad6-7f01-4218-8072-8feaf5fed115}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="Session.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>소스 파일\Time</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@ private:
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 
-	CRITICAL_SECTION cs; 
+	CRITICAL_SECTION cs;
 
 };
 
