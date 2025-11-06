@@ -4,8 +4,6 @@
 #include "Packet.h"
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
 
-// #include "Time.h"
-
 enum class RoomGameMode
 {
 	SinglePlayer,
@@ -22,6 +20,7 @@ enum class RoomGameMode
 // KJ 해답 : 아하 알겠음
 
 class Session; // DW설명 : 전방 선언
+class Timer;
 
 class Room
 {
@@ -46,8 +45,8 @@ private:
 
 	// DW생각 : 2vs2 모드가 없어졌기에 필요가 있나?
 	// int Camera_ID;
-
-	class Time* timer = nullptr;
+	
+	Timer* timer = nullptr;
 
 	// DW질문 : 이거 어카지?
 	std::queue<common::packet::PacketHeader*> incomingQueue;
@@ -55,6 +54,4 @@ private:
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 
 	CRITICAL_SECTION cs;
-
 };
-

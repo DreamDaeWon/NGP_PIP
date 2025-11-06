@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "Session.h"
 #include "Room.h"
+#include "Timer.h"
 
 // DW예정 : 일단 다 제작만 해둠 하나씩 바꿔나갈 예정
 Room::Room() :
 	CurrentMapSize{ 0 },
-	mode{ RoomGameMode::ROOM_MODE_MAX }
+	mode{ RoomGameMode::ROOM_MODE_MAX },
+	timer{ new Timer() }
 {
 	InitializeCriticalSection(&cs);
 }
@@ -43,6 +45,8 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 	common::packet::PacketHeader* in_move_packet{};
 	while (true)
 	{
+		timer->Tick();
+
 		EnterCriticalSection(&cs);
 		in_move_packet = incomingQueue.front();
 		incomingQueue.pop();
