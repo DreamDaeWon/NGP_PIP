@@ -23,9 +23,9 @@ namespace Common::packet
 		LogoutPacket_c2s = 23,
 
 		// Map관련 패킷은 30번 대
-		MapNamesPacket_s2c = 30, 
+		/*MapNamesPacket_s2c = 30, 
 		MapLoadRequestPacket_c2s = 31,
-		MapLoadPacket_s2c = 32, 
+		MapLoadPacket_s2c = 32, */
 
 		MapRoomLeavePacket_c2s = 33,
 		MapRoomEndPacket_s2c = 34,
@@ -69,10 +69,10 @@ namespace Common::packet
 	};
 
 	// CJ : 이 패킷은 이제 우리 유즈맵 만들어서 업로드 하는 기능은 필요 없으니 제외해도될듯
-	struct C2S_MapNamesPacket : public PacketHeader {
+	/*struct C2S_MapNamesPacket : public PacketHeader {
 		std::array<char[30], 10> mapNames;
 		std::vector<char> mapData; 
-	};
+	};*/
 
 	struct C2S_LoginAcceptPacket : public PacketHeader {
 		int playerID;
@@ -87,9 +87,9 @@ namespace Common::packet
 	};
 
 	// CJ : 이것도 C2S_MapNamesPacket와 마찬가지
-	struct C2S_UploadDonePacket : public PacketHeader {
-		//KJ: 패킷 타입으로 알아볼수 있음
-	};
+	//struct C2S_UploadDonePacket : public PacketHeader {
+	//	//KJ: 패킷 타입으로 알아볼수 있음
+	//};
 
 	struct C2S_RoomEndPacket : public PacketHeader {
 		int roomID;
@@ -129,19 +129,19 @@ namespace Common::packet
 	};
 
 	// CJ : C2S_MapNamesPacket 처럼 얘도 필요 없어질 듯
-	struct S2C_MapLoadRequestPacket : public PacketHeader {
+	/*struct S2C_MapLoadRequestPacket : public PacketHeader {
 		char mapName[30];
-	};
+	};*/
 
 	struct S2C_RoomEnterPacket : public PacketHeader {
 		int roomID;
 	};
 
 	// CJ : C2S_MapNamesPacket 처럼 얘도 필요 없어질 듯
-	struct S2C_MapUploadPacket : public PacketHeader {
+	/*struct S2C_MapUploadPacket : public PacketHeader {
 		char mapName[30];
 		std::vector<char> mapData;
-	};
+	};*/
 
 	struct S2C_RoomLeavePacket : public PacketHeader {
 		int romID;
