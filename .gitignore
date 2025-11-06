@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # Fmod
-!지오메트리대쉬/FMOD SoundSystem/FMOD Studio API Windows/
-!지오메트리대쉬/FMOD SoundSystem/FMOD Studio API Windows/api/core/lib/*.lib
+!GeometryDash/FMOD SoundSystem/FMOD Studio API Windows/
+!GeometryDash/FMOD SoundSystem/FMOD Studio API Windows/api/core/lib/*.lib
 
 
 # User-specific files
