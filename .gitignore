@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Fmod
+!지오메트리대쉬/FMOD SoundSystem/
+!지오메트리대쉬/FMOD SoundSystem/api/core/lib
+
+
 # User-specific files
 *.rsuser
 *.suo
@@ -400,6 +405,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Fmod
-!지오메트리대쉬/FMOD SoundSystem/
-!지오메트리대쉬/FMOD SoundSystem/api/core/lib
