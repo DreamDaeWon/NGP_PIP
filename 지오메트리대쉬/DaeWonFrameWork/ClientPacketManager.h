@@ -5,9 +5,7 @@
 
 // CJ : Packet 처리 엔진
 
-class Session; // Session 만들어지면 사용하기 위해 전방 선언
-
-using PacketHandlerFunc = std::function<void(Session*, char*)>; // unordered_map에서 다양한 함수를 등록 받기 위해
+using ClientPacketHandlerFunc = std::function<void(char*)>; // unordered_map에서 다양한 함수를 등록 받기 위해
 using namespace Common::packet;
 
 
@@ -16,11 +14,13 @@ class ClientPacketManager
 public:
 	ClientPacketManager();
 
-	void RegisterHandler(PacketType type, PacketHandlerFunc func);
-	void HandlePacket(PacketType type, Session* session);
+	// 서버로부터 받은 원시데이터를 어떤 함수가 처리해야할지 결정하고 호출하는 함수
+	void HandlePacket(char* buffer);
 
 private:
-	std::unordered_map<PacketType, PacketHandlerFunc> Handlers;
-
+	// PacketManager 객체를 생성하는 즉시 모든 패킷을 처리할 준비하는 함수
+	void RegisterHandler();
+	
+	std::unordered_map<PacketType, ClientPacketHandlerFunc> _handlers;
 };
 
