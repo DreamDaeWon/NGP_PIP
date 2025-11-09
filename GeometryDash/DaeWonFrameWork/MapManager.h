@@ -14,6 +14,5 @@ public:
 	void MapShow();
 	//void MapLoad();
 	void MapStage();
-
 };
 
