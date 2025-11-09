@@ -10,10 +10,13 @@ using ClientPacketHandlerFunc = std::function<void(char*)>; // unordered_map에서
 using namespace common::packet; // 클라는 PacketType, PacketHeader를 쓸테니 네임스페이스 사용
 
 
-class ClientPacketManager
+class ClientPacketManager : public Singleton<ClientPacketManager>
 {
 public:
 	ClientPacketManager();
+
+	void GetInstance();
+	void DestroyInstance();
 
 	// 서버로부터 받은 원시데이터를 어떤 함수가 처리해야할지 결정하고 호출하는 함수
 	void HandlePacket(char* buffer);

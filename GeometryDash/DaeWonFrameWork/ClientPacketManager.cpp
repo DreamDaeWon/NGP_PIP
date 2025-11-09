@@ -6,6 +6,14 @@ ClientPacketManager::ClientPacketManager()
 	RegisterHandler();
 }
 
+void ClientPacketManager::GetInstance()
+{
+}
+
+void ClientPacketManager::DestroyInstance()
+{
+}
+
 void ClientPacketManager::HandlePacket(char* buffer)
 {
 	// 버퍼에서 패킷 헤더 추출 및 타입 확인 <- 첫 부분을 PacketHeader라고 간주
