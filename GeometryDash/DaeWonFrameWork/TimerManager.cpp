@@ -1,6 +1,7 @@
 #include "TimerManager.h"
 
 TimerManager::TimerManager()
+	:_totalTime(0.0f)
 {
 }
 
@@ -34,6 +35,12 @@ float TimerManager::GetFPS() const
 	
 }
 
+float TimerManager::SetTotalTime(float time)
+{
+	return _totalTime = time;
+}
+
 float TimerManager::GetTotalTime() const
 {
+	return _totalTime;
 }
