@@ -17,7 +17,7 @@ public:
 	float GetDeltaTime() const;
 	float GetFPS() const;
 
-	// 서버에서 시간 측정하면 클라에선 아래 두개만 필요하지않나??
+	// CJ질문 : 서버에서 시간 측정하면 클라에선 아래 두개만 필요하지않나??
 	float SetTotalTime(float time);
 	float GetTotalTime() const;
 private:
