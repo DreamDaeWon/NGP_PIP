@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Session.h"
 #include "Room.h"
-
 #include "Server.h"
-#include "ServerPacketManager.h"
 #include "Timer.h"
 
 // DW예정 : 일단 다 제작만 해둠 하나씩 바꿔나갈 예정
@@ -12,7 +10,7 @@ Room::Room() :
 	mode{ RoomGameMode::ROOM_MODE_MAX },
 	timer{ new Timer() }
 {
-	
+	RegisterHandler(common::packet::PacketType::MovePacket_c2s, &Room::MovePacket_c2s);
 }
 
 Room::~Room()
@@ -108,24 +106,9 @@ void Room::ProcessInputs()
 		packetsToProcess.pop();
 
 		// C2S_MovePacket만 처리한다고 가정
-		if (packet->type == common::packet::PacketType::MovePacket_c2s)
-		{
-			common::packet::C2S_MovePacket * movePacket = reinterpret_cast<common::packet::C2S_MovePacket*>(packet);
-			// ID 유효성 검사
-			{
-				std::lock_guard<std::mutex> lock(_playerMutex); // Players 벡터 접근을 위한 락
-				// movePacket->id가 Players 벡터의 유효한 인덱스인지 확인
-				if (movePacket->id < Players.size())
-				{
-					// 세션 포인터를 통해 해당 플레이어의 상태를 직접 업데이트
-					Player& player = Players[movePacket->id]->getPlayer();
-					player.x = movePacket->x;
-					player.y = movePacket->y;
-					player.state = movePacket->player_state;
-					player.Rotate = movePacket->rotate;
-				}
-			} // _players_mutex 락 해제
-		}
+		
+		HandlePacket(nullptr, reinterpret_cast<char*>(packet));
+
 		delete packet;
 	}
 }
@@ -154,4 +137,55 @@ void Room::BroadcastState()
 
 	// BroadcastPacket 함수를 통해 모든 플레이어에게 전송
 	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&allPlayerStatePacket));
+}
+
+void Room::RegisterHandler(common::packet::PacketType type, PacketHandlerFunc func)
+{
+	Handlers[type] = func;
+}
+
+// 추가된 오버로드: Room 멤버 함수 포인터를 받아 this로 바인딩해서 저장
+void Room::RegisterHandler(common::packet::PacketType type, void (Room::* func)(Session*, char*))
+{
+	using namespace std::placeholders;
+	Handlers[type] = std::bind(func, this, _1, _2);
+}
+
+void Room::HandlePacket(Session* session, char* packet)
+{
+	common::packet::PacketHeader* header = reinterpret_cast<common::packet::PacketHeader*>(packet);
+	auto it = Handlers.find(header->type);
+	if (it != Handlers.end())
+	{
+		PacketHandlerFunc func = it->second;
+		func(session, packet);
+	}
+	else
+	{
+		// 알 수 없는 패킷 타입 처리
+	}
+}
+
+void Room::MovePacket_c2s(Session* player, char* packet)
+{
+	common::packet::C2S_MovePacket* movePacket = reinterpret_cast<common::packet::C2S_MovePacket*>(packet);
+	// ID 유효성 검사
+	{
+		std::lock_guard<std::mutex> lock(_playerMutex); // Players 벡터 접근을 위한 락
+		// movePacket->id가 Players 벡터의 유효한 인덱스인지 확인
+		if (movePacket->id < Players.size())
+		{
+			// 세션 포인터를 통해 해당 플레이어의 상태를 직접 업데이트
+			Player& player = Players[movePacket->id]->getPlayer();
+			player.x = movePacket->x;
+			player.y = movePacket->y;
+			player.state = movePacket->player_state;
+			player.Rotate = movePacket->rotate;
+		}
+	} // _players_mutex 락 해제
+}
+
+void Room::LoginRequestPacket_c2s(Session* player, char* packet)
+{
+	// 1150 : 고민중
 }

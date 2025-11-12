@@ -16,9 +16,6 @@
     <Filter Include="소스 파일\Room">
       <UniqueIdentifier>{9b97a18b-2e87-437a-92b0-46b38d685abd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\ServerPacket">
-      <UniqueIdentifier>{4f5b36c8-3472-4aac-a6bb-7b0864376fc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Time">
       <UniqueIdentifier>{fce65ad6-7f01-4218-8072-8feaf5fed115}</UniqueIdentifier>
     </Filter>
@@ -39,12 +36,6 @@
     <ClCompile Include="Room.cpp">
       <Filter>소스 파일\Room</Filter>
     </ClCompile>
-    <ClCompile Include="ServerPacketManager.cpp">
-      <Filter>소스 파일\ServerPacket</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerPacketHandler.cpp">
-      <Filter>소스 파일\ServerPacket</Filter>
-    </ClCompile>
     <ClCompile Include="Session.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -61,12 +52,6 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>소스 파일\Room</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerPacketManager.h">
-      <Filter>소스 파일\ServerPacket</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerPacketHandler.h">
-      <Filter>소스 파일\ServerPacket</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">
       <Filter>소스 파일\common</Filter>

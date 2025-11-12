@@ -21,7 +21,7 @@ enum class RoomGameMode
 
 class Session; // DW설명 : 전방 선언
 class Timer;
-
+using PacketHandlerFunc = std::function<void(Session*, char*)>;
 class Room
 {
 public:
@@ -36,11 +36,20 @@ public:
 	void StopGame();
 	void UpdateGame();
 	void BroadcastPacket(common::packet::PacketHeader* packet);
-
 	void EnqueuePacket(common::packet::PacketHeader* packet);
+
+	void RegisterHandler(common::packet::PacketType type, PacketHandlerFunc func);
+	void RegisterHandler(common::packet::PacketType type, void(Room::* func)(Session*, char*));
+	void HandlePacket(Session* session, char* packet);
+
+	void MovePacket_c2s(Session* player, char* packet);
+
+	void LoginRequestPacket_c2s(Session* player, char* packet);
+
 private:
 	void ProcessInputs();
 	void BroadcastState();
+
 
 private:
 	long long CurrentMapSize{};
@@ -59,4 +68,6 @@ private:
 	std::mutex _playerMutex;
 	std::mutex _queueMutex;
 	std::atomic_bool _isGameRunning{ false };
+
+	std::unordered_map<common::packet::PacketType, PacketHandlerFunc> Handlers;
 };

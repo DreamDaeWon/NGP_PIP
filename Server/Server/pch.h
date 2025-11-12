@@ -10,6 +10,7 @@
 #include <mutex>
 #include <queue>
 #include <chrono>
+#include <functional>
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 
