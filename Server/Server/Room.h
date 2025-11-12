@@ -33,11 +33,14 @@ public:
 	void AddPlayer(Session* player);
 	void RemovePlayer(Session* player);
 	void StartGame();
+	void StopGame();
 	void UpdateGame();
-	void BroadcastPacket(common::packet::S2C_AllPlayerMovePacket all_player);
+	void BroadcastPacket(common::packet::PacketHeader* packet);
 
 	void EnqueuePacket(common::packet::PacketHeader* packet);
-	
+private:
+	void ProcessInputs();
+	void BroadcastState();
 
 private:
 	long long CurrentMapSize{};
@@ -53,5 +56,7 @@ private:
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 
-	CRITICAL_SECTION cs;
+	std::mutex _playerMutex;
+	std::mutex _queueMutex;
+	std::atomic_bool _isGameRunning{ false };
 };

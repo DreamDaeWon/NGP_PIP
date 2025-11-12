@@ -4,11 +4,11 @@
 
 #include "ServerPacketManager.h"
 
-Session::Session() : _id(0), _socket(INVALID_SOCKET), _state(ClientState::Disconnected)
+Session::Session() : _id(0), _socket(INVALID_SOCKET), _state(ClientState::Disconnected), _currentRoom{ nullptr }
 {
 }
 
-Session::Session(uint32_t id, SOCKET socket, ClientState state) : _id(id), _socket(socket), _state(state)
+Session::Session(uint32_t id, SOCKET socket, ClientState state) : _id(id), _socket(socket), _state(state), _currentRoom{ nullptr }
 {
 }
 
@@ -20,6 +20,7 @@ Session::Session(const Session& other)
 		_socket = other._socket;
 		_state = other._state;
 		_player = other._player;
+		_currentRoom = other._currentRoom;
 	}
 }
 
@@ -31,6 +32,7 @@ Session& Session::operator=(const Session& other)
 		_socket = other._socket;
 		_state = other._state;
 		_player = other._player;
+		_currentRoom = other._currentRoom;
 	}
 	return *this;
 }
@@ -120,28 +122,52 @@ void Session::SendPacket()
 void Session::RecvPacket()
 {
 	// 클라에서 준 패킷 데이터를 _recvBuffer에 저장
-	int recv_bytes = recv(_socket, _recvBuffer.data(), static_cast<int>(sizeof(common::packet::PacketHeader)),
+	int retval = recv(_socket, _recvBuffer.data(), static_cast<int>(sizeof(common::packet::PacketHeader)),
 		MSG_WAITALL);
+	if (SOCKET_ERROR == retval)
+	{
+		err_display("recv() header error");
+		Disconnect();
+		return;
+	}
+	if (0 == retval)
+	{
+		printf("Client disconnected gracefully.\n");
+		Disconnect();
+		return;
+	}
 	
 	common::packet::PacketHeader* header = reinterpret_cast<common::packet::PacketHeader*>(_recvBuffer.data());
 
-	unsigned long long total_recv_len = 0;
-	int retval = 0;
-	while (total_recv_len < header->size) {
-		retval = recv(_socket, _recvBuffer.data() + recv_bytes, static_cast<int>(_recvBuffer.size()), 0);
-		if (SOCKET_ERROR == retval) {
-			err_display("recv()");
-			break;
-		}
-		else if (0 == retval)
-			break;
-		total_recv_len += retval;
+	int required_bytes = header->size - sizeof(common::packet::PacketHeader);
+	if (required_bytes > 0)
+	{
+	    retval = recv(_socket, _recvBuffer.data() + sizeof(common::packet::PacketHeader), required_bytes,
+	MSG_WAITALL);
+	    if (retval == SOCKET_ERROR)
+	    {
+            err_display("recv() body error");
+            Disconnect();
+            return;
+	    }
+	    if (retval == 0)
+	    {
+            printf("Client [%2d] disconnected gracefully.\n", _id);
+            Disconnect();
+            return;
+	    }
 	}
 	
 }
 
 void Session::Disconnect()
 {
+	// Room에서 플레이어 제거 요청
+	if (_currentRoom != nullptr)
+	{
+		_currentRoom->RemovePlayer(this);
+	}
+
 	closesocket(_socket);
 	_state = ClientState::Disconnected;
 }

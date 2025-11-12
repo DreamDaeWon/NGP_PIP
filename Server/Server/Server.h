@@ -1,7 +1,8 @@
 ﻿#pragma once
+#include "Room.h"
 #include "Session.h"
 
-constexpr uint32_t MAX_PLAYERS = 3;
+
 
 class Server
 {
@@ -16,4 +17,6 @@ private:
 	uint32_t _playerCount = 0;
 	std::array<Session, 3> _sessions;
 	std::vector<std::thread> _workers;
+	Room _room;
+	std::thread _roomThread;
 };

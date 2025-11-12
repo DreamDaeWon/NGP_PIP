@@ -35,12 +35,14 @@ public:
 
 	Player& getPlayer() { return _player; }
 	uint32_t getId() const { return _id; }
+
+	void setCurrentRoom(Room* room) { _currentRoom = room; }
 private:
 	uint32_t _id;
 	SOCKET _socket;
 	ClientState _state;
 	Player _player;
-	Room* _currentRoom{ nullptr };
+	Room* _currentRoom;
 
 	std::array<char, 1024> _recvBuffer;
 	std::array<char, 1024> _sendBuffer;

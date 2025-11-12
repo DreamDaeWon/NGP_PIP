@@ -23,6 +23,7 @@ void Server::initailize()
 	{
 		err_quit("bind() 오류");
 	}
+	
 }
 
 void Server::start()
@@ -31,6 +32,8 @@ void Server::start()
 	{
 		err_quit("listen() 오류");
 	}
+	_room.StartGame();
+	_roomThread = std::thread(&Room::UpdateGame, &_room);
 	// ToDo : 패킷 매니저 등 초기화 여기서 진행
 }
 
@@ -50,6 +53,10 @@ void Server::end()
 	{
 		if (worker.joinable())
 			worker.join();
+	}
+	if (_roomThread.joinable())
+	{
+		_roomThread.join();
 	}
 	_workers.clear();
 
@@ -93,6 +100,11 @@ void Server::acceptLoop()
 
 		uint32_t idx = _playerCount; // 0-based
 		_sessions[idx] = Session(idx + 1, clientsocket, ClientState::Connected);
+
+		// Room에 플레이어(세션) 추가 및 세션에 Room 정보 설정
+		_room.AddPlayer(&_sessions[idx]);
+		_sessions[idx].setCurrentRoom(&_room);
+
 		_playerCount++;
 
 		_workers.emplace_back(&Session::WorkerLoop, &_sessions[idx]);

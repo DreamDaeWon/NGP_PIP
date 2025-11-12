@@ -1,8 +1,8 @@
 #pragma once
 #include <cstdint> 
-#include <array> // C2S_MapNamesPacket 구조체 땜에 선언해둔거니 나중에 삭제할 때 같이 삭제
 
 // CJ : 공용 구조체, 패킷 정의하는 곳
+constexpr uint32_t MAX_PLAYERS = 3;
 
 namespace common::packet 
 {
