@@ -124,6 +124,9 @@
     <Filter Include="소스 파일\Manager\UIManager">
       <UniqueIdentifier>{492025cd-e013-4950-9c46-59ed73641b07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager\NetworkManager">
+      <UniqueIdentifier>{c6364b7d-9cfe-47c6-9f28-37a8d4a5221a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainGame.cpp">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
       <Filter>소스 파일\Manager\UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>소스 파일\Manager\NetworkManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>소스 파일\Manager\UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>소스 파일\Manager\NetworkManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@ public:
 
 	bool initialize_Client(const char* ip, unsigned short port); // 서버 접속 및 논블로킹 소켓 설정
 	void sendPacket(char* buffer, int size); // 서버로 패킷 전송 <- Main Thread에서 호출
-	void recvPacket(); // 서버로 부터 패킷 처리
+	void processPacket(); // 서버로 부터 패킷 처리
 	void updatePacket(); // 게임 루프에서 매 프레임 호출 서버로부터 온 데이터를 수신하고 큐에 넣음 
 	void shutdown(); // 접속 종료
 

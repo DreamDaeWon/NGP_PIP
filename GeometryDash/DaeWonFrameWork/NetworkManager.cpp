@@ -75,8 +75,38 @@ void NetworkManager::sendPacket(char* buffer, int size)
 	}
 }
 
-void NetworkManager::recvPacket()
+void NetworkManager::processPacket()
 {
+	while (_recvBufferSize >= sizeof(PacketHeader))
+	{
+		// 1. 헤더를 읽어 패킷의 전체 크기를 확인
+		PacketHeader* pHeader = (PacketHeader*)_recvBuffer;
+		long long packetSize = pHeader->size;
+
+		// 2. 버퍼에 패킷 전체 크기만큼의 데이터가 쌓였는지 확인
+		if (_recvBufferSize >= packetSize)
+		{
+			// 3. ClientPacketManager에게 버퍼를 넘겨 처리 요청
+			if (_packetManager)
+			{
+				_packetManager->HandlePacket(_recvBuffer);
+			}
+
+			// 4. 버퍼에서 처리된 패킷만큼 제거
+			int remainingData = _recvBufferSize - packetSize;
+			if (remainingData > 0)
+			{
+				// 뒤에 남은 데이터를 버퍼 앞으로 당겨옴 (memmove)
+				memmove(_recvBuffer, _recvBuffer + packetSize, remainingData);
+			}
+			_recvBufferSize = remainingData; // 버퍼 크기 갱신
+		}
+		else
+		{
+			// 5. recv()를 위해 루프 종료
+			break;
+		}
+	}
 }
 
 void NetworkManager::updatePacket()

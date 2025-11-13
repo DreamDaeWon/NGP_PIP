@@ -187,6 +187,7 @@
     <ClCompile Include="ClientPacketManager.cpp" />
     <ClCompile Include="ClientPakcetHandler.cpp" />
     <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
@@ -226,6 +227,7 @@
     <ClInclude Include="ClientPacketManager.h" />
     <ClInclude Include="ClientPakcetHandler.h" />
     <ClInclude Include="MapManager.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="UIManager.h" />
   </ItemGroup>
