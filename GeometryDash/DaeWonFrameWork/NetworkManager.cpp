@@ -116,7 +116,7 @@ void NetworkManager::updatePacket()
 	// 1. _recvBuffer의 남은 공간에 데이터를 수신 시도
 	int bytesRecv = recv(_serverSocket,
 		_recvBuffer + _recvBufferSize,   // 버퍼의 빈 공간 시작 위치
-		4096 - _recvBufferSize,          // 버퍼의 남은 크기
+		BUFFER_SIZE - _recvBufferSize,          // 버퍼의 남은 크기
 		0);
 
 	if (bytesRecv > 0)
