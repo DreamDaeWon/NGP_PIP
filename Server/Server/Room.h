@@ -44,8 +44,6 @@ public:
 
 	void MovePacket_c2s(Session* player, char* packet);
 
-	void LoginRequestPacket_c2s(Session* player, char* packet);
-
 private:
 	void ProcessInputs();
 	void BroadcastState();

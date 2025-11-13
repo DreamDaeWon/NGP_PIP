@@ -148,7 +148,7 @@ void Room::RegisterHandler(common::packet::PacketType type, PacketHandlerFunc fu
 void Room::RegisterHandler(common::packet::PacketType type, void (Room::* func)(Session*, char*))
 {
 	using namespace std::placeholders;
-	Handlers[type] = std::bind(func, this, _1, _2);
+	Handlers[type] = std::bind(func,this, _1, _2);
 }
 
 void Room::HandlePacket(Session* session, char* packet)
@@ -183,9 +183,4 @@ void Room::MovePacket_c2s(Session* player, char* packet)
 			player.Rotate = movePacket->rotate;
 		}
 	} // _players_mutex 락 해제
-}
-
-void Room::LoginRequestPacket_c2s(Session* player, char* packet)
-{
-	// 1150 : 고민중
 }
