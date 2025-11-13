@@ -64,6 +64,22 @@ bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
 	}
 
 	_recvBufferSize = 0;
+
+	// 1. 패킷을 담을 버퍼 생성
+	const int packetSize = sizeof(PacketHeader) + sizeof(PacketType::LoginRequestPacket_c2s);
+	char loginPacketBuffer[packetSize];
+
+	// 2. 헤더 채우기
+	PacketHeader* header = (PacketHeader*)loginPacketBuffer;
+	header->size = packetSize;
+	header->type = PacketType::LoginRequestPacket_c2s;
+
+	// TODO (나중에 ID/PW 채우기)
+	// LoginRequestPacket_c2s* payload = (LoginRequestPacket_c2s*)(loginPacketBuffer + sizeof(PacketHeader));
+	// payload->userID = ... (만약 ID/PW가 있다면)
+
+	sendPacket(loginPacketBuffer, packetSize);
+
 	return true;
 }
 
