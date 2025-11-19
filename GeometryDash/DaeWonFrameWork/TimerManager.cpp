@@ -27,12 +27,12 @@ void TimerManager::Tick()
 
 float TimerManager::GetDeltaTime() const
 {
-	
+	return 0.f;
 }
 
 float TimerManager::GetFPS() const
 {
-	
+	return 0.f;
 }
 
 float TimerManager::SetTotalTime(float time)

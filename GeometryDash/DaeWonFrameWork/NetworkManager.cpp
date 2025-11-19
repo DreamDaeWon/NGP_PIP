@@ -1,11 +1,11 @@
 #include "NetworkManager.h"
 #include "ClientPacketManager.h"
-#include <ws2tcpip.h>
+
 
 using namespace common::packet;
 
 NetworkManager::NetworkManager()
-	:_serverSocket(INVALID_SOCKET),
+	:_clientSocket(INVALID_SOCKET),
 	_recvBufferSize(0)
 {
 	WSADATA wsa;
@@ -33,33 +33,34 @@ void NetworkManager::DestroyInstance()
 
 bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
 {
-	_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (_serverSocket == INVALID_SOCKET)
+	_clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (_clientSocket == INVALID_SOCKET)
 	{
-		// TODO: 소켓 생성 실패	
+		// TODO: 소켓 생성 실패
+		// TODO : 에러 로그 남기기
 		return false;
 	}
 
-	sockaddr_in server_address;
-	memset(&server_address, 0, sizeof(server_address));
+	sockaddr_in server_address {};
 	server_address.sin_family = AF_INET;
 	server_address.sin_port = htons(port);
 	inet_pton(AF_INET, ip, &server_address.sin_addr);
 
 	// 서버 접속
-	if (connect(_serverSocket, (sockaddr*)&server_address, sizeof(server_address)) == SOCKET_ERROR)
+	if (connect(_clientSocket, (sockaddr*)&server_address, sizeof(server_address)) == SOCKET_ERROR)
 	{
-		closesocket(_serverSocket);
-		_serverSocket = INVALID_SOCKET;
+		closesocket(_clientSocket);
+		_clientSocket = INVALID_SOCKET;
 		return false;
 	}
 
 	// CJ 설명 : 논블로킹 소켓 설정 -> 게임 루프가 recv에서 멈추지 않도록 함
+	// CJ 설명 일단 따라함 정확한	이해 필요
 	u_long mode = 1;
-	if (SOCKET_ERROR == ioctlsocket(_serverSocket, FIONBIO, &mode))
+	if (SOCKET_ERROR == ioctlsocket(_clientSocket, FIONBIO, &mode))
 	{
-		closesocket(_serverSocket);
-		_serverSocket = INVALID_SOCKET;
+		closesocket(_clientSocket);
+		_clientSocket = INVALID_SOCKET;
 		return false;
 	}
 
@@ -85,9 +86,9 @@ bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
 
 void NetworkManager::sendPacket(char* buffer, int size)
 {
-	if (_serverSocket != INVALID_SOCKET)
+	if (_clientSocket != INVALID_SOCKET)
 	{
-		send(_serverSocket, buffer, size, 0);
+		send(_clientSocket, buffer, size, 0);
 	}
 }
 
@@ -109,7 +110,7 @@ void NetworkManager::processPacket()
 			}
 
 			// 4. 버퍼에서 처리된 패킷만큼 제거
-			int remainingData = _recvBufferSize - packetSize;
+			long long remainingData = _recvBufferSize - packetSize;
 			if (remainingData > 0)
 			{
 				// 뒤에 남은 데이터를 버퍼 앞으로 당겨옴 (memmove)
@@ -127,12 +128,12 @@ void NetworkManager::processPacket()
 
 void NetworkManager::updatePacket()
 {
-	if (_serverSocket == INVALID_SOCKET) return;
+	if (_clientSocket == INVALID_SOCKET) return;
 
 	// 1. _recvBuffer의 남은 공간에 데이터를 수신 시도
-	int bytesRecv = recv(_serverSocket,
+	int bytesRecv = recv(_clientSocket,
 		_recvBuffer + _recvBufferSize,   // 버퍼의 빈 공간 시작 위치
-		BUFFER_SIZE - _recvBufferSize,          // 버퍼의 남은 크기
+		(int)(BUFFER_SIZE - _recvBufferSize),          // 버퍼의 남은 크기
 		0);
 
 	if (bytesRecv > 0)
@@ -165,9 +166,9 @@ void NetworkManager::updatePacket()
 
 void NetworkManager::shutdown()
 {
-	if (_serverSocket != INVALID_SOCKET)
+	if (_clientSocket != INVALID_SOCKET)
 	{
-		closesocket(_serverSocket);
-		_serverSocket = INVALID_SOCKET;
+		closesocket(_clientSocket);
+		_clientSocket = INVALID_SOCKET;
 	}
 }

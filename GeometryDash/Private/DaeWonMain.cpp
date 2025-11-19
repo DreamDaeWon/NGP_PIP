@@ -67,6 +67,7 @@ void CALLBACK TickTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 	
 	if (!bStop)
 	{
+		//TODO : 패킷 송신 논 블락킹 필요할수도?
 		MainGame->Update(0.01f);
 		MainGame->LateUpdate(0.01f);
 		InvalidateRect(hWnd, nullptr, false);

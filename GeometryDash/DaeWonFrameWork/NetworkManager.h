@@ -1,11 +1,13 @@
 #pragma once
 #include "Singleton.h"
 #include "Packet.h"
-
 #include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
+
 
 #define BUFFER_SIZE 4096
-
+class ClientPacketManager;
 class NetworkManager : public Singleton<NetworkManager>
 {
 private:
@@ -25,10 +27,10 @@ public:
 private:
 	friend class Singleton<NetworkManager>;
 
-	ClientPacketManager _packetManager;
-	SOCKET _serverSocket;
+	ClientPacketManager* _packetManager;
+	SOCKET _clientSocket;
 
 	char _recvBuffer[BUFFER_SIZE];
-	int _recvBufferSize;
+	long long _recvBufferSize;
 };
 
