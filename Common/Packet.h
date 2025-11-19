@@ -3,6 +3,8 @@
 
 // CJ : 공용 구조체, 패킷 정의하는 곳
 constexpr uint32_t MAX_PLAYERS = 3;
+constexpr char SERVER_IP[] = "127.0.0.1";
+constexpr short SERVER_PORT = 9000;
 
 namespace common::packet 
 {
@@ -39,14 +41,14 @@ namespace common::packet
 		//MapUploadPacket_c2s = 1, 
 		//MapUploadDonePacket_s2c = 2, 
 	};
-	enum class Player_State
+	enum class Player_State : uint8_t
 	{
-		IDLE,
-		DIE,
-		WAIT,
-		SPACESHIP,
-		ZIGZAG,
-		PLAYER_STATE_END
+		IDLE				= 0, // normal
+		SPACESHIP			= 1, // AIRPLANE
+		ZIGZAG				= 2, // 
+		FINISH				= 3,
+		DIE					= 4,
+		PLAYER_STATE_END	= 5
 	};
 	// 1바이트 크기로 정렬
 #pragma pack(push, 1)
@@ -61,11 +63,11 @@ namespace common::packet
 
 	struct C2S_MovePacket : public PacketHeader {
 		int id;
-		float x, y;
+		long x, y;
 		float rotate;
+		float ridius; // 반지름 보내기
 		int cameraID;
-		Player_State player_state; //<- CJ : Player_State 제작 후 주석 해제
-		float minMapPercentage; // 이거는 minMap을 통해 해당 플레이어의 위치를 짐작할 수 있도록 제작하기 + 백분율로!
+		Player_State player_state;
 	};
 
 	// CJ : 이 패킷은 이제 우리 유즈맵 만들어서 업로드 하는 기능은 필요 없으니 제외해도될듯
@@ -104,6 +106,7 @@ namespace common::packet
 		float x, y;
 		float rotate;
 		Player_State player_state; // <- CJ : Player_State 제작 후 주석 해제
+		float minMapPercentage; // 이거는 minMap을 통해 해당 플레이어의 위치를 짐작할 수 있도록 제작하기 + 백분율로!
 	};
 
 	struct S2C_AllPlayerMovePacket : public PacketHeader

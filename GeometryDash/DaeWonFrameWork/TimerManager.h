@@ -1,4 +1,6 @@
 #pragma once
+#include <chrono>
+
 #include "Singleton.h"
 
 class TimerManager : public Singleton<TimerManager>
@@ -8,9 +10,7 @@ public:
 	~TimerManager();
 
 public:
-	void GetInstance();
-	void DestroyInstance();
-
+	void init();
 	void Reset();
 	void Tick();
 
@@ -21,6 +21,9 @@ public:
 	float SetTotalTime(float time);
 	float GetTotalTime() const;
 private:
-	float _totalTime;
+	float _totalTime; // 서버에서 주는 방 돌아가던 시간
+	std::chrono::steady_clock::time_point _lastTimePoint;
+	std::chrono::steady_clock::time_point _currentTimePoint;
+	float _deltaTime;
 };
 

@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include "CSoundManager.h"
 #include "StageManager.h"
+#include "../DaeWonFrameWork/NetworkManager.h"
 
 //#pragma comment (lib, "msimg32.lib")
 CPlayer::CPlayer()
@@ -153,7 +154,10 @@ int CPlayer::Update(float fTime)
 
     m_NowPoint[2].x = (m_CenterPos.x - CCameraManager::GetInstance()->GetCenterPos().x) + (ridius * cos(radian(angle - 225)));
     m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle - 225)));
-    return 0;
+
+    //TODO: 50ms 마다 위치 패킷 전송
+
+	return 0;
 }
 
 void CPlayer::LateUpdate(float fTime)
@@ -487,6 +491,22 @@ void CPlayer::LoadPlayerSound()
     //CSoundManager::GetInstance()->LoadSound("레벨완료","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
 
 
+}
+
+void CPlayer::sendPosition()
+{
+	common::packet::C2S_MovePacket packet{};
+	packet.type = common::packet::PacketType::MovePacket_c2s;
+	packet.id = CObjManager::GetInstance()->GetPlayerID();
+	packet.x = m_CenterPos.x;
+	packet.y = m_CenterPos.y;
+	packet.rotate = angle;
+	packet.ridius = m_fRidius; // 반지름 보내기
+    packet.cameraID = 0;
+
+	char* buffer = reinterpret_cast<char*>(&packet);
+
+    NetworkManager::Instance()->sendPacket(buffer, sizeof(packet));
 }
 
 //void CPlayer::SetStopSpin()

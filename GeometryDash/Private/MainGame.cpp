@@ -10,6 +10,7 @@
 #include "CollisionManager.h"
 #include "CSoundManager.h"
 #include "StageManager.h"
+#include "../DaeWonFrameWork/NetworkManager.h"
 
 
 CMainGame::CMainGame()
@@ -31,6 +32,7 @@ void CMainGame::Initailizer()
 	CCollisionManager::GetInstance();
 	CSoundManager::GetInstance();
 	CStageManager::GetInstance();
+	NetworkManager::Instance()->initialize_Client();
 	
 	//NowStage = new CToolStage{};
 }

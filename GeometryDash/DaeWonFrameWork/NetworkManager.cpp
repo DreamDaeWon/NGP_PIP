@@ -1,6 +1,9 @@
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
+
 #include "NetworkManager.h"
 #include "ClientPacketManager.h"
-
 
 using namespace common::packet;
 
@@ -23,15 +26,15 @@ NetworkManager::~NetworkManager()
 	WSACleanup();
 }
 
-void NetworkManager::GetInstance()
-{
-}
+//void NetworkManager::GetInstance()
+//{
+//}
+//
+//void NetworkManager::DestroyInstance()
+//{
+//}
 
-void NetworkManager::DestroyInstance()
-{
-}
-
-bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
+bool NetworkManager::initialize_Client()
 {
 	_clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (_clientSocket == INVALID_SOCKET)
@@ -43,8 +46,8 @@ bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
 
 	sockaddr_in server_address {};
 	server_address.sin_family = AF_INET;
-	server_address.sin_port = htons(port);
-	inet_pton(AF_INET, ip, &server_address.sin_addr);
+	server_address.sin_port = htons(SERVER_PORT);
+	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
 
 	// 서버 접속
 	if (connect(_clientSocket, (sockaddr*)&server_address, sizeof(server_address)) == SOCKET_ERROR)
@@ -86,9 +89,49 @@ bool NetworkManager::initialize_Client(const char* ip, unsigned short port)
 
 void NetworkManager::sendPacket(char* buffer, int size)
 {
-	if (_clientSocket != INVALID_SOCKET)
+	if (_clientSocket == INVALID_SOCKET)
+		return;
+
+	// 남은 데이터가 있으면 버퍼에 추가
+	_sendBuffer.insert(_sendBuffer.end(), buffer, buffer + size);
+	trySendBuffer();
+}
+
+void NetworkManager::trySendBuffer()
+{
+	while (_sendBufferOffset < _sendBuffer.size())
 	{
-		send(_clientSocket, buffer, size, 0);
+		int toSend = (int)(_sendBuffer.size() - _sendBufferOffset);
+		int sent = send(_clientSocket, &_sendBuffer[_sendBufferOffset], toSend, 0);
+		if (sent > 0)
+		{
+			_sendBufferOffset += sent;
+		}
+		else if (sent == SOCKET_ERROR)
+		{
+			int error = WSAGetLastError();
+			if (error == WSAEWOULDBLOCK)
+			{
+				// 다음 루프에서 다시 시도
+				break;
+			}
+			else
+			{
+				shutdown();
+				break;
+			}
+		}
+		else
+		{
+			shutdown();
+			break;
+		}
+	}
+	// 모두 보냈으면 버퍼 초기화
+	if (_sendBufferOffset >= _sendBuffer.size())
+	{
+		_sendBuffer.clear();
+		_sendBufferOffset = 0;
 	}
 }
 
@@ -162,6 +205,8 @@ void NetworkManager::updatePacket()
 			shutdown();
 		}
 	}
+
+	trySendBuffer(); // send도 주기적으로 시도
 }
 
 void NetworkManager::shutdown()

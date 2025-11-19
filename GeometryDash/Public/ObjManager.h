@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Packet.h"
 
 class CObjManager : public CObject
 {
@@ -19,7 +20,7 @@ public:
 	void Render(HDC mDC) override;
 
 	void Free() override;
-
+	int GetPlayerID() const { return m_PlayerID; }
 
 public:
 	static CObjManager* GetInstance()
@@ -50,6 +51,7 @@ public:
 private:
 	static CObjManager* m_pInstance;
 	vector<CObject*>vecAllObj[OBJECT_END]{};
+	int m_PlayerID{};
 
 };
 

@@ -57,7 +57,7 @@ public:
         m_bMSpace = true;
     }
 
-
+    void sendPosition();
 
     //  void SetbMSpace(bool _Jump) { m_bMSpace = _Jump; }
 
