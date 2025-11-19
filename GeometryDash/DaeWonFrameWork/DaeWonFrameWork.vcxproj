@@ -123,7 +123,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>C:\NGP_PIP\common;../Public/;../Private/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp23</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,6 +143,7 @@
       <AdditionalIncludeDirectories>../Public/;../Private/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -188,6 +189,7 @@
     <ClCompile Include="ClientPakcetHandler.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="OtherPlayer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
@@ -228,6 +230,7 @@
     <ClInclude Include="ClientPakcetHandler.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="OtherPlayer.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="UIManager.h" />
   </ItemGroup>
