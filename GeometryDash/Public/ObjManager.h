@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Packet.h"
+#include <vector>
 
 class CObjManager : public CObject
 {
@@ -10,7 +11,7 @@ public:
 	virtual ~CObjManager();
 
 public:
-	// CObject을(를) 통해 상속됨
+	// CObject의(를) 상속 받은 함수들
 	void Initailizer() override;
 
 	int Update(float fTime) override;
@@ -20,7 +21,18 @@ public:
 	void Render(HDC mDC) override;
 
 	void Free() override;
+
+	// 로컬 플레이어 ID 접근자
 	int GetPlayerID() const { return m_PlayerID; }
+	void SetPlayerID(int id) { m_PlayerID = id; }
+
+	// 다른 플레이어 ID 관리
+	bool AddOtherPlayerID(int id);
+	bool RemoveOtherPlayerID(int id);
+	int GetOtherPlayerCount() const { return (int)m_OtherPlayerIDs.size(); }
+	int GetOtherPlayerID(int index) const;
+	bool IsOtherPlayer(int id) const;
+	void ClearOtherPlayers();
 
 public:
 	static CObjManager* GetInstance()
@@ -40,18 +52,20 @@ public:
 		m_pInstance = nullptr;
 	}
 
-	enum ObjectType { OBJECT_BACK, OBJECT_CAMERA,OBJECT_WALL,OBJECT_TILE, OBJECT_ITEM, OBJECT_MONSTER, 
-		OBJECT_BULLET, OBJECT_PLAYER, OBJECT_TILE2, OBJECT_EFFECT,OBECT_ESC_MENU, OBJECT_UI, OBJECT_MOUSE, OBJECT_LAND, OBJECT_BUTTON,OBJECT_END };
+	enum ObjectType {
+		OBJECT_BACK, OBJECT_CAMERA, OBJECT_WALL, OBJECT_TILE, OBJECT_ITEM, OBJECT_MONSTER,
+		OBJECT_BULLET, OBJECT_PLAYER, OBJECT_TILE2, OBJECT_EFFECT, OBECT_ESC_MENU, OBJECT_UI, OBJECT_MOUSE, OBJECT_LAND, OBJECT_BUTTON, OBJECT_END
+	};
 
-	vector<CObject*>* GetAllVector() { return vecAllObj; }
-	
+	std::vector<CObject*>* GetAllVector() { return vecAllObj; }
+
 	void DeleteVector(ObjectType _Type);
 
 
 private:
 	static CObjManager* m_pInstance;
-	vector<CObject*>vecAllObj[OBJECT_END]{};
-	int m_PlayerID{};
+	std::vector<CObject*>vecAllObj[OBJECT_END]{};
+	int m_PlayerID{ -1 };
+	std::vector<int> m_OtherPlayerIDs{};
 
 };
-
