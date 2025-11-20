@@ -106,7 +106,7 @@ void Server::acceptLoop()
 		_room.AddPlayer();
 
 		// DW추가 : 여기에 플레이어 ID 전송해주는 함수 추가함
-		sendClientID(idx);
+		sendClientID((int)idx);
 
 		_playerCount++;
 
