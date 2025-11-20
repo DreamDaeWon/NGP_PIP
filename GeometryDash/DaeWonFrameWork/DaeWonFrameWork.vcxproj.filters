@@ -237,6 +237,9 @@
     <ClCompile Include="NetworkManager.cpp">
       <Filter>소스 파일\Manager\NetworkManager</Filter>
     </ClCompile>
+    <ClCompile Include="OtherPlayer.cpp">
+      <Filter>소스 파일\Object\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Default.h">
@@ -352,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="NetworkManager.h">
       <Filter>소스 파일\Manager\NetworkManager</Filter>
+    </ClInclude>
+    <ClInclude Include="OtherPlayer.h">
+      <Filter>소스 파일\Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

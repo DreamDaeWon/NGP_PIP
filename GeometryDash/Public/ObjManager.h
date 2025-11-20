@@ -1,7 +1,9 @@
 #pragma once
 #include "Object.h"
-#include "Packet.h"
 #include <vector>
+
+class CPlayer;
+class COtherPlayer;
 
 class CObjManager : public CObject
 {
@@ -21,18 +23,6 @@ public:
 	void Render(HDC mDC) override;
 
 	void Free() override;
-
-	// 로컬 플레이어 ID 접근자
-	int GetPlayerID() const { return m_PlayerID; }
-	void SetPlayerID(int id) { m_PlayerID = id; }
-
-	// 다른 플레이어 ID 관리
-	bool AddOtherPlayerID(int id);
-	bool RemoveOtherPlayerID(int id);
-	int GetOtherPlayerCount() const { return (int)m_OtherPlayerIDs.size(); }
-	int GetOtherPlayerID(int index) const;
-	bool IsOtherPlayer(int id) const;
-	void ClearOtherPlayers();
 
 public:
 	static CObjManager* GetInstance()
@@ -54,7 +44,7 @@ public:
 
 	enum ObjectType {
 		OBJECT_BACK, OBJECT_CAMERA, OBJECT_WALL, OBJECT_TILE, OBJECT_ITEM, OBJECT_MONSTER,
-		OBJECT_BULLET, OBJECT_PLAYER, OBJECT_TILE2, OBJECT_EFFECT, OBECT_ESC_MENU, OBJECT_UI, OBJECT_MOUSE, OBJECT_LAND, OBJECT_BUTTON, OBJECT_END
+		OBJECT_BULLET, OBJECT_PLAYER, OBJECT_OTHERPLAYER, OBJECT_TILE2, OBJECT_EFFECT, OBECT_ESC_MENU, OBJECT_UI, OBJECT_MOUSE, OBJECT_LAND, OBJECT_BUTTON, OBJECT_END
 	};
 
 	std::vector<CObject*>* GetAllVector() { return vecAllObj; }
@@ -65,7 +55,17 @@ public:
 private:
 	static CObjManager* m_pInstance;
 	std::vector<CObject*>vecAllObj[OBJECT_END]{};
-	int m_PlayerID{ -1 };
-	std::vector<int> m_OtherPlayerIDs{};
 
+	CPlayer* _MyPlayer;
+
+public:
+	void SetMyPlayer(CPlayer* _player);				 // 내 player 설정
+	void SetMyPlayerID(int id);						 // 내 player ID 설정 (Login 패킷 송신 시 사용)
+	int GetMyPlayerID() const;						 // 내 player ID 반환
+	CPlayer* GetMyPlayer() const;					 // 내 player 포인터 반환
+
+	COtherPlayer* FindOtherPlayer(int id);			 // ID로 다른 플레이어 찾기 
+	void AddOtherPlayer(int id, float x, float y);   // 다른 플레이어 추가 (RoomStart 패킷 수신 시 삭제)
+	void RemoveOtherPlayer(int id);					 // 플레이어 삭제 (RoomLeave 패킷 수신 시 삭제)
+	void ClearOtherPlayers();						 // 모든 다른 플레이어 삭제 (게임 종료 시 삭제)
 };

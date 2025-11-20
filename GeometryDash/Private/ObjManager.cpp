@@ -1,10 +1,11 @@
 #include "ObjManager.h"
+#include "Player.h"
+#include "../DaeWonFrameWork/OtherPlayer.h"
 #include <algorithm>
 
 CObjManager* CObjManager::m_pInstance = nullptr;
 
 CObjManager::CObjManager()
-	: m_PlayerID(-1) // 초기값을 -1로 설정 (미할당 상태)
 {
 }
 
@@ -81,9 +82,6 @@ void CObjManager::Free()
 		}
 		vecAllObj[i].clear();
 	}
-	// 플레이어 ID 리스트 정리
-	m_OtherPlayerIDs.clear();
-	m_PlayerID = -1; // ID 초기화
 }
 
 void CObjManager::DeleteVector(ObjectType _Type)
@@ -99,45 +97,74 @@ void CObjManager::DeleteVector(ObjectType _Type)
 	vecAllObj[_Type].clear();
 }
 
-// --- Other Player ID 관리 함수 구현 ---
-
-bool CObjManager::AddOtherPlayerID(int id)
+void CObjManager::SetMyPlayer(CPlayer* _player)
 {
-	// 로컬 플레이어 ID와 중복 불가
-	if (id == m_PlayerID)
-		return false;
-
-	// 이미 존재하면 추가 안 함
-	if (std::find(m_OtherPlayerIDs.begin(), m_OtherPlayerIDs.end(), id) != m_OtherPlayerIDs.end())
-		return false;
-
-	m_OtherPlayerIDs.push_back(id);
-	return true;
+	_MyPlayer = _player;
 }
 
-bool CObjManager::RemoveOtherPlayerID(int id)
+void CObjManager::SetMyPlayerID(int id)
 {
-	auto it = std::find(m_OtherPlayerIDs.begin(), m_OtherPlayerIDs.end(), id);
-	if (it == m_OtherPlayerIDs.end())
-		return false;
-
-	m_OtherPlayerIDs.erase(it);
-	return true;
+	if (_MyPlayer)
+		_MyPlayer->SetID(id);
 }
 
-int CObjManager::GetOtherPlayerID(int index) const
+int CObjManager::GetMyPlayerID() const 
 {
-	if (index < 0 || index >= (int)m_OtherPlayerIDs.size())
-		return -1;
-	return m_OtherPlayerIDs[index];
+	if (_MyPlayer)
+		return _MyPlayer->GetID();
+	return -1; 
 }
 
-bool CObjManager::IsOtherPlayer(int id) const
+// --- 다른 플레이어 관련 ---
+
+COtherPlayer* CObjManager::FindOtherPlayer(int id)
 {
-	return std::find(m_OtherPlayerIDs.begin(), m_OtherPlayerIDs.end(), id) != m_OtherPlayerIDs.end();
+	for (CObject* player : vecAllObj[OBJECT_OTHERPLAYER])
+	{
+		COtherPlayer* otherPlayer = dynamic_cast<COtherPlayer*>(player);
+		if (otherPlayer->GetID() == id)
+			return otherPlayer;
+	}
+	return nullptr;
+}
+
+void CObjManager::AddOtherPlayer(int id, float x, float y)
+{
+	// 1. 이미 있는 플레이어인지 확인 (중복 생성 방지)
+	if (FindOtherPlayer(id) != nullptr) return;
+
+	// 2. 내 ID와 같은지 확인 (나는 OtherPlayer로 만들면 안 됨)
+	if (id == GetMyPlayerID()) return;
+
+	// 3. 생성 및 초기화
+	COtherPlayer* newPlayer = new COtherPlayer();
+	newPlayer->SetID(id);
+
+	// 4. 리스트에 추가
+	vecAllObj[OBJECT_OTHERPLAYER].emplace_back(newPlayer);
+}
+
+void CObjManager::RemoveOtherPlayer(int id)
+{
+	auto& vec = vecAllObj[OBJECT_OTHERPLAYER];
+	for (auto iter = vec.begin(); iter != vec.end(); ++iter)
+	{
+		COtherPlayer* pOther = dynamic_cast<COtherPlayer*>(*iter);
+		if (pOther && pOther->GetID() == id)
+		{
+			delete* iter;   // 메모리 해제
+			vec.erase(iter); // 벡터에서 제거
+			return;
+		}
+	}
 }
 
 void CObjManager::ClearOtherPlayers()
 {
-	m_OtherPlayerIDs.clear();
+	auto& vec = vecAllObj[OBJECT_OTHERPLAYER];
+	for (auto pObj : vec)
+	{
+		delete pObj;
+	}
+	vec.clear();
 }

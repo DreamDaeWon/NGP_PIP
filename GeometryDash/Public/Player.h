@@ -68,6 +68,9 @@ public:
         m_eBeforeStatus = (STATUS)_Status;
     }
 
+	void SetID(int id) { _id = id; }
+	int GetID() const { return _id; }
+
 
 private:
     vector<HBITMAP*> m_vechBitMap{};
@@ -100,7 +103,7 @@ private:
 
     bool m_bFinish = false;
 
-    int _MainPlayeID{};
+    int _id = -1;
 
 private:
     float angle{};

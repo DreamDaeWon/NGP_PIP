@@ -93,6 +93,10 @@ namespace common::packet
 		int playerIDs[MAX_PLAYERS];
 	};
 
+	struct S2C_LoginAcceptPacket : public PacketHeader {
+		int	playerID;
+	};
+
 	struct S2C_LoginRequestPacket : public PacketHeader {
 		int playerID;
 	};

@@ -78,10 +78,6 @@ bool NetworkManager::initialize_Client()
 	header->size = packetSize;
 	header->type = PacketType::LoginRequestPacket_c2s;
 
-	// TODO (나중에 ID/PW 채우기)
-	// LoginRequestPacket_c2s* payload = (LoginRequestPacket_c2s*)(loginPacketBuffer + sizeof(PacketHeader));
-	// payload->userID = ... (만약 ID/PW가 있다면)
-
 	sendPacket(loginPacketBuffer, packetSize);
 
 	return true;

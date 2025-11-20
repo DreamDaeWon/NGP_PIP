@@ -157,9 +157,9 @@ int CPlayer::Update(float fTime)
 
 
 	auto now_time = chrono::steady_clock::now();
-	if (now_time >= _lastSendTime + SEND_DELAY)
+	if (now_time >= _lastSendTime + chrono::milliseconds(SEND_DELAY))
 	{
-        sendPosition();
+        sendPosition(); 
 		_lastSendTime = now_time;
 	}
 
@@ -503,7 +503,7 @@ void CPlayer::sendPosition()
 {
 	common::packet::C2S_MovePacket packet{};
 	packet.type = common::packet::PacketType::MovePacket_c2s;
-	packet.id = CObjManager::GetInstance()->GetPlayerID();
+	packet.id = CObjManager::GetInstance()->GetMyPlayerID();
 	packet.x = m_CenterPos.x;
 	packet.y = m_CenterPos.y;
 	packet.rotate = angle;
