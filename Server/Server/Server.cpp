@@ -116,7 +116,7 @@ void Server::acceptLoop()
 
 }
 
-void Server::sendClientID(uint32_t clientID)
+void Server::sendClientID(int clientID)
 {
 	// 1. 패킷 생성
 	common::packet::S2C_LoginAcceptPacket* packet = new common::packet::S2C_LoginAcceptPacket();
@@ -127,7 +127,8 @@ void Server::sendClientID(uint32_t clientID)
 	packet->size = sizeof(common::packet::S2C_LoginAcceptPacket);
 
 	// 3. 데이터 설정 (uint32_t -> int 형변환)
-	packet->playerID = static_cast<int>(clientID);
+	packet->playerID = clientID;
+	printf("플레이어 ID알려줌 : %d\n", clientID);
 
 	// 4. 세션 큐에 전송 예약
 	// 워커 스레드가 돌기 시작하면 바로 전송됩니다.

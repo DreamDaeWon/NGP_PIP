@@ -21,7 +21,7 @@ public:
 	void acceptLoop();
 
 	// DW추가 : 클라이언트 id 알려주는 함수
-	void sendClientID(uint32_t clientID);
+	void sendClientID(int clientID);
 
 public:
 	Clients _clients;
