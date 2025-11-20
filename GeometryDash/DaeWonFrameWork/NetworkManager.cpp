@@ -194,6 +194,7 @@ void NetworkManager::updatePacket()
 		if (error == WSAEWOULDBLOCK)
 		{
 			// 5. (정상) 데이터가 없는 것뿐. 아무것도 하지 않음.
+			return;
 		}
 		else
 		{
