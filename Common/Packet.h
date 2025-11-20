@@ -83,9 +83,14 @@ namespace common::packet
 		float Rotate[3]{ 0.f,0.f,0.f };
 	};
 
-	struct S2C_RoomPlayPacket : public PacketHeader { // Room Wait & Start °ø¿ë
+	struct S2C_RoomWaitPacket : public PacketHeader {
 		int playerCount;
 		int playerIDs[MAX_PLAYERS]; // ºó ½½·ÔÀº -1
+	};
+
+	struct S2C_RoomStartPacket : public PacketHeader {
+		int playerCount;
+		int playerIDs[MAX_PLAYERS];
 	};
 
 	struct S2C_LoginRequestPacket : public PacketHeader {
