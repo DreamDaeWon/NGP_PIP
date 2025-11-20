@@ -18,6 +18,11 @@ Session::~Session()
 {
 }
 
+void Session::init(uint32_t id, SOCKET socket, ClientState state)
+{
+	// 일단 임시로 추가해둠
+}
+
 void Session::WorkerLoop()
 {
 	while (_state != ClientState::Disconnected)
@@ -40,28 +45,31 @@ void Session::ProcessPacket()
 	PacketHeader* deserializedPacket = nullptr;
 	switch (header->type)
 	{
-	case PacketType::LoginRequestPacket_c2s:
-		deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
-		break;
-	case PacketType::LogoutPacket_c2s:
-		deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
-		break;
-	case PacketType::RoomEnterPacket_c2s:
-		deserializedPacket = new common::packet::C2S_RoomEnterAcceptPacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_RoomEnterAcceptPacket));
-		break;
-	case PacketType::MovePacket_c2s:
-		deserializedPacket = new common::packet::C2S_MovePacket();
-		memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_MovePacket));
-		break;
-	case PacketType::ErrorPacket:
-		__debugbreak();
-		break;
-	default:
-		// 알 수 없는 패킷 타입 처리
-		break;
+		// DW수정 : 서버가 받을 패킷은 MovePacket_c2s이거 하나라고 박대원은 인식하고 있음
+		
+		//case PacketType::LoginRequestPacket_c2s:
+		//	deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
+		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
+		//	break;
+		//case PacketType::LogoutPacket_c2s:
+		//	deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
+		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
+		//	break;
+		//case PacketType::RoomEnterPacket_c2s:
+		//	deserializedPacket = new common::packet::C2S_RoomEnterAcceptPacket();
+		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_RoomEnterAcceptPacket));
+		//	break;
+
+		case PacketType::MovePacket_c2s:
+			deserializedPacket = new common::packet::C2S_MovePacket();
+			memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_MovePacket));
+			break;
+		case PacketType::ErrorPacket:
+			__debugbreak();
+			break;
+		default:
+			// 알 수 없는 패킷 타입 처리
+			break;
 	}
 	if (nullptr == deserializedPacket)
 	{
