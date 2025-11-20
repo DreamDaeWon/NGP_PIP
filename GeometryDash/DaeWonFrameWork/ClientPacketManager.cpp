@@ -41,7 +41,7 @@ void ClientPacketManager::RegisterHandler()
 	_handlers[PacketType::LoginAcceptPacket_s2c] = Handle_LoginAccept_s2c;
 	//_handlers[PacketType::MapNamesPacket_s2c] = Handle_MapNames_s2c;
 	//_handlers[PacketType::MapLoadPacket_s2c] = Handle_MapLoad_s2c;
-	_handlers[PacketType::RoomEnterAcceptPacket_s2c] = Handle_RoomEnterAccept_s2c;
+	//_handlers[PacketType::RoomEnterAcceptPacket_s2c] = Handle_RoomEnterAccept_s2c;
 	_handlers[PacketType::RoomStartPacket_s2c] = Handle_RoomStart_s2c;
-	_handlers[PacketType::MapRoomEndPacket_s2c] = Handle_MapRoomEnd_s2c;
+	//_handlers[PacketType::MapRoomEndPacket_s2c] = Handle_MapRoomEnd_s2c;
 }
