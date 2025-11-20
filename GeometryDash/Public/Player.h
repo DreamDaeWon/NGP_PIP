@@ -68,6 +68,7 @@ public:
         m_eBeforeStatus = (STATUS)_Status;
     }
 
+
 private:
     vector<HBITMAP*> m_vechBitMap{};
     HDC m_PalyerDc{};
@@ -98,6 +99,8 @@ private:
     bool m_bMSpace = false; // 대원 추가 점프 확인용
 
     bool m_bFinish = false;
+
+    int _MainPlayeID{};
 
 private:
     float angle{};

@@ -106,5 +106,6 @@ private:
 
     HDC m_CompleteDc{};
 
+	int _OtherPlayerID{};
 };
 
