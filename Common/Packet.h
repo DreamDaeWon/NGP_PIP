@@ -59,24 +59,6 @@ namespace common::packet
 		Player_State player_state;
 	};
 
-	struct C2S_LoginAcceptPacket : public PacketHeader {
-		int playerID;
-	};
-
-	struct C2S_RoomWaitPacket : public PacketHeader {
-		
-	};
-
-	struct C2S_RoomStartPacket : public PacketHeader {
-
-	};
-
-	struct C2S_RoomEndPacket : public PacketHeader {
-		int roomID;
-		int winUserID;
-		float ElapsedTime;
-	};
-
 	// -------------------------------------------Server to Client-------------------------------------------
 	
 	struct S2C_MovePacket : public PacketHeader {
@@ -99,6 +81,16 @@ namespace common::packet
 			Player_State::PLAYER_STATE_END,
 		};
 		float Rotate[3]{ 0.f,0.f,0.f };
+	};
+
+	struct S2C_RoomWaitPacket : public PacketHeader {
+		int playerCount;
+		int playerIDs[MAX_PLAYERS]; // ∫Û ΩΩ∑‘¿∫ -1
+	};
+
+	struct S2C_RoomStartPacket : public PacketHeader {
+		int playerCount;
+		int playerIDs[MAX_PLAYERS];
 	};
 
 	struct S2C_LoginRequestPacket : public PacketHeader {
