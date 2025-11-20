@@ -33,7 +33,7 @@ private:
 	SOCKET _clientSocket;
 
 	char _recvBuffer[BUFFER_SIZE];
-	long long _recvBufferSize;
+	unsigned long long _recvBufferSize;
 
 	std::vector<char> _sendBuffer;
 	size_t _sendBufferOffset = 0;

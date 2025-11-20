@@ -137,7 +137,7 @@ void NetworkManager::processPacket()
 	{
 		// 1. 헤더를 읽어 패킷의 전체 크기를 확인
 		PacketHeader* pHeader = (PacketHeader*)_recvBuffer;
-		long long packetSize = pHeader->size;
+		unsigned long long packetSize = pHeader->size;
 
 		// 2. 버퍼에 패킷 전체 크기만큼의 데이터가 쌓였는지 확인
 		if (_recvBufferSize >= packetSize)
@@ -149,7 +149,7 @@ void NetworkManager::processPacket()
 			}
 
 			// 4. 버퍼에서 처리된 패킷만큼 제거
-			long long remainingData = _recvBufferSize - packetSize;
+			unsigned long long remainingData = _recvBufferSize - packetSize;
 			if (remainingData > 0)
 			{
 				// 뒤에 남은 데이터를 버퍼 앞으로 당겨옴 (memmove)
