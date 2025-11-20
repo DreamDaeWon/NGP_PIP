@@ -54,6 +54,8 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 
 	while (_isGameRunning)
 	{
+		timer->StartDeltatime();
+
 		timer->Tick();
 
 		// 패킷 입력 처리
