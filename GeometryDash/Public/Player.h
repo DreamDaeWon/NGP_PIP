@@ -1,4 +1,6 @@
 #pragma once
+#include <chrono>
+
 #include "Object.h"
 #include "math.h"
 #include "CSoundManager.h"
@@ -108,5 +110,7 @@ private:
 
     HDC m_CompleteDc{};
 
+	const unsigned int SEND_DELAY = 50; // 50ms
+    chrono::steady_clock::time_point _lastSendTime;
 };
 

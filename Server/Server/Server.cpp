@@ -18,7 +18,7 @@ void Server::initailize()
 	sockaddr_in serveraddr;
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serveraddr.sin_port = htons(SERVERPORT);
+	serveraddr.sin_port = htons(SERVER_PORT);
 	if (SOCKET_ERROR == bind(_listenSocket, (sockaddr*)&serveraddr, sizeof(serveraddr)))
 	{
 		err_quit("bind() 오류");
@@ -60,11 +60,10 @@ void Server::end()
 	}
 	_workers.clear();
 
-	for (auto& session : _sessions)
+	for (auto & session : _clients._sessions)
 	{
 		session.Disconnect();
 	}
-
 	WSACleanup();
 }
 
@@ -99,15 +98,16 @@ void Server::acceptLoop()
 			ntohs(clientaddr.sin_port));
 
 		uint32_t idx = _playerCount; // 0-based
-		_sessions[idx] = Session(idx + 1, clientsocket, ClientState::Connected);
+		_clients._sessionLock.lock();
+		_clients._sessions[idx].init(idx, clientsocket, ClientState::Connected);
+		_clients._sessions[idx].setCurrentRoom(&_room);
+		_clients._sessionLock.unlock();
 
-		// Room에 플레이어(세션) 추가 및 세션에 Room 정보 설정
-		_room.AddPlayer(&_sessions[idx]);
-		_sessions[idx].setCurrentRoom(&_room);
+		_room.AddPlayer();
 
 		_playerCount++;
 
-		_workers.emplace_back(&Session::WorkerLoop, &_sessions[idx]);
+		_workers.emplace_back(&Session::WorkerLoop, &_clients._sessions[idx]);
 
 	}
 

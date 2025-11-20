@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "Player.h"
 #include "Packet.h"
-// DW¿¹Á¤ : ÃßÈÄ¿¡ Ãß°¡µÇ¸é Ãß°¡ÇÒ ¿¹Á¤ÀÎ Çì´õµé
+// DWì˜ˆì • : ì¶”í›„ì— ì¶”ê°€ë˜ë©´ ì¶”ê°€í•  ì˜ˆì •ì¸ í—¤ë”ë“¤
 
 enum class RoomGameMode
 {
@@ -11,15 +11,15 @@ enum class RoomGameMode
 	ROOM_MODE_MAX
 };
 
-// DWÁú¹® : Player ±¸Á¶Á¦ °ü·Ã ¾Öµé ¾îµğ¿¡ Á¤ÀÇÇØµÎ¾î¾ß ÇÏÁö?
-// KJ ÇØ´ä : ÆÄÀÏÇÏ³ª ¸¸µé¾î¼­ Player.h·Î Á¤ÀÇÇØµÎ´Â°Ô ÁÁÀ»µí
+// DWì§ˆë¬¸ : Player êµ¬ì¡°ì œ ê´€ë ¨ ì• ë“¤ ì–´ë””ì— ì •ì˜í•´ë‘ì–´ì•¼ í•˜ì§€?
+// KJ í•´ë‹µ : íŒŒì¼í•˜ë‚˜ ë§Œë“¤ì–´ì„œ Player.hë¡œ ì •ì˜í•´ë‘ëŠ”ê²Œ ì¢‹ì„ë“¯
 
 
-// KJ Áú¹® : ÀÌ°Ô ¹¹ÀÓ
-// DW ´äº¯ : ºê·Îµå Ä³½ºÆ®¹Û¿¡ ¾ÈÇÒ²¨´Ï±î ¹­¾î¼­ º¸³»ÀÚ, ÀÌµ¿ ÆĞÅ¶À» ¹Ù²ÙÀÚ
-// KJ ÇØ´ä : ¾ÆÇÏ ¾Ë°ÚÀ½
+// KJ ì§ˆë¬¸ : ì´ê²Œ ë­ì„
+// DW ë‹µë³€ : ë¸Œë¡œë“œ ìºìŠ¤íŠ¸ë°–ì— ì•ˆí• êº¼ë‹ˆê¹Œ ë¬¶ì–´ì„œ ë³´ë‚´ì, ì´ë™ íŒ¨í‚·ì„ ë°”ê¾¸ì
+// KJ í•´ë‹µ : ì•„í•˜ ì•Œê² ìŒ
 
-class Session; // DW¼³¸í : Àü¹æ ¼±¾ğ
+class Session; // DWì„¤ëª… : ì „ë°© ì„ ì–¸
 class Timer;
 using PacketHandlerFunc = std::function<void(Session*, char*)>;
 class Room
@@ -29,9 +29,9 @@ public:
 	~Room();
 
 public:
-	// DW¿¹Á¤ : ¸®ÅÏ Å¸ÀÔ ¹× ¸Å°³º¯¼ö ±¸Çö ¶§ ÇÏ³ª ¾¿ ¼öÁ¤ÇÒ ¿¹Á¤
-	void AddPlayer(Session* player);
-	void RemovePlayer(Session* player);
+	// DWì˜ˆì • : ë¦¬í„´ íƒ€ì… ë° ë§¤ê°œë³€ìˆ˜ êµ¬í˜„ ë•Œ í•˜ë‚˜ ì”© ìˆ˜ì •í•  ì˜ˆì •
+	void AddPlayer();
+	void RemovePlayer(int id);
 	void StartGame();
 	void StopGame();
 	void UpdateGame();
@@ -42,7 +42,7 @@ public:
 	void RegisterHandler(common::packet::PacketType type, void(Room::* func)(Session*, char*));
 	void HandlePacket(Session* session, char* packet);
 
-	void MovePacket_c2s(Session* player, char* packet);
+	void MovePacket_c2s(Session* session, char* packet);
 
 private:
 	void ProcessInputs();
@@ -51,19 +51,15 @@ private:
 
 private:
 	long long CurrentMapSize{};
-	std::vector<Session*> Players{};
+	std::vector<Player> Players{};
+	std::mutex _playerMutex;
 
-	// DW»ı°¢ : 2vs2 ¸ğµå°¡ ¾ø¾îÁ³±â¿¡ ÇÊ¿ä°¡ ÀÖ³ª?
-	// int Camera_ID;
-	
 	Timer* timer = nullptr;
 
-	// DWÁú¹® : ÀÌ°Å ¾îÄ«Áö?
 	std::queue<common::packet::PacketHeader*> incomingQueue;
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 
-	std::mutex _playerMutex;
 	std::mutex _queueMutex;
 	std::atomic_bool _isGameRunning{ false };
 

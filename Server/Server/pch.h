@@ -14,7 +14,6 @@
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib 링크
 
-constexpr int SERVERPORT = 9000;
 
 // 소켓 함수 오류 출력 후 종료
 inline void err_quit(const char* msg)

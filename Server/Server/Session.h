@@ -1,9 +1,8 @@
 ﻿#pragma once
-
 #include "Player.h"
 class Room; // 전방 선언
 
-enum class ClientState
+enum class ClientState : int
 {
 	Connected,
 	InRoom,
@@ -18,12 +17,14 @@ public:
 	Session();
 	Session(uint32_t id, SOCKET socket, ClientState state);
 
-	Session(const Session& other);
-	Session& operator=(const Session& other);
+	Session(const Session& other) = delete;
+	Session& operator=(const Session& other) = delete;
 
 
 	~Session();
-
+	void init(uint32_t id, SOCKET socket, ClientState state);
+	bool isConnected() const { return _state != ClientState::Disconnected; }
+	ClientState getState() const { return _state; }
 	void WorkerLoop();
 	void ProcessPacket();
 	void SendPacket();
@@ -33,15 +34,13 @@ public:
 	void EnqueuePacket(common::packet::PacketHeader* packet);
 
 
-	Player& getPlayer() { return _player; }
 	uint32_t getId() const { return _id; }
 
 	void setCurrentRoom(Room* room) { _currentRoom = room; }
 private:
 	uint32_t _id;
 	SOCKET _socket;
-	ClientState _state;
-	Player _player;
+	std::atomic<ClientState> _state;
 	Room* _currentRoom;
 
 	std::array<char, 1024> _recvBuffer;

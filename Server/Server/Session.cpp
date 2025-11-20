@@ -12,30 +12,7 @@ Session::Session(uint32_t id, SOCKET socket, ClientState state) : _id(id), _sock
 {
 }
 
-Session::Session(const Session& other)
-{
-	if (this != &other)
-	{
-		_id = other._id;
-		_socket = other._socket;
-		_state = other._state;
-		_player = other._player;
-		_currentRoom = other._currentRoom;
-	}
-}
 
-Session& Session::operator=(const Session& other)
-{
-	if (this != &other)
-	{
-		_id = other._id;
-		_socket = other._socket;
-		_state = other._state;
-		_player = other._player;
-		_currentRoom = other._currentRoom;
-	}
-	return *this;
-}
 
 Session::~Session()
 {
@@ -165,7 +142,7 @@ void Session::Disconnect()
 	// Room에서 플레이어 제거 요청
 	if (_currentRoom != nullptr)
 	{
-		_currentRoom->RemovePlayer(this);
+		_currentRoom->RemovePlayer(_id);
 	}
 
 	closesocket(_socket);

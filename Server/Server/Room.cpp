@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Session.h"
 #include "Room.h"
+
+#include <utility>
 #include "Server.h"
 #include "Timer.h"
 
@@ -18,22 +20,19 @@ Room::~Room()
 	
 }
 
-void Room::AddPlayer(Session* player)
+void Room::AddPlayer()
 {
-	_playerMutex.lock();
-	Players.push_back(player);
-	_playerMutex.unlock();
+	std::lock_guard<std::mutex> lock(_playerMutex);
+	Players.push_back(Player{});
 }
 
-void Room::RemovePlayer(Session* player)
+void Room::RemovePlayer(int id)
 {
-	_playerMutex.lock();
-	auto iter = std::find(Players.begin(), Players.end(), player);
-	if(iter != Players.end())
-	{
-		Players.erase(iter);
-	}
-	_playerMutex.unlock();
+	std::lock_guard<std::mutex> lock(_playerMutex);
+	std::erase_if(Players, [id](const Player& player)
+		{
+			return std::cmp_equal(player.id, id);
+		});
 }
 
 void Room::StartGame()
@@ -72,14 +71,16 @@ void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
 
 void Room::BroadcastPacket(common::packet::PacketHeader* packet)
 {
-	std::lock_guard<std::mutex> lock(_playerMutex);
-	for (Session* player : Players)
+	Server::Instance()->_clients._sessionLock.lock();
+	auto& sessions = Server::Instance()->_clients._sessions;
+	for (auto& player : sessions)
 	{
 		// KJ: 이 메모리는 각 세션의 SendPacket 함수에서 delete
 		char* buffer = new char[packet->size];
 		memcpy(buffer, packet, packet->size);
-		player->EnqueuePacket(reinterpret_cast<common::packet::PacketHeader*>(buffer));
+		player.EnqueuePacket(reinterpret_cast<common::packet::PacketHeader*>(buffer));
 	}
+	Server::Instance()->_clients._sessionLock.unlock();
 }
 
 void Room::EnqueuePacket(common::packet::PacketHeader* packet)
@@ -120,20 +121,21 @@ void Room::BroadcastState()
 	allPlayerStatePacket.size = sizeof(common::packet::S2C_AllPlayerMovePacket);
 	allPlayerStatePacket.type = common::packet::PacketType::AllPlayerMovePacket_s2c;
 
-	_playerMutex.lock();
-	for (const auto& session : Players)
+	
 	{
-		const Player& player = session->getPlayer();
-		size_t id = player.id;
-		if (id < MAX_PLAYERS)
+		std::lock_guard<std::mutex> lock(_playerMutex);
+		for (const auto& player : Players)
 		{
-			allPlayerStatePacket.x[id] = player.x;
-			allPlayerStatePacket.y[id] = player.y;
-			allPlayerStatePacket.state[id] = player.state;
-			allPlayerStatePacket.Rotate[id] = player.Rotate;
+			size_t id = player.id;
+			if (id < MAX_PLAYERS)
+			{
+				allPlayerStatePacket.x[id] = player.x;
+				allPlayerStatePacket.y[id] = player.y;
+				allPlayerStatePacket.state[id] = player.state;
+				allPlayerStatePacket.Rotate[id] = player.Rotate;
+			}
 		}
 	}
-	_playerMutex.unlock();
 
 	// BroadcastPacket 함수를 통해 모든 플레이어에게 전송
 	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&allPlayerStatePacket));
@@ -166,21 +168,18 @@ void Room::HandlePacket(Session* session, char* packet)
 	}
 }
 
-void Room::MovePacket_c2s(Session* player, char* packet)
+void Room::MovePacket_c2s(Session* session, char* packet)
 {
 	common::packet::C2S_MovePacket* movePacket = reinterpret_cast<common::packet::C2S_MovePacket*>(packet);
-	// ID 유효성 검사
+	
+	if (movePacket->id < Players.size())
 	{
-		std::lock_guard<std::mutex> lock(_playerMutex); // Players 벡터 접근을 위한 락
-		// movePacket->id가 Players 벡터의 유효한 인덱스인지 확인
-		if (movePacket->id < Players.size())
-		{
-			// 세션 포인터를 통해 해당 플레이어의 상태를 직접 업데이트
-			Player& player = Players[movePacket->id]->getPlayer();
-			player.x = movePacket->x;
-			player.y = movePacket->y;
-			player.state = movePacket->player_state;
-			player.Rotate = movePacket->rotate;
-		}
-	} // _players_mutex 락 해제
+		// 세션 포인터를 통해 해당 플레이어의 상태를 직접 업데이트
+		Player& player = Players[movePacket->id];
+		player.x = movePacket->x;
+		player.y = movePacket->y;
+		player.state = movePacket->player_state;
+		player.Rotate = movePacket->rotate;
+	}
+	
 }

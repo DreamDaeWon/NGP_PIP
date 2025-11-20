@@ -22,12 +22,15 @@
     <Filter Include="소스 파일\common">
       <UniqueIdentifier>{ae4e53b2-ceab-4e5a-92f4-ad2dfba867f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server">
+      <UniqueIdentifier>{fd3fd021-2165-44d2-9da7-f5c9da596e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\Session">
+      <UniqueIdentifier>{a5de93d8-f6ce-410d-8d5a-fa75d9d5b8a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -36,17 +39,17 @@
     <ClCompile Include="Room.cpp">
       <Filter>소스 파일\Room</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>소스 파일\Time</Filter>
     </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>소스 파일\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>소스 파일\Server\Session</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -56,9 +59,6 @@
     <ClInclude Include="..\..\Common\Packet.h">
       <Filter>소스 파일\common</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -67,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\Singleton.h">
       <Filter>소스 파일\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>소스 파일\Server\Session</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

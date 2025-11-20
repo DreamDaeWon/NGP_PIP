@@ -155,7 +155,13 @@ int CPlayer::Update(float fTime)
     m_NowPoint[2].x = (m_CenterPos.x - CCameraManager::GetInstance()->GetCenterPos().x) + (ridius * cos(radian(angle - 225)));
     m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle - 225)));
 
-    //TODO: 50ms 마다 위치 패킷 전송
+
+	auto now_time = chrono::steady_clock::now();
+	if (now_time >= _lastSendTime + SEND_DELAY)
+	{
+        sendPosition();
+		_lastSendTime = now_time;
+	}
 
 	return 0;
 }
