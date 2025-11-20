@@ -66,6 +66,7 @@ public:
         m_eBeforeStatus = (STATUS)_Status;
     }
 
+
 private:
     vector<HBITMAP*> m_vechBitMap{};
     HDC m_PalyerDc{};
@@ -97,6 +98,8 @@ private:
 
     bool m_bFinish = false;
 
+    int _MainPlayeID{};
+
 private:
     float angle{};
 
@@ -107,6 +110,5 @@ private:
        {(long)(0),(long)(m_fRidius * 2)} }; // 현재 왼쪽 위 오른쪽 위 왼쪽아래 의 좌표
 
     HDC m_CompleteDc{};
-
 };
 

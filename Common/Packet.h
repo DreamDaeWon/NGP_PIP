@@ -94,7 +94,7 @@ namespace common::packet
 	};
 
 	struct S2C_LoginRequestPacket : public PacketHeader {
-		//KJ: 패킷 타입으로 알아볼수 있음
+		int playerID;
 	};
 
 	struct S2C_LogoutPacket : public PacketHeader {
