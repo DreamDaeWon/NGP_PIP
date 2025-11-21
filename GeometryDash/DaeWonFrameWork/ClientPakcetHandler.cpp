@@ -1,4 +1,7 @@
 #include "ClientPakcetHandler.h"
+
+#include <string>
+
 #include "Packet.h"
 #include "ObjManager.h"
 #include "OtherPlayer.h"
@@ -53,7 +56,8 @@ void client::handler::Handle_LoginAccept_s2c(char* buffer)
 
     // ³» ID ¼³Á¤
     CObjManager::GetInstance()->SetMyPlayerID(assignedID);
-    std::printf("[Client] Login Success! My ID: %d\n", assignedID);
+	string debugMsg = "[Client] Login Success! My ID: " + to_string(assignedID) + "\n";
+    OutputDebugStringA(debugMsg.c_str());
 }
 
 void client::handler::Handle_RoomWait_s2c(char* buffer)

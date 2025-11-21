@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "Player.h"
+#include <vector>
+#include <memory>
+#include <queue>
+
 class Room; // 전방 선언
 
 enum class ClientState : int
@@ -31,7 +35,7 @@ public:
 	void RecvPacket();
 	void Disconnect();
 
-	void EnqueuePacket(common::packet::PacketHeader* packet);
+	void EnqueuePacket(std::shared_ptr<std::vector<char>> packet);
 
 
 	uint32_t getId() const { return _id; }
@@ -47,5 +51,5 @@ private:
 	std::array<char, 1024> _sendBuffer;
 
 	std::mutex _sendMutex;
-	std::queue<common::packet::PacketHeader*> _sendQueue;
+	std::queue<std::shared_ptr<std::vector<char>>> _sendQueue;
 };

@@ -13,6 +13,7 @@
 CPlayer::CPlayer()
 {
     Initailizer();
+	_lastSendTime = chrono::steady_clock::now();
 }
 
 CPlayer::~CPlayer()
@@ -236,7 +237,7 @@ void CPlayer::Render(HDC mDC)
     }
 
 
-    // Å×µÎ¸® Áö¿ì´Â ÄÚµå ³Ö±â
+    // ï¿½×µÎ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ ï¿½Ö±ï¿½
     HPEN hPen = (HPEN)CreatePen(PS_SOLID, 2, RGB(255, 0, 255)), OldPen{};
     OldPen = (HPEN)SelectObject(_BackDc, hPen);
 
@@ -249,7 +250,7 @@ void CPlayer::Render(HDC mDC)
     SelectObject(_BackDc, OldPen);
     DeleteObject(hBrush);
     DeleteObject(hPen);
-    // ¿©±â¼­ºÎÅÍ ±×¸®±â ÇÏ±â!
+    // ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½!
     if (m_Fcntx >= (90 * fspeed)) {
         m_CompleteDc = CreateCompatibleDC(_BackDc);
         SelectObject(m_CompleteDc, (BITMAP*)*(m_vechBitMap[3]));
@@ -287,7 +288,7 @@ void CPlayer::Free()
 
 void CPlayer::KeyDown()
 {
-    // KeyManager »ç¿ë¿¹½Ã
+    // KeyManager ï¿½ï¿½ë¿¹ï¿½ï¿½
     if (CKeyManager::GetInstance()->KeyDown(VK_LEFT))
     {
         Key[DIR_LEFT] = true;
@@ -494,7 +495,7 @@ float CPlayer::radian(float degrees)
 
 void CPlayer::LoadPlayerSound()
 {
-    //CSoundManager::GetInstance()->LoadSound("·¹º§¿Ï·á","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
+    //CSoundManager::GetInstance()->LoadSound("ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
 
 
 }
@@ -507,7 +508,7 @@ void CPlayer::sendPosition()
 	packet.x = m_CenterPos.x;
 	packet.y = m_CenterPos.y;
 	packet.rotate = angle;
-	packet.ridius = m_fRidius; // ¹ÝÁö¸§ º¸³»±â
+	packet.ridius = m_fRidius; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     packet.cameraID = 0;
 
 	char* buffer = reinterpret_cast<char*>(&packet);

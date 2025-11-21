@@ -3,10 +3,10 @@
 
 int main()
 {
-	Server server;
-	server.initailize();
-	server.start();
-	server.run();
-	server.end();
+	Server* server = Server::Instance();
+	server->initailize();
+	server->start();
+	server->run();
+	server->end();
 	return 0;
 }

@@ -229,6 +229,7 @@
     <ClInclude Include="ClientPacketManager.h" />
     <ClInclude Include="ClientPakcetHandler.h" />
     <ClInclude Include="MapManager.h" />
+    <ClInclude Include="NetworkHeader.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="OtherPlayer.h" />
     <ClInclude Include="TimerManager.h" />

@@ -106,31 +106,31 @@ void Server::acceptLoop()
 		_room.AddPlayer();
 
 		// DW추가 : 여기에 플레이어 ID 전송해주는 함수 추가함
-		sendClientID((int)idx);
 
 		_playerCount++;
 
-		_workers.emplace_back(&Session::WorkerLoop, &_clients._sessions[idx]);
+		std::thread worker{ &Session::WorkerLoop, &_clients._sessions[idx] };
+		_workers.emplace_back(std::move(worker));
 
+		sendClientID((int)idx);
 	}
 
 }
 
 void Server::sendClientID(int clientID)
 {
-	// 1. 패킷 생성
-	common::packet::S2C_LoginAcceptPacket* packet = new common::packet::S2C_LoginAcceptPacket();
+	// 1. Create packet on stack
+	common::packet::S2C_LoginAcceptPacket packet;
+	packet.type = common::packet::PacketType::LoginAcceptPacket_s2c;
+	packet.size = sizeof(common::packet::S2C_LoginAcceptPacket);
+	packet.playerID = clientID;
 
-	// 2. 헤더 설정 (생성자에서 안 한다면 필수!)
-	// PacketType enum에 해당하는 타입이 정의되어 있어야 합니다.
-	packet->type = common::packet::PacketType::LoginAcceptPacket_s2c;
-	packet->size = sizeof(common::packet::S2C_LoginAcceptPacket);
-
-	// 3. 데이터 설정 (uint32_t -> int 형변환)
-	packet->playerID = clientID;
 	printf("플레이어 ID알려줌 : %d\n", clientID);
 
-	// 4. 세션 큐에 전송 예약
-	// 워커 스레드가 돌기 시작하면 바로 전송됩니다.
-	_clients._sessions[clientID].EnqueuePacket(reinterpret_cast<common::packet::PacketHeader*>(packet));
+	// 2. Create a shared vector from the packet data
+	auto packetData = std::make_shared<std::vector<char>>(packet.size);
+	memcpy(packetData->data(), &packet, packet.size);
+
+	// 3. Enqueue the packet for sending
+	_clients._sessions[clientID].EnqueuePacket(packetData);
 }

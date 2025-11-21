@@ -58,7 +58,12 @@ namespace common::packet
 		int cameraID;
 		Player_State player_state;
 	};
-
+	struct C2S_LogoutPacket : public PacketHeader {
+		int	id;
+	};
+	struct C2S_LoginRequestPacket : public PacketHeader {
+		int	id;
+	};
 	// -------------------------------------------Server to Client-------------------------------------------
 	
 	struct S2C_MovePacket : public PacketHeader {
@@ -96,14 +101,5 @@ namespace common::packet
 	struct S2C_LoginAcceptPacket : public PacketHeader {
 		int	playerID;
 	};
-
-	struct S2C_LoginRequestPacket : public PacketHeader {
-		int playerID;
-	};
-
-	struct S2C_LogoutPacket : public PacketHeader {
-		//KJ: 패킷 타입으로 알아볼수 있음
-	};
-
 #pragma pack (pop)
 }

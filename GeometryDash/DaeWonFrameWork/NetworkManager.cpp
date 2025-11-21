@@ -1,7 +1,4 @@
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
-
+#include "NetworkHeader.h"
 #include "NetworkManager.h"
 #include "ClientPacketManager.h"
 
@@ -14,7 +11,7 @@ NetworkManager::NetworkManager()
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
-		// 에러	
+		err_quit("WSAStartup()");
 	}
 
 	_packetManager = ClientPacketManager::Instance();
@@ -39,8 +36,7 @@ bool NetworkManager::initialize_Client()
 	_clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (_clientSocket == INVALID_SOCKET)
 	{
-		// TODO: 소켓 생성 실패
-		// TODO : 에러 로그 남기기
+		err_quit("socket()");
 		return false;
 	}
 
@@ -54,6 +50,7 @@ bool NetworkManager::initialize_Client()
 	{
 		closesocket(_clientSocket);
 		_clientSocket = INVALID_SOCKET;
+		err_quit("connect()");
 		return false;
 	}
 
@@ -64,6 +61,7 @@ bool NetworkManager::initialize_Client()
 	{
 		closesocket(_clientSocket);
 		_clientSocket = INVALID_SOCKET;
+		err_display("ioctlsocket()");
 		return false;
 	}
 
@@ -86,7 +84,10 @@ bool NetworkManager::initialize_Client()
 void NetworkManager::sendPacket(char* buffer, int size)
 {
 	if (_clientSocket == INVALID_SOCKET)
+	{
+		err_display("sendPacket()");
 		return;
+	}
 
 	// 남은 데이터가 있으면 버퍼에 추가
 	_sendBuffer.insert(_sendBuffer.end(), buffer, buffer + size);
@@ -210,6 +211,7 @@ void NetworkManager::shutdown()
 {
 	if (_clientSocket != INVALID_SOCKET)
 	{
+		err_display("shutdown()");
 		closesocket(_clientSocket);
 		_clientSocket = INVALID_SOCKET;
 	}

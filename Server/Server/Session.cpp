@@ -20,7 +20,9 @@ Session::~Session()
 
 void Session::init(uint32_t id, SOCKET socket, ClientState state)
 {
-	// 일단 임시로 추가해둠
+	_id = id;
+	_socket = socket;
+	_state = state;
 }
 
 void Session::WorkerLoop()
@@ -46,20 +48,16 @@ void Session::ProcessPacket()
 	switch (header->type)
 	{
 		// DW수정 : 서버가 받을 패킷은 MovePacket_c2s이거 하나라고 박대원은 인식하고 있음
+		// KJ: 로그인 로그아웃은 있어야함
 		
-		//case PacketType::LoginRequestPacket_c2s:
-		//	deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
-		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
-		//	break;
-		//case PacketType::LogoutPacket_c2s:
-		//	deserializedPacket = new common::packet::C2S_LoginAcceptPacket();
-		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginAcceptPacket));
-		//	break;
-		//case PacketType::RoomEnterPacket_c2s:
-		//	deserializedPacket = new common::packet::C2S_RoomEnterAcceptPacket();
-		//	memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_RoomEnterAcceptPacket));
-		//	break;
-
+		case PacketType::LoginRequestPacket_c2s:
+			deserializedPacket = new common::packet::C2S_LoginRequestPacket();
+			memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LoginRequestPacket));
+			break;
+		case PacketType::LogoutPacket_c2s:
+			deserializedPacket = new common::packet::C2S_LogoutPacket;
+			memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_LogoutPacket));
+			break;
 		case PacketType::MovePacket_c2s:
 			deserializedPacket = new common::packet::C2S_MovePacket();
 			memcpy(deserializedPacket, _recvBuffer.data(), sizeof(common::packet::C2S_MovePacket));
@@ -68,7 +66,7 @@ void Session::ProcessPacket()
 			__debugbreak();
 			break;
 		default:
-			// 알 수 없는 패킷 타입 처리
+			__debugbreak();
 			break;
 	}
 	if (nullptr == deserializedPacket)
@@ -80,7 +78,7 @@ void Session::ProcessPacket()
 
 void Session::SendPacket()
 {
-	common::packet::PacketHeader* packetToSend = nullptr;
+	std::shared_ptr<std::vector<char>> packetToSend = nullptr;
 	{
 		std::lock_guard<std::mutex> lock(_sendMutex);
 		if (_sendQueue.empty())
@@ -88,11 +86,14 @@ void Session::SendPacket()
 		packetToSend = _sendQueue.front();
 		_sendQueue.pop();
 	}
+
+	if (packetToSend == nullptr) return;
+
 	int total_sent_len = 0;
 	int retval = 0;
-	while (total_sent_len < packetToSend->size) {
-		retval = send(_socket, reinterpret_cast<char*>(packetToSend) + total_sent_len,
-			static_cast<int>(packetToSend->size) - total_sent_len, 0);
+	while (total_sent_len < packetToSend->size()) {
+		retval = send(_socket, packetToSend->data() + total_sent_len,
+			static_cast<int>(packetToSend->size()) - total_sent_len, 0);
 		if (SOCKET_ERROR == retval) {
 			err_display("send()");
 			break;
@@ -101,7 +102,6 @@ void Session::SendPacket()
 			break;
 		total_sent_len += retval;
 	}
-	delete packetToSend;
 }
 
 void Session::RecvPacket()
@@ -155,9 +155,14 @@ void Session::Disconnect()
 
 	closesocket(_socket);
 	_state = ClientState::Disconnected;
+
+	// Clear the queue, smart pointers will be released
+	std::lock_guard<std::mutex> lock(_sendMutex);
+	std::queue<std::shared_ptr<std::vector<char>>> emptyQueue;
+	_sendQueue.swap(emptyQueue);
 }
 
-void Session::EnqueuePacket(common::packet::PacketHeader* packet)
+void Session::EnqueuePacket(std::shared_ptr<std::vector<char>> packet)
 {
 	std::lock_guard<std::mutex> lock(_sendMutex);
 	_sendQueue.push(packet);

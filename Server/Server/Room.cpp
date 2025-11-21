@@ -6,7 +6,7 @@
 #include "Server.h"
 #include "Timer.h"
 
-// DW¿¹Á¤ : ÀÏ´Ü ´Ù Á¦ÀÛ¸¸ ÇØµÒ ÇÏ³ª¾¿ ¹Ù²ã³ª°¥ ¿¹Á¤
+// DWì˜ˆì • : ì¼ë‹¨ ë‹¤ ì œì‘ë§Œ í•´ë‘  í•˜ë‚˜ì”© ë°”ê¿”ë‚˜ê°ˆ ì˜ˆì •
 Room::Room() :
 	CurrentMapSize{ 0 },
 	mode{ RoomGameMode::ROOM_MODE_MAX },
@@ -17,7 +17,14 @@ Room::Room() :
 
 Room::~Room()
 {
-	
+	delete timer;
+
+	std::lock_guard<std::mutex> lock(_queueMutex);
+	while (!incomingQueue.empty())
+	{
+		delete incomingQueue.front();
+		incomingQueue.pop();
+	}
 }
 
 void Room::AddPlayer()
@@ -45,9 +52,9 @@ void Room::StopGame()
 	_isGameRunning = false;
 }
 
-void Room::UpdateGame() // DW¼³¸í : ÇÃ·¹ÀÌ¾î »óÅÂ °»½Å
+void Room::UpdateGame() // DWì„¤ëª… : í”Œë ˆì´ì–´ ìƒíƒœ ê°±ì‹ 
 {
-	StartGame(); // °ÔÀÓ ·çÇÁ ½ÃÀÛ
+	StartGame(); // ê²Œì„ ë£¨í”„ ì‹œì‘
 	const float FPS = 60.0f;
 	const float FRAME_TIME = 1.0f / FPS;
 
@@ -57,12 +64,12 @@ void Room::UpdateGame() // DW¼³¸í : ÇÃ·¹ÀÌ¾î »óÅÂ °»½Å
 
 		timer->Tick();
 
-		// ÆĞÅ¶ ÀÔ·Â Ã³¸®
+		// íŒ¨í‚· ì…ë ¥ ì²˜ë¦¬
 		ProcessInputs();
-		// ¸ğµç ÇÃ·¹ÀÌ¾î »óÅÂ ºê·ÎµåÄ³½ºÆ®
+		// ëª¨ë“  í”Œë ˆì´ì–´ ìƒíƒœ ë¸Œë¡œë“œìºìŠ¤íŠ¸
 		BroadcastState();
 
-		// 3. ·çÇÁ ÁÖ±â ¸ÂÃß±â
+		// 3. ë£¨í”„ ì£¼ê¸° ë§ì¶”ê¸°
 		double elapsedTime = timer->EndDeltatime();
 		if (elapsedTime < FRAME_TIME)
 		{
@@ -73,16 +80,22 @@ void Room::UpdateGame() // DW¼³¸í : ÇÃ·¹ÀÌ¾î »óÅÂ °»½Å
 
 void Room::BroadcastPacket(common::packet::PacketHeader* packet)
 {
-	Server::Instance()->_clients._sessionLock.lock();
+	// Create the packet data once
+	auto packetData = std::make_shared<std::vector<char>>(packet->size);
+	memcpy(packetData->data(), packet, packet->size);
+
+	// Lock and broadcast to all sessions
+	std::lock_guard<std::mutex> lock(Server::Instance()->_clients._sessionLock);
 	auto& sessions = Server::Instance()->_clients._sessions;
-	for (auto& player : sessions)
+	for (auto& session : sessions)
 	{
-		// KJ: ÀÌ ¸Ş¸ğ¸®´Â °¢ ¼¼¼ÇÀÇ SendPacket ÇÔ¼ö¿¡¼­ delete
-		char* buffer = new char[packet->size];
-		memcpy(buffer, packet, packet->size);
-		player.EnqueuePacket(reinterpret_cast<common::packet::PacketHeader*>(buffer));
+		// Enqueue the same shared_ptr to all sessions.
+		// This avoids copying the data for each session.
+		if (session.isConnected())
+		{
+			session.EnqueuePacket(packetData);
+		}
 	}
-	Server::Instance()->_clients._sessionLock.unlock();
 }
 
 void Room::EnqueuePacket(common::packet::PacketHeader* packet)
@@ -91,24 +104,24 @@ void Room::EnqueuePacket(common::packet::PacketHeader* packet)
 	incomingQueue.push(packet);
 	_queueMutex.unlock();
 }
-// KJ: ¿ø·¡ UpdateLoopÀÇ ¸Å ·çÇÁ¸¶´Ù ÇØÁÖ´ø ÆĞÅ¶ Ã³¸® ÀÛ¾÷À» ÇÔ¼ö·Î ºĞ¸®
+// KJ: ì›ë˜ UpdateLoopì˜ ë§¤ ë£¨í”„ë§ˆë‹¤ í•´ì£¼ë˜ íŒ¨í‚· ì²˜ë¦¬ ì‘ì—…ì„ í•¨ìˆ˜ë¡œ ë¶„ë¦¬
 void Room::ProcessInputs()
 {
-	// ÀÌ¹ø ÇÁ·¹ÀÓ¿¡ Ã³¸®ÇÒ ÆĞÅ¶µéÀ» ÀÓ½Ã Å¥·Î ¿Å±è
+	// ì´ë²ˆ í”„ë ˆì„ì— ì²˜ë¦¬í•  íŒ¨í‚·ë“¤ì„ ì„ì‹œ íë¡œ ì˜®ê¹€
 	std::queue<common::packet::PacketHeader*> packetsToProcess;
 	{
 		std::lock_guard<std::mutex> lock(_queueMutex);
 		packetsToProcess.swap(incomingQueue);
-	} // ¿©±â¼­ _queue_mutex ¶ôÀÌ ÇØÁ¦µË´Ï´Ù.
+	} // ì—¬ê¸°ì„œ _queue_mutex ë½ì´ í•´ì œë©ë‹ˆë‹¤.
 
 
-	// ÀÓ½Ã Å¥ÀÇ ÆĞÅ¶µéÀ» ¸ğµÎ Ã³¸®
+	// ì„ì‹œ íì˜ íŒ¨í‚·ë“¤ì„ ëª¨ë‘ ì²˜ë¦¬
 	while (!packetsToProcess.empty())
 	{
 		common::packet::PacketHeader* packet = packetsToProcess.front();
 		packetsToProcess.pop();
 
-		// C2S_MovePacket¸¸ Ã³¸®ÇÑ´Ù°í °¡Á¤
+		// C2S_MovePacketë§Œ ì²˜ë¦¬í•œë‹¤ê³  ê°€ì •
 		
 		HandlePacket(nullptr, reinterpret_cast<char*>(packet));
 
@@ -116,7 +129,7 @@ void Room::ProcessInputs()
 	}
 }
 
-//KJ: ¿ø·¡ UpdateLoopÀÇ ¸Å ·çÇÁ¸¶´Ù ÇØÁÖ´ø ÆĞÅ¶ ¸¸µé¾îÁÖ´Â ÀÛ¾÷À» ÇÔ¼ö·Î ºĞ¸®
+//KJ: ì›ë˜ UpdateLoopì˜ ë§¤ ë£¨í”„ë§ˆë‹¤ í•´ì£¼ë˜ íŒ¨í‚· ë§Œë“¤ì–´ì£¼ëŠ” ì‘ì—…ì„ í•¨ìˆ˜ë¡œ ë¶„ë¦¬
 void Room::BroadcastState()
 {
 	common::packet::S2C_AllPlayerMovePacket allPlayerStatePacket{};
@@ -139,7 +152,7 @@ void Room::BroadcastState()
 		}
 	}
 
-	// BroadcastPacket ÇÔ¼ö¸¦ ÅëÇØ ¸ğµç ÇÃ·¹ÀÌ¾î¿¡°Ô Àü¼Û
+	// BroadcastPacket í•¨ìˆ˜ë¥¼ í†µí•´ ëª¨ë“  í”Œë ˆì´ì–´ì—ê²Œ ì „ì†¡
 	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&allPlayerStatePacket));
 }
 
@@ -148,7 +161,7 @@ void Room::RegisterHandler(common::packet::PacketType type, PacketHandlerFunc fu
 	Handlers[type] = func;
 }
 
-// Ãß°¡µÈ ¿À¹ö·Îµå: Room ¸â¹ö ÇÔ¼ö Æ÷ÀÎÅÍ¸¦ ¹Ş¾Æ this·Î ¹ÙÀÎµùÇØ¼­ ÀúÀå
+// ì¶”ê°€ëœ ì˜¤ë²„ë¡œë“œ: Room ë©¤ë²„ í•¨ìˆ˜ í¬ì¸í„°ë¥¼ ë°›ì•„ thisë¡œ ë°”ì¸ë”©í•´ì„œ ì €ì¥
 void Room::RegisterHandler(common::packet::PacketType type, void (Room::* func)(Session*, char*))
 {
 	using namespace std::placeholders;
@@ -166,7 +179,7 @@ void Room::HandlePacket(Session* session, char* packet)
 	}
 	else
 	{
-		// ¾Ë ¼ö ¾ø´Â ÆĞÅ¶ Å¸ÀÔ Ã³¸®
+		// ì•Œ ìˆ˜ ì—†ëŠ” íŒ¨í‚· íƒ€ì… ì²˜ë¦¬
 	}
 }
 
@@ -176,7 +189,7 @@ void Room::MovePacket_c2s(Session* session, char* packet)
 	
 	if (movePacket->id < Players.size())
 	{
-		// ¼¼¼Ç Æ÷ÀÎÅÍ¸¦ ÅëÇØ ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ¸¦ Á÷Á¢ ¾÷µ¥ÀÌÆ®
+		// ì„¸ì…˜ í¬ì¸í„°ë¥¼ í†µí•´ í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ìƒíƒœë¥¼ ì§ì ‘ ì—…ë°ì´íŠ¸
 		Player& player = Players[movePacket->id];
 		player.x = movePacket->x;
 		player.y = movePacket->y;
