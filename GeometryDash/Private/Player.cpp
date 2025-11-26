@@ -162,8 +162,6 @@ int CPlayer::Update(float fTime)
 	{
         sendPosition(); 
 		_lastSendTime = now_time;
-		std::wstring str = L"now time: " + std::to_wstring(chrono::duration_cast<chrono::milliseconds>(now_time.time_since_epoch()).count()) + L", last send time: " + std::to_wstring(chrono::duration_cast<chrono::milliseconds>(_lastSendTime.time_since_epoch()).count()) + L"\n";
-        OutputDebugStringW(str.c_str());
 	}
 
 	return 0;
