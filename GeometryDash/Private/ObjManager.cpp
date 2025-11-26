@@ -84,6 +84,25 @@ void CObjManager::Free()
 	}
 }
 
+void CObjManager::Free_But_OtherPlayer_Exclude()
+{
+	for (int i = 0; i < OBJECT_END; ++i)
+	{
+		if(i != OBJECT_OTHERPLAYER)
+		{
+			if (vecAllObj[i].size())
+			{
+				for (int j = 0; j < vecAllObj[i].size(); ++j)
+				{
+					delete vecAllObj[i][j];
+					vecAllObj[i][j] = nullptr;
+				}
+			}
+			vecAllObj[i].clear();
+		}
+	}
+}
+
 void CObjManager::DeleteVector(ObjectType _Type)
 {
 	if (vecAllObj[_Type].size())

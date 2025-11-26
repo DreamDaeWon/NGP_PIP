@@ -24,6 +24,8 @@ public:
 
 	void Free() override;
 
+	void Free_But_OtherPlayer_Exclude();
+
 public:
 	static CObjManager* GetInstance()
 	{
