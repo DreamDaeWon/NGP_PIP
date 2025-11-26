@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
-#include "Singleton.h"
-#include "Packet.h"
+#include "Default.h"
+
+
 
 
 
@@ -19,12 +19,12 @@ public:
 	/*void GetInstance();
 	void DestroyInstance();*/
 
-	bool initialize_Client(); // ¼­¹ö Á¢¼Ó ¹× ³íºí·ÎÅ· ¼ÒÄÏ ¼³Á¤
-	void sendPacket(char* buffer, int size); // ¼­¹ö·Î ÆĞÅ¶ Àü¼Û <- Main Thread¿¡¼­ È£Ãâ
+	bool initialize_Client(); // ì„œë²„ ì ‘ì† ë° ë…¼ë¸”ë¡œí‚¹ ì†Œì¼“ ì„¤ì •
+	void sendPacket(char* buffer, int size); // ì„œë²„ë¡œ íŒ¨í‚· ì „ì†¡ <- Main Threadì—ì„œ í˜¸ì¶œ
 	void trySendBuffer();
-	void processPacket(); // ¼­¹ö·Î ºÎÅÍ ÆĞÅ¶ Ã³¸® 
+	void processPacket(); // ì„œë²„ë¡œ ë¶€í„° íŒ¨í‚· ì²˜ë¦¬ 
 	void updatePacket(); //recv -> send
-	void shutdown(); // Á¢¼Ó Á¾·á
+	void shutdown(); // ì ‘ì† ì¢…ë£Œ
 
 private:
 	

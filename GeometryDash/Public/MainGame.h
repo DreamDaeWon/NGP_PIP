@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
-#include <Windows.h>
-#include <vector>
+#include "Default.h"
 #include "Stage.h"
 using namespace std;
 

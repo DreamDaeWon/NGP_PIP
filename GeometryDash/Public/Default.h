@@ -1,23 +1,31 @@
 #pragma once
 
-#include <iostream>
-#include<Windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32") // ws2_32.lib ë§í¬
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 #include "tchar.h"
 #include <vector>
 #include <list>
 #include <map>
+#include <cstdio>
+#include <iostream>
 
-
+#include "Packet.h"
+#include "Singleton.h"
 #define WINSIZEX 800
 #define WINSIZEY 600
 
 
-#define TileSizeX 50 // Å¸ÀÏÀÇ °¡·Î ±æÀÌ
-#define TileSizeY 50 // Å¸ÀÏÀÇ ¼¼·Î ±æÀÌ
+#define TileSizeX 50 // íƒ€ì¼ì˜ ê°€ë¡œ ê¸¸ì´
+#define TileSizeY 50 // íƒ€ì¼ì˜ ì„¸ë¡œ ê¸¸ì´
 
 #define VK_MAX 0xff
 
-#define AllTileNum 17 // ¸ğµç »ç¿ë Å¸ÀÏ Á¾·ùÀÇ ¼ö
+#define AllTileNum 17 // ëª¨ë“  ì‚¬ìš© íƒ€ì¼ ì¢…ë¥˜ì˜ ìˆ˜
 
 
 using namespace std;

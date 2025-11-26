@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Windows.h>
 #include "Default.h"
 
 class CPlayer;
