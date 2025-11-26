@@ -89,8 +89,8 @@ void Session::DoRecv()
 			// 아직 패킷이 다 오지 않았으므로 다음 수신을 기다립니다.
 			break;
 		}
-		std::cout << "session:"<< _id
-		<< "packet Number: " << static_cast<int>(header->type) << " packet received, size: " << packetSize << " bytes.\n";
+		/*std::cout << "session:"<< _id
+		<< "packet Number: " << static_cast<int>(header->type) << " packet received, size: " << packetSize << " bytes.\n";*/
 
 
 		// --- 패킷 하나를 처리하는 로직 (기존 ProcessPacket과 유사) ---
