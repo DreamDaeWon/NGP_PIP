@@ -1,4 +1,4 @@
-#include "NetworkHeader.h"
+ï»¿#include "NetworkHeader.h"
 #include "NetworkManager.h"
 #include "ClientPacketManager.h"
 
@@ -45,7 +45,7 @@ bool NetworkManager::initialize_Client()
 	server_address.sin_port = htons(SERVER_PORT);
 	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
 
-	// ¼­¹ö Á¢¼Ó
+	// ì„œë²„ ì ‘ì†
 	if (connect(_clientSocket, (sockaddr*)&server_address, sizeof(server_address)) == SOCKET_ERROR)
 	{
 		closesocket(_clientSocket);
@@ -54,8 +54,7 @@ bool NetworkManager::initialize_Client()
 		return false;
 	}
 
-	// CJ ¼³¸í : ³íºí·ÎÅ· ¼ÒÄÏ ¼³Á¤ -> °ÔÀÓ ·çÇÁ°¡ recv¿¡¼­ ¸ØÃßÁö ¾Êµµ·Ï ÇÔ
-	// CJ ¼³¸í ÀÏ´Ü µû¶óÇÔ Á¤È®ÇÑ	ÀÌÇØ ÇÊ¿ä
+	// CJ ë©”ëª¨ : ë…¼ë¸”ë¡œí‚¹ ì†Œì¼“ ì„¤ì • -> ì´ì œë¶€í„° recvê°€ ë¸”ë¡œí‚¹ ë˜ì§€ ì•ŠìŒ
 	u_long mode = 1;
 	if (SOCKET_ERROR == ioctlsocket(_clientSocket, FIONBIO, &mode))
 	{
@@ -71,7 +70,7 @@ bool NetworkManager::initialize_Client()
 
 	login_request_packet.size = sizeof(login_request_packet);
 	login_request_packet.type = common::packet::PacketType::LoginRequestPacket_c2s;
-	login_request_packet.id = -1; // ÀÓ½Ã ID
+	login_request_packet.id = -1; // ì„ì‹œ ID
 
 	sendPacket(reinterpret_cast<char*>(&login_request_packet), sizeof(login_request_packet));
 
@@ -86,7 +85,7 @@ void NetworkManager::sendPacket(char* buffer, int size)
 		return;
 	}
 
-	// ³²Àº µ¥ÀÌÅÍ°¡ ÀÖÀ¸¸é ¹öÆÛ¿¡ Ãß°¡
+	// ë³´ë‚¼ ë°ì´í„°ë¥¼ ì†¡ì‹  ë²„í¼ì— ì¶”ê°€
 	_sendBuffer.insert(_sendBuffer.end(), buffer, buffer + size);
 	trySendBuffer();
 }
@@ -106,7 +105,7 @@ void NetworkManager::trySendBuffer()
 			int error = WSAGetLastError();
 			if (error == WSAEWOULDBLOCK)
 			{
-				// ´ÙÀ½ ·çÇÁ¿¡¼­ ´Ù½Ã ½Ãµµ
+				// ì†¡ì‹  ë²„í¼ê°€ ê°€ë“ ì°¸, ì ì‹œ í›„ ë‹¤ì‹œ ì‹œë„
 				break;
 			}
 			else
@@ -121,7 +120,7 @@ void NetworkManager::trySendBuffer()
 			break;
 		}
 	}
-	// ¸ğµÎ º¸³ÂÀ¸¸é ¹öÆÛ ÃÊ±âÈ­
+	// ëª¨ë“  ë°ì´í„°ë¥¼ ë³´ëƒˆìœ¼ë©´ ì´ˆê¸°í™”
 	if (_sendBufferOffset >= _sendBuffer.size())
 	{
 		_sendBuffer.clear();
@@ -133,31 +132,31 @@ void NetworkManager::processPacket()
 {
 	while (_recvBufferSize >= sizeof(PacketHeader))
 	{
-		// 1. Çì´õ¸¦ ÀĞ¾î ÆĞÅ¶ÀÇ ÀüÃ¼ Å©±â¸¦ È®ÀÎ
+		// 1. ë²„í¼ì—ì„œ íŒ¨í‚·ì˜ ì „ì²´ í¬ê¸°ë¥¼ í™•ì¸
 		PacketHeader* pHeader = (PacketHeader*)_recvBuffer;
 		unsigned long long packetSize = pHeader->size;
 
-		// 2. ¹öÆÛ¿¡ ÆĞÅ¶ ÀüÃ¼ Å©±â¸¸Å­ÀÇ µ¥ÀÌÅÍ°¡ ½×¿´´ÂÁö È®ÀÎ
+		// 2. ë²„í¼ì— íŒ¨í‚· ì „ì²´ í¬ê¸°ë§Œí¼ì˜ ë°ì´í„°ê°€ ìˆëŠ”ì§€ í™•ì¸
 		if (_recvBufferSize >= packetSize)
 		{
-			// 3. ClientPacketManager¿¡°Ô ¹öÆÛ¸¦ ³Ñ°Ü Ã³¸® ¿äÃ»
+			// 3. ClientPacketManagerì—ê²Œ íŒ¨í‚· ì²˜ë¦¬ ìš”ì²­
 			if (_packetManager)
 			{
 				_packetManager->HandlePacket(_recvBuffer);
 			}
 
-			// 4. ¹öÆÛ¿¡¼­ Ã³¸®µÈ ÆĞÅ¶¸¸Å­ Á¦°Å
+			// 4. ë²„í¼ì—ì„œ ì²˜ë¦¬ëœ íŒ¨í‚·ë§Œí¼ ì œê±°
 			unsigned long long remainingData = _recvBufferSize - packetSize;
 			if (remainingData > 0)
 			{
-				// µÚ¿¡ ³²Àº µ¥ÀÌÅÍ¸¦ ¹öÆÛ ¾ÕÀ¸·Î ´ç°Ü¿È (memmove)
+				// ë’¤ì— ë‚¨ì€ ë°ì´í„°ë¥¼ ì•ìœ¼ë¡œ ë‹¹ê¹€ (memmove)
 				memmove(_recvBuffer, _recvBuffer + packetSize, remainingData);
 			}
-			_recvBufferSize = remainingData; // ¹öÆÛ Å©±â °»½Å
+			_recvBufferSize = remainingData; // ë²„í¼ í¬ê¸° ê°±ì‹ 
 		}
 		else
 		{
-			// 5. recv()¸¦ À§ÇØ ·çÇÁ Á¾·á
+			// 5. íŒ¨í‚· ì „ì²´ê°€ ì•„ì§ ë„ì°©í•˜ì§€ ì•ŠìŒ (ë‹¤ìŒ recv ëŒ€ê¸°)
 			break;
 		}
 	}
@@ -167,23 +166,31 @@ void NetworkManager::updatePacket()
 {
 	if (_clientSocket == INVALID_SOCKET) return;
 
-	// 1. _recvBufferÀÇ ³²Àº °ø°£¿¡ µ¥ÀÌÅÍ¸¦ ¼ö½Å ½Ãµµ
+	// ë²„í¼ê°€ ê°€ë“ ì°¼ëŠ”ì§€ í™•ì¸ (ì•ˆì „ì¥ì¹˜)
+	if ((int)(BUFFER_SIZE - _recvBufferSize) <= 0)
+	{
+		printf("[ì˜¤ë¥˜] ìˆ˜ì‹  ë²„í¼ê°€ ê°€ë“ ì°¼ìŠµë‹ˆë‹¤. íŒ¨í‚· ì²˜ë¦¬ê°€ ì§€ì—°ë˜ê³  ìˆê±°ë‚˜ íŒ¨í‚· í¬ê¸°ê°€ ë„ˆë¬´ í½ë‹ˆë‹¤.\n");
+		return;
+	}
+
+	// 1. _recvBufferì— ë‚¨ì€ ê³µê°„ì— ë°ì´í„°ë¥¼ ìˆ˜ì‹  ì‹œë„
 	int bytesRecv = recv(_clientSocket,
-		_recvBuffer + _recvBufferSize,   // ¹öÆÛÀÇ ºó °ø°£ ½ÃÀÛ À§Ä¡
-		(int)(BUFFER_SIZE - _recvBufferSize),          // ¹öÆÛÀÇ ³²Àº Å©±â
+		_recvBuffer + _recvBufferSize,   // ì €ì¥í•  ë²„í¼ ìœ„ì¹˜
+		(int)(BUFFER_SIZE - _recvBufferSize),          // ì €ì¥í•  ìˆ˜ ìˆëŠ” í¬ê¸°
 		0);
 
 	if (bytesRecv > 0)
 	{
-		// 2. µ¥ÀÌÅÍ°¡ ¿ÔÀ¸¸é, ¹öÆÛ¿¡ ½×ÀÎ Å©±â¸¦ ´Ã¸²
+		// 2. ë°ì´í„°ê°€ ë“¤ì–´ì˜´, ë²„í¼ í¬ê¸°ë¥¼ ëŠ˜ë¦¼
 		_recvBufferSize += bytesRecv;
 
-		// 3. ¹öÆÛ¿¡ ¿Ï¼ºµÈ ÆĞÅ¶ÀÌ ÀÖ´ÂÁö ÆÄ½Ì
+		// 3. ë²„í¼ì— ì™„ì„±ëœ íŒ¨í‚·ì´ ìˆëŠ”ì§€ íŒŒì‹±
 		processPacket();
 	}
 	else if (bytesRecv == 0)
 	{
-		// 4. (Á¢¼Ó Á¾·á) ¼­¹ö°¡ Á¢¼ÓÀ» ²÷À½
+		// 4. (ì—°ê²° ì¢…ë£Œ) ì„œë²„ê°€ ì—°ê²°ì„ ëŠìŒ
+		printf("ì„œë²„ì™€ ì—°ê²°ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n");
 		shutdown();
 	}
 	else // bytesRecv == SOCKET_ERROR
@@ -191,24 +198,25 @@ void NetworkManager::updatePacket()
 		int error = WSAGetLastError();
 		if (error == WSAEWOULDBLOCK)
 		{
-			// 5. (Á¤»ó) µ¥ÀÌÅÍ°¡ ¾ø´Â °Í»Ó. ¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½.
+			// 5. (ëŒ€ê¸°) ë°ì´í„°ê°€ ì•„ì§ ì—†ìŒ. ì •ìƒì ì¸ ë…¼ë¸”ë¡œí‚¹ ìƒíƒœ.
+			// processPacket()ì€ ë°ì´í„°ê°€ ìƒˆë¡œ ë“¤ì–´ì™”ì„ ë•Œë§Œ í˜¸ì¶œí•˜ë©´ ë¨.
 			return;
 		}
 		else
 		{
-			// 6. (¿À·ù) ½ÇÁ¦ ¿À·ù ¹ß»ı. Á¢¼Ó Á¾·á.
+			// 6. (ì—ëŸ¬) ì§„ì§œ ì—ëŸ¬ ë°œìƒ.
+			err_display("recv()");
 			shutdown();
 		}
 	}
 
-	trySendBuffer(); // sendµµ ÁÖ±âÀûÀ¸·Î ½Ãµµ
+	trySendBuffer(); // sendí•  ê²ƒì´ ìˆë‹¤ë©´ ì‹œë„
 }
 
 void NetworkManager::shutdown()
 {
 	if (_clientSocket != INVALID_SOCKET)
 	{
-		err_display("shutdown()");
 		closesocket(_clientSocket);
 		_clientSocket = INVALID_SOCKET;
 	}

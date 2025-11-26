@@ -2,6 +2,7 @@
 #include "Server.h"
 
 #include "Session.h"
+#include <algorithm> // std::find_if 사용을 위해 추가
 
 void Server::initailize()
 {
@@ -23,7 +24,12 @@ void Server::initailize()
 	{
 		err_quit("bind() 오류");
 	}
-	
+
+    // 초기화 시 모든 ID를 _freeIds 큐에 추가 (0부터 MAX_PLAYERS-1까지)
+    for (int i = 0; i < MAX_PLAYERS; ++i)
+    {
+        _freeIds.push(i);
+    }
 }
 
 void Server::start()
@@ -65,7 +71,8 @@ void Server::acceptLoop()
 {
 	while (true)
 	{
-		if (_playerCount >= MAX_PLAYERS)
+        // _freeIds 큐가 비어있으면 (사용 가능한 ID가 없으면) 새 클라이언트 접속을 받지 않음
+		if (_freeIds.empty())
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			continue;
@@ -99,31 +106,30 @@ void Server::acceptLoop()
 			closesocket(clientsocket);
 			continue;
 		}
+        
+        // _freeIds에서 사용 가능한 가장 작은 ID를 가져옴
+        int clientID = _freeIds.top();
+        _freeIds.pop();
 
-		uint32_t idx = _playerCount; // 0-based
 		_clients._sessionLock.lock();
-		_clients._sessions[idx].init(idx, clientsocket, ClientState::Connected);
-		_clients._sessions[idx].setCurrentRoom(&_room);
+		_clients._sessions[clientID].init(clientID, clientsocket, ClientState::Connected);
+		_clients._sessions[clientID].setCurrentRoom(&_room);
 		_clients._sessionLock.unlock();
 
-		_room.AddPlayer();
+		_room.AddPlayer(clientID); // Room에도 할당된 ID 전달
 
-		// DW추가 : 여기에 플레이어 ID 전송해주는 함수 추가함
-
-		_playerCount++;
+		// _playerCount++; // 이제 이 변수는 사용하지 않음
 
 		// 스레드를 분리하여 독립적으로 실행되게 합니다.
 		// 소멸 시 자동으로 리소스를 해제하므로 수동 관리가 필요 없습니다.
-		std::thread worker{ &Session::WorkerLoop, &_clients._sessions[idx] };
+		std::thread worker{ &Session::WorkerLoop, &_clients._sessions[clientID] };
 		worker.detach();
 
-		sendClientID((int)idx);
-		broadcastNewPlayer((int)idx);
+		sendClientID(clientID);
+		broadcastNewPlayer(clientID);
 
-		// 모든 클라이언트에게 다른 플레이어 알려주기
-
+		// 모든 클라이언트에게 다른 플레이어 알려주기 (broadcastNewPlayer에서 처리)
 	}
-
 }
 
 void Server::sendClientID(int clientID)
@@ -157,6 +163,7 @@ void Server::broadcastNewPlayer(int newPlayerID)
 	memcpy(packetData->data(), &packet, packet.size);
 	// 3. Enqueue the packet for sending to all connected clients
 	std::lock_guard<std::mutex> lock(_clients._sessionLock);
+    // 모든 세션을 순회하며 접속된 세션에만 브로드캐스트
 	for (auto& session : _clients._sessions)
 	{
 		if (session.isConnected())
@@ -166,15 +173,31 @@ void Server::broadcastNewPlayer(int newPlayerID)
 	}
 
 	// 기존 플레이어들도 새로운 플레이어에게 알려주기
-	for (uint32_t id = 0; id < _playerCount; ++id)
+    // 모든 세션을 순회하며 접속된 플레이어 중 newPlayerID가 아닌 플레이어에게만 알림
+	for (uint32_t id = 0; id < MAX_PLAYERS; ++id) // MAX_PLAYERS로 루프 범위 변경
 	{
-		if (id == newPlayerID) continue; // 자기 자신은 제외
-		common::packet::S2C_SpawnOtherPlayerPacket existingPlayerPacket;
-		existingPlayerPacket.type = common::packet::PacketType::SpawnOtherPlayerPacket_s2c;
-		existingPlayerPacket.size = sizeof(common::packet::S2C_SpawnOtherPlayerPacket);
-		existingPlayerPacket.OtherplayerID = id;
-		auto existingPacketData = std::make_shared<std::vector<char>>(existingPlayerPacket.size);
-		memcpy(existingPacketData->data(), &existingPlayerPacket, existingPlayerPacket.size);
-		_clients._sessions[newPlayerID].EnqueuePacket(existingPacketData);
+        if (id == newPlayerID) continue; // 자기 자신은 제외
+        
+        // 해당 ID의 세션이 유효하고 접속 중인 경우에만
+        if (_clients._sessions[id].isConnected())
+        {
+		    common::packet::S2C_SpawnOtherPlayerPacket existingPlayerPacket;
+		    existingPlayerPacket.type = common::packet::PacketType::SpawnOtherPlayerPacket_s2c;
+		    existingPlayerPacket.size = sizeof(common::packet::S2C_SpawnOtherPlayerPacket);
+		    existingPlayerPacket.OtherplayerID = id; // 기존 플레이어의 ID
+		    auto existingPacketData = std::make_shared<std::vector<char>>(existingPlayerPacket.size);
+		    memcpy(existingPacketData->data(), &existingPlayerPacket, existingPlayerPacket.size);
+		    _clients._sessions[newPlayerID].EnqueuePacket(existingPacketData); // 새로 접속한 플레이어에게 전송
+        }
 	}
+}
+
+// 사용이 끝난 클라이언트 ID를 _freeIds 큐에 반환
+void Server::ReturnClientID(int clientID)
+{
+    if (clientID >= 0 && clientID < MAX_PLAYERS)
+    {
+        _freeIds.push(clientID);
+        printf("클라이언트 ID %d 반환\n", clientID);
+    }
 }

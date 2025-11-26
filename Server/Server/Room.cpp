@@ -1,41 +1,74 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Session.h"
 #include "Room.h"
-
-#include <utility>
 #include "Server.h"
 #include "Timer.h"
 
-// DW예정 : 일단 다 제작만 해둠 하나씩 바꿔나갈 예정
-Room::Room() :
-	CurrentMapSize{ 0 },
-	mode{ RoomGameMode::ROOM_MODE_MAX },
-	timer{ new Timer() }
+// Room 클래스 생성자 및 소멸자
+Room::Room() : timer{ new Timer() }
 {
+    // Players 배열 초기화 (기본적으로 비활성 상태)
+    for (int i = 0; i < MAX_PLAYERS; ++i)
+    {
+        Players[i].id = i;
+        Players[i].isActive = false; // Player 구조체에 isActive 필드가 있다고 가정
+        Players[i].state = common::packet::Player_State::PLAYER_STATE_END;
+        // 다른 필드들도 기본값으로 초기화
+    }
 	RegisterHandler(common::packet::PacketType::MovePacket_c2s, &Room::MovePacket_c2s);
 }
 
 Room::~Room()
 {
 	delete timer;
-
 	// incomingQueue의 unique_ptr들이 자동으로 메모리를 해제하므로,
 	// 별도의 반복문으로 큐를 비울 필요가 없습니다.
 }
 
-void Room::AddPlayer()
+// 플레이어 추가 (ID 기반)
+void Room::AddPlayer(int id)
 {
 	std::lock_guard<std::mutex> lock(_playerMutex);
-	Players.push_back(Player{});
+    if (id >= 0 && id < MAX_PLAYERS)
+    {
+        Players[id] = Player(); // Player 객체 기본 생성자로 초기화
+        Players[id].id = id;
+        Players[id].isActive = true; // 활성 상태로 설정
+        Players[id].state = common::packet::Player_State::IDLE; // 초기 상태 설정
+        // 다른 필드들도 적절히 초기화 (예: x, y 좌표)
+        printf("Room에 플레이어 ID %d 추가 및 활성화.\n", id);
+    }
+    else
+    {
+        printf("[경고] Room::AddPlayer - 유효하지 않은 ID: %d\n", id);
+    }
 }
 
+// 플레이어 제거 (ID 기반)
 void Room::RemovePlayer(int id)
 {
 	std::lock_guard<std::mutex> lock(_playerMutex);
-	std::erase_if(Players, [id](const Player& player)
-		{
-			return std::cmp_equal(player.id, id);
-		});
+    if (id >= 0 && id < MAX_PLAYERS)
+    {
+        if (Players[id].isActive) // 활성화된 플레이어인 경우만 처리
+        {
+            printf("Room에서 플레이어 ID %d 제거 및 비활성화.\n", id);
+            Players[id].isActive = false; // 비활성 상태로 설정
+            Players[id].state = common::packet::Player_State::PLAYER_STATE_END; // 상태 초기화
+            // 나머지 플레이어 데이터(x, y 등)도 초기화할 수 있음
+
+            // 다른 클라이언트들에게 퇴장 패킷 전송
+            common::packet::S2C_DespawnOtherPlayerPacket despawnPacket;
+            despawnPacket.type = common::packet::PacketType::DespawnOtherPlayerPacket_s2c;
+            despawnPacket.size = sizeof(common::packet::S2C_DespawnOtherPlayerPacket);
+            despawnPacket.OtherplayerID = id;
+            BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&despawnPacket));
+        }
+    }
+    else
+    {
+        printf("[경고] Room::RemovePlayer - 유효하지 않은 ID: %d\n", id);
+    }
 }
 
 void Room::StartGame()
@@ -48,7 +81,8 @@ void Room::StopGame()
 	_isGameRunning = false;
 }
 
-void Room::UpdateGame() // DW설명 : 플레이어 상태 갱신
+// 플레이어 상태 갱신
+void Room::UpdateGame() 
 {
 	StartGame(); // 게임 루프 시작
 	const float FPS = 60.0f;
@@ -99,7 +133,8 @@ void Room::EnqueuePacket(std::unique_ptr<common::packet::PacketHeader> packet)
 	std::lock_guard lock(_queueMutex);
 	incomingQueue.push(std::move(packet));
 }
-// KJ: 원래 UpdateLoop의 매 루프마다 해주던 패킷 처리 작업을 함수로 분리
+
+// 매 루프마다 해주던 패킷 처리 작업을 함수로 분리
 void Room::ProcessInputs()
 {
 	// 이번 프레임에 처리할 패킷들을 임시 큐로 옮김
@@ -117,14 +152,13 @@ void Room::ProcessInputs()
 		packetsToProcess.pop();
 
 		// C2S_MovePacket만 처리한다고 가정
-		
 		HandlePacket(nullptr, reinterpret_cast<char*>(packet.get()));
 
 		// unique_ptr이 범위를 벗어나면 자동으로 메모리가 해제됩니다.
 	}
 }
 
-//KJ: 원래 UpdateLoop의 매 루프마다 해주던 패킷 만들어주는 작업을 함수로 분리
+// 매 루프마다 해주던 패킷 만들어주는 작업을 함수로 분리
 void Room::BroadcastState()
 {
 	common::packet::S2C_AllPlayerMovePacket allPlayerStatePacket{};
@@ -134,16 +168,22 @@ void Room::BroadcastState()
 	
 	{
 		std::lock_guard lock(_playerMutex);
-		for (const auto& player : Players)
+        // MAX_PLAYERS만큼 순회하며 활성화된 플레이어 정보만 패킷에 담음
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			size_t id = player.id;
-			if (id < MAX_PLAYERS)
-			{
-				allPlayerStatePacket.x[id] = player.x;
-				allPlayerStatePacket.y[id] = player.y;
-				allPlayerStatePacket.state[id] = player.state;
-				allPlayerStatePacket.Rotate[id] = player.Rotate;
-			}
+            if (Players[i].isActive) // 활성 상태인 플레이어만 처리
+            {
+                size_t id = Players[i].id; // id와 인덱스가 일치하므로
+                allPlayerStatePacket.x[id] = Players[i].x;
+                allPlayerStatePacket.y[id] = Players[i].y;
+                allPlayerStatePacket.state[id] = Players[i].state;
+                allPlayerStatePacket.Rotate[id] = Players[i].Rotate;
+            } else { // 비활성 플레이어는 상태를 PLAYER_STATE_END로 설정하여 클라이언트에 알림
+                allPlayerStatePacket.x[i] = 0; // 또는 기본값
+                allPlayerStatePacket.y[i] = 0;
+                allPlayerStatePacket.state[i] = common::packet::Player_State::PLAYER_STATE_END;
+                allPlayerStatePacket.Rotate[i] = 0;
+            }
 		}
 	}
 
@@ -175,6 +215,8 @@ void Room::HandlePacket(Session* session, char* packet)
 	else
 	{
 		// 알 수 없는 패킷 타입 처리
+        printf("[경고] 알 수 없는 패킷 타입 수신: %d\n", static_cast<int>(header->type));
+        // session->Disconnect(); // 알 수 없는 패킷 수신 시 연결 끊기 (선택 사항)
 	}
 }
 
@@ -182,7 +224,7 @@ void Room::MovePacket_c2s(Session* session, char* packet)
 {
 	common::packet::C2S_MovePacket* movePacket = reinterpret_cast<common::packet::C2S_MovePacket*>(packet);
 	
-	if (movePacket->id < Players.size())
+	if (movePacket->id >= 0 && movePacket->id < MAX_PLAYERS && Players[movePacket->id].isActive)
 	{
 		// 세션 포인터를 통해 해당 플레이어의 상태를 직접 업데이트
 		Player& player = Players[movePacket->id];
@@ -190,6 +232,7 @@ void Room::MovePacket_c2s(Session* session, char* packet)
 		player.y = movePacket->y;
 		player.state = movePacket->player_state;
 		player.Rotate = movePacket->rotate;
-	}
-	
+	} else {
+        printf("[경고] MovePacket_c2s - 유효하지 않거나 비활성화된 플레이어 ID: %d\n", movePacket->id);
+    }
 }

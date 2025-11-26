@@ -1,8 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 #include <memory>
 #include "Player.h"
 #include "Packet.h"
+#include <array> // std::array 사용을 위해 추가
+
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
 
 enum class RoomGameMode
@@ -31,7 +33,7 @@ public:
 
 public:
 	// DW예정 : 리턴 타입 및 매개변수 구현 때 하나 씩 수정할 예정
-	void AddPlayer();
+	void AddPlayer(int id); // ID를 받도록 시그니처 변경
 	void RemovePlayer(int id);
 	void StartGame();
 	void StopGame();
@@ -52,7 +54,7 @@ private:
 
 private:
 	long long CurrentMapSize{};
-	std::vector<Player> Players{};
+	std::array<Player, MAX_PLAYERS> Players; // std::vector 대신 std::array 사용
 	std::mutex _playerMutex;
 
 	Timer* timer = nullptr;

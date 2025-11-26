@@ -1,11 +1,7 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Session.h"
-
-
-
 #include "Room.h"
-
-
+#include "Server.h" // Server::Instance() 접근을 위해 추가
 
 Session::Session() : _id(0), _socket(INVALID_SOCKET), _state(ClientState::Disconnected), _currentRoom{ nullptr }
 {
@@ -14,8 +10,6 @@ Session::Session() : _id(0), _socket(INVALID_SOCKET), _state(ClientState::Discon
 Session::Session(uint32_t id, SOCKET socket, ClientState state) : _id(id), _socket(socket), _state(state), _currentRoom{ nullptr }
 {
 }
-
-
 
 Session::~Session()
 {
@@ -190,7 +184,7 @@ void Session::SendPacket()
 				}
 
 				// WSAEWOULDBLOCK 이외의 오류는 연결 끊김으로 처리합니다.
-				err_display("send()");
+				err_display("send ()");
 				Disconnect();
 				return;
 			}
@@ -217,6 +211,12 @@ void Session::Disconnect()
 	{
 		_currentRoom->RemovePlayer(_id);
 	}
+
+    // Server의 ID 풀에 해당 ID 반환 (Disconnected 상태가 아닌 경우만)
+    if (_state != ClientState::Disconnected)
+    {
+        Server::Instance()->ReturnClientID(_id);
+    }
 
 	closesocket(_socket);
 	_state = ClientState::Disconnected;

@@ -9,4 +9,5 @@ struct Player
 	float ridius{};
 	float Rotate{};
 	size_t id{};
+	bool isActive = false; // 플레이어 활성 상태 플래그
 };

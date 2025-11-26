@@ -24,6 +24,11 @@ inline void err_display(const char* msg)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(char*)&lpMsgBuf, 0, NULL);
 	printf("[%s] %s\n", msg, (char*)lpMsgBuf);
+
+	char debugBuf[256];
+	snprintf(debugBuf, sizeof(debugBuf), "[%s] %s\n", msg, (char*)lpMsgBuf);
+	OutputDebugStringA(debugBuf);
+
 	LocalFree(lpMsgBuf);
 }
 
@@ -37,5 +42,10 @@ inline void err_display(int errcode)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(char*)&lpMsgBuf, 0, NULL);
 	printf("[오류] %s\n", (char*)lpMsgBuf);
+
+	char debugBuf[256];
+	snprintf(debugBuf, sizeof(debugBuf), "[오류] %s\n", (char*)lpMsgBuf);
+	OutputDebugStringA(debugBuf);
+
 	LocalFree(lpMsgBuf);
 }
