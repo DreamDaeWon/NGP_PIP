@@ -78,7 +78,7 @@ namespace common::packet
 	{
 		float x[3]{ 0.f,0.f,0.f };
 		float y[3]{ 0.f,0.f,0.f };
-
+		float ridius[3]{ 0.f,0.f,0.f };
 		Player_State state[3]
 		{
 			Player_State::PLAYER_STATE_END,

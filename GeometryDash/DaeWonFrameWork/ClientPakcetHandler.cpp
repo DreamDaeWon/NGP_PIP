@@ -2,10 +2,35 @@
 
 #include <string>
 
+#include "NetworkManager.h"
 #include "Packet.h"
 #include "ObjManager.h"
 #include "OtherPlayer.h"
 using namespace common::packet;
+void client::handler::Handle_AllPlayerMovePacket_s2c(char* buffer)
+{
+    S2C_AllPlayerMovePacket* packet = reinterpret_cast<S2C_AllPlayerMovePacket*>(buffer);
+    auto players = CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_OTHERPLAYER];
+    for (size_t i = 0; i < 3; ++i)
+    {
+        int targetID = i;
+        // 내 캐릭터의 움직임은 서버에서 받아도 무시 (클라 주도)
+        if (targetID == CObjManager::GetInstance()->GetMyPlayerID())
+            continue;
+        // 다른 플레이어 찾기
+        COtherPlayer* pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
+        if (pTarget != nullptr)
+        {
+            // 찾았다! 위치 동기화
+			POINT pos = { static_cast<LONG>(packet->x[i]), static_cast<LONG>(packet->y[i]) };
+            pTarget->SetCenterPos(pos);
+            pTarget->SetAngle(packet->Rotate[i]);
+            pTarget->SetRidius(packet->ridius[i]);
+            pTarget->Set_Status(static_cast<int>(packet->state[i]));
+        }
+	}
+}
+
 
 void client::handler::Handle_MovePacket_s2c(char* buffer)
 {
@@ -72,3 +97,5 @@ void client::handler::Handle_RoomStart_s2c(char* buffer)
 void client::handler::Handle_MapRoomEnd_s2c(char* buffer)
 {
 }
+
+

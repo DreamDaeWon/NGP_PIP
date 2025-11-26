@@ -67,7 +67,6 @@ public:
     void SetID(int id) { _OtherPlayerID = id; }   
 	int GetID() const { return _OtherPlayerID; }
 
-
 private:
     vector<HBITMAP*> m_vechBitMap{};
     HDC m_PalyerDc{};
