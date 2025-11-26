@@ -91,11 +91,6 @@ void CSoundManager::LoadSound(const string _Name, const string _path)
 	FMOD::Sound* INSound = ChangeSound;
 	//_path.assign
 	m_mapSound.insert(make_pair(_Name, INSound));
-
-	
-
-	
-
 }
 
 void CSoundManager::PlayBGM(const string _Name)

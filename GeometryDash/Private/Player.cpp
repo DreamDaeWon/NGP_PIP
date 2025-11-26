@@ -138,7 +138,8 @@ int CPlayer::Update(float fTime)
 
         if (m_fRidius <= 0.f)
         {
-            CStageManager::GetInstance()->StageChanger((CStageManager::STAGETYPE)CStageManager::GetInstance()->GetNowSatge());
+            CStageManager::GetInstance()->RestartStage((CStageManager::STAGETYPE)CStageManager::GetInstance()->GetNowSatge());
+			m_eStatus = STATUS_NOMAL;
         }
     }
     break;

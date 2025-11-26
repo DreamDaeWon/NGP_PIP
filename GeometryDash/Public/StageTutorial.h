@@ -12,6 +12,8 @@ public:
 
 	void Initailizer() override;
 
+	void RestartStage() override;
+
 	void Update(float fTime) override;
 
 	void LateUpdate(float fTime) override;
