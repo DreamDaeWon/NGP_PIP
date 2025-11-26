@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Session.h"
 #include "Room.h"
 #include "Server.h" // Server::Instance() 접근을 위해 추가
@@ -229,6 +229,6 @@ void Session::Disconnect()
 
 void Session::EnqueuePacket(std::shared_ptr<std::vector<char>> packet)
 {
-	std::lock_guard<std::mutex> lock(_sendMutex);
+	std::lock_guard lock(_sendMutex);
 	_sendQueue.push(packet);
 }

@@ -1,5 +1,9 @@
 #include "ClientPacketManager.h"
+
+#include <string>
+
 #include "ClientPakcetHandler.h"
+#include "CSoundManager.h"
 
 ClientPacketManager::ClientPacketManager()
 {
@@ -28,8 +32,9 @@ void ClientPacketManager::HandlePacket(char* buffer)
 	}
 	else
 	{
-		// 오류 <- 클라이언트가 모르는 패킷을 서버가 보낸 경우
-		// CJ 질문 : 오류 처리 어떻게 할까? <- 로그 남기기?
+		// 없는 패킷 타입
+		wstring debugMsg = L"[ClientPacketManager] 없는 패킷 type: " + to_wstring(static_cast<int>(type)) + L"\n";
+		OutputDebugString(debugMsg.c_str());
 	}
 }
 

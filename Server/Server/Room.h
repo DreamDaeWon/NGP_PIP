@@ -46,11 +46,15 @@ public:
 	void HandlePacket(Session* session, char* packet);
 
 	void MovePacket_c2s(Session* session, char* packet);
+    void LoginRequest_c2s(Session* session, char* packet);
 
 private:
 	void ProcessInputs();
 	void BroadcastState();
 
+    // Server에서 이동된 함수들 (내부에서 호출됨)
+    void SendClientID(int clientID);
+    void BroadcastNewPlayer(int newPlayerID);
 
 private:
 	long long CurrentMapSize{};

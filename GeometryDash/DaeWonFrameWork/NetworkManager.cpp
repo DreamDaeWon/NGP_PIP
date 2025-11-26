@@ -70,7 +70,6 @@ bool NetworkManager::initialize_Client()
 
 	login_request_packet.size = sizeof(login_request_packet);
 	login_request_packet.type = common::packet::PacketType::LoginRequestPacket_c2s;
-	login_request_packet.id = -1; // 임시 ID
 
 	sendPacket(reinterpret_cast<char*>(&login_request_packet), sizeof(login_request_packet));
 

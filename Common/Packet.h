@@ -65,7 +65,6 @@ namespace common::packet
 		int	id;
 	};
 	struct C2S_LoginRequestPacket : public PacketHeader {
-		int	id;
 	};
 	// -------------------------------------------Server to Client-------------------------------------------
 	

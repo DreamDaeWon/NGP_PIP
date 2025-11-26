@@ -36,13 +36,13 @@ public:
 	void EnqueuePacket(std::shared_ptr<std::vector<char>> packet);
 
 
-	uint32_t getId() const { return _id; }
+	int getId() const { return _id; }
 
 	void setCurrentRoom(Room* room) { _currentRoom = room; }
 private:
 	void DoRecv();
 
-	uint32_t _id;
+	int _id;
 	SOCKET _socket;
 	std::atomic<ClientState> _state;
 	Room* _currentRoom;
