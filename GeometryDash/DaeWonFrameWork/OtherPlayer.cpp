@@ -23,17 +23,17 @@ void COtherPlayer::Initailizer()
     HBITMAP* InBitMap{};
     LoadPlayerSound();
     TCHAR Name[50] = {};
-    wsprintf(Name, L"../resource/Player/player.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Ship.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1_Ship.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Zigzag.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1_ZigZag.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
@@ -42,9 +42,6 @@ void COtherPlayer::Initailizer()
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
-
-    // CSoundManager::GetInstance()->LoadSound("GeometryDashLevelComplete", "../sound/Geometry Dash Level Complete - djlunatique.mp3");
-
 }
 
 int COtherPlayer::Update(float fTime)
