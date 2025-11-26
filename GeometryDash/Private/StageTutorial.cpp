@@ -52,6 +52,21 @@ void CStageTutorial::Initailizer()
 
 }
 
+void CStageTutorial::RestartStage()
+{
+	// 플레이어 위치 초기화
+	CObject* pPlayer = CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_PLAYER].back();
+	POINT Pos{ 200,400 };
+	pPlayer->SetCenterPos(Pos);
+	pPlayer->SetRidius(25.f);
+
+	// 음악 리셋
+	CSoundManager::GetInstance()->LoadSound("TheoryOfEverything", "../sound/TheoryOfEverything.mp3");
+	CSoundManager::GetInstance()->PlayBGM("TheoryOfEverything");
+	CSoundManager::GetInstance()->SetVolume(0, 0.1f);
+
+}
+
 void CStageTutorial::Update(float fTime)
 {
 
@@ -73,8 +88,8 @@ void CStageTutorial::Render(HDC mDC)
 
 void CStageTutorial::Free()
 {
-	//CObjManager::GetInstance()->Free();
-	CObjManager::GetInstance()->CObjManager::GetInstance()->Free_But_OtherPlayer_Exclude();
+	CObjManager::GetInstance()->Free();
+	//CObjManager::GetInstance()->CObjManager::GetInstance()->Free_But_OtherPlayer_Exclude();
 }
 
 void CStageTutorial::SpawnCamera()

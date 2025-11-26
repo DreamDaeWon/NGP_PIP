@@ -19,6 +19,7 @@ public:
 public:
 	enum STAGETYPE {STAGE_MAIN,STAGE_MENU,STAGE_TUTORIAL,STAGE_ONE, STAGE_TOOL, STAGE_TOOL_PLAY_STAGE ,STAGE_END};
 	void StageChanger(STAGETYPE _Stage);
+	void RestartStage(STAGETYPE _Stage);
 	void PauseAll() { m_bPlay = false; }
 	void ResumeAll() { m_bPlay = true; 
 	CObjManager::GetInstance()->DeleteVector(CObjManager::OBECT_ESC_MENU);
