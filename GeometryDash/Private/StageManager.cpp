@@ -215,3 +215,26 @@ void CStageManager::StageChanger(STAGETYPE _Stage)
     CCameraManager::GetInstance()->ResetBackImageMove();
     CCameraManager::GetInstance()->SetNomalLeftRight();
 }
+
+void CStageManager::RestartStage(STAGETYPE _Stage)
+{
+    CStageManager::GetInstance()->ResumeAll();
+    switch (_Stage)
+    {
+        case CStageManager::STAGE_TUTORIAL:
+        {
+            m_NowStage->RestartStage();
+            // m_eNowStage = STAGE_TUTORIAL;
+        }
+        break;
+        case CStageManager::STAGE_ONE:
+        {
+            m_NowStage->RestartStage();
+            //m_eNowStage = STAGE_ONE;
+        }
+        break;
+    }
+    CKeyManager::GetInstance()->ResetAllKey();
+    CCameraManager::GetInstance()->ResetBackImageMove();
+    CCameraManager::GetInstance()->SetNomalLeftRight();
+}

@@ -23,17 +23,17 @@ void COtherPlayer::Initailizer()
     HBITMAP* InBitMap{};
     LoadPlayerSound();
     TCHAR Name[50] = {};
-    wsprintf(Name, L"../resource/Player/player.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Ship.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1_Ship.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Zigzag.bmp");
+    wsprintf(Name, L"../resource/Player/OtherPlayer1_ZigZag.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
@@ -42,9 +42,6 @@ void COtherPlayer::Initailizer()
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
-
-    // CSoundManager::GetInstance()->LoadSound("GeometryDashLevelComplete", "../sound/Geometry Dash Level Complete - djlunatique.mp3");
-
 }
 
 int COtherPlayer::Update(float fTime)
@@ -190,85 +187,6 @@ void COtherPlayer::Free()
 
 void COtherPlayer::KeyDown()
 {
-    // KeyManager 사용예시
-    if (CKeyManager::GetInstance()->KeyDown(VK_LEFT))
-    {
-        Key[DIR_LEFT] = true;
-        m_NowDir = DIR_LEFT;
-    }
-    else if (CKeyManager::GetInstance()->KeyUp(VK_LEFT))
-    {
-        Key[DIR_LEFT] = false;
-    }
-
-    if (CKeyManager::GetInstance()->KeyDown(VK_RIGHT))
-    {
-        Key[DIR_RIGHT] = true;
-        m_NowDir = DIR_RIGHT;
-    }
-    else if (CKeyManager::GetInstance()->KeyUp(VK_RIGHT))
-    {
-        Key[DIR_UP] = false;
-    }
-    if (CKeyManager::GetInstance()->KeyDown(VK_UP))
-    {
-        Key[DIR_UP] = true;
-        m_NowDir = DIR_UP;
-    }
-    else if (CKeyManager::GetInstance()->KeyUp(VK_UP))
-    {
-        Key[DIR_UP] = false;
-    }
-
-    if (CKeyManager::GetInstance()->KeyDown(VK_DOWN))
-    {
-        Key[DIR_DOWN] = true;
-        m_NowDir = DIR_DOWN;
-    }
-    else if (CKeyManager::GetInstance()->KeyUp(VK_DOWN))
-    {
-        Key[DIR_DOWN] = false;
-    }
-
-    if (CKeyManager::GetInstance()->KeyDown(VK_SPACE))
-    {
-        if (m_eStatus == STATUS_NOMAL) {
-            if (!m_bMSpace && Key[DIR_SPACE] == false) {
-                m_Jcnt = 0;
-            }
-            Key[DIR_DOWN] = false;
-            Key[DIR_SPACE] = true;
-            m_bMSpace = true;
-        }
-        else if (m_eStatus == STATUS_AIRPLANE) {
-            Key[DIR_SPACE] = true;
-            Key[DIR_DOWN] = false;
-
-        }
-        else if (m_eStatus == STATUS_ZIGZAG) {
-            Key[DIR_SPACE] = true;
-            Key[DIR_DOWN] = false;
-            angle = -45;
-            m_eZigzag = ZIGZAG_UP;
-        }
-
-    }
-    else if (CKeyManager::GetInstance()->KeyUp(VK_SPACE))
-    {
-
-        if (m_eStatus == STATUS_NOMAL) {
-            Key[DIR_SPACE] = false;
-        }
-        else if (m_eStatus == STATUS_AIRPLANE) {
-            Key[DIR_SPACE] = false;
-        }
-        else if (m_eStatus == STATUS_ZIGZAG) {
-
-            Key[DIR_SPACE] = false;
-            angle = 45;
-            m_eZigzag = ZIGZAG_DOWN;
-        }
-    }
 }
 
 void COtherPlayer::MSpace(float fTime)
