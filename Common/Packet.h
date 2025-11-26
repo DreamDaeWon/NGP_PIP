@@ -23,6 +23,9 @@ namespace common::packet
 		LoginAcceptPacket_s2c = 20,
 		LoginRequestPacket_c2s = 21,
 		LogoutPacket_c2s = 23,
+		
+		SpawnOtherPlayerPacket_s2c = 24,
+		DespawnOtherPlayerPacket_s2c = 25,
 
 		// Map관련 패킷은 30번 대
 
@@ -100,6 +103,14 @@ namespace common::packet
 
 	struct S2C_LoginAcceptPacket : public PacketHeader {
 		int	playerID;
+	};
+
+	struct S2C_SpawnOtherPlayerPacket : public PacketHeader {
+		int	OtherplayerID;
+	};
+
+	struct S2C_DespawnOtherPlayerPacket : public PacketHeader {
+		int	OtherplayerID;
 	};
 #pragma pack (pop)
 }

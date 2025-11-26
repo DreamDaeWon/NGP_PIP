@@ -118,6 +118,10 @@ void Server::acceptLoop()
 		worker.detach();
 
 		sendClientID((int)idx);
+		broadcastNewPlayer((int)idx);
+
+		// 모든 클라이언트에게 다른 플레이어 알려주기
+
 	}
 
 }
@@ -138,4 +142,39 @@ void Server::sendClientID(int clientID)
 
 	// 3. Enqueue the packet for sending
 	_clients._sessions[clientID].EnqueuePacket(packetData);
+}
+
+void Server::broadcastNewPlayer(int newPlayerID)
+{
+	// 1. Create packet on stack
+	common::packet::S2C_SpawnOtherPlayerPacket packet;
+	packet.type = common::packet::PacketType::SpawnOtherPlayerPacket_s2c;
+	packet.size = sizeof(common::packet::S2C_SpawnOtherPlayerPacket);
+	packet.OtherplayerID = newPlayerID;
+	printf("새 플레이어 알림 : %d\n", newPlayerID);
+	// 2. Create a shared vector from the packet data
+	auto packetData = std::make_shared<std::vector<char>>(packet.size);
+	memcpy(packetData->data(), &packet, packet.size);
+	// 3. Enqueue the packet for sending to all connected clients
+	std::lock_guard<std::mutex> lock(_clients._sessionLock);
+	for (auto& session : _clients._sessions)
+	{
+		if (session.isConnected())
+		{
+			session.EnqueuePacket(packetData);
+		}
+	}
+
+	// 기존 플레이어들도 새로운 플레이어에게 알려주기
+	for (uint32_t id = 0; id < _playerCount; ++id)
+	{
+		if (id == newPlayerID) continue; // 자기 자신은 제외
+		common::packet::S2C_SpawnOtherPlayerPacket existingPlayerPacket;
+		existingPlayerPacket.type = common::packet::PacketType::SpawnOtherPlayerPacket_s2c;
+		existingPlayerPacket.size = sizeof(common::packet::S2C_SpawnOtherPlayerPacket);
+		existingPlayerPacket.OtherplayerID = id;
+		auto existingPacketData = std::make_shared<std::vector<char>>(existingPlayerPacket.size);
+		memcpy(existingPacketData->data(), &existingPlayerPacket, existingPlayerPacket.size);
+		_clients._sessions[newPlayerID].EnqueuePacket(existingPacketData);
+	}
 }

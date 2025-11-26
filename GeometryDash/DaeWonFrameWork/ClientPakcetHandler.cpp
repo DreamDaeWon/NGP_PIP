@@ -45,6 +45,13 @@ void client::handler::Handle_MovePacket_s2c(char* buffer)
     //}
 }
 
+void client::handler::AllPlayer_MovePacket_s2c(char* buffer)
+{
+	PacketHeader* header = (PacketHeader*)buffer;
+	if (header->type != PacketType::AllPlayerMovePacket_s2c) return;
+	auto packet = reinterpret_cast<S2C_AllPlayerMovePacket*>(buffer);
+}
+
 void client::handler::Handle_LoginAccept_s2c(char* buffer)
 {
     PacketHeader* header = (PacketHeader*)buffer;
@@ -71,4 +78,34 @@ void client::handler::Handle_RoomStart_s2c(char* buffer)
 }
 void client::handler::Handle_MapRoomEnd_s2c(char* buffer)
 {
+}
+
+void client::handler::SpawnOtherPlayerPacket_s2c(char* buffer)
+{
+    PacketHeader* header = (PacketHeader*)buffer;
+
+    if (header->type != PacketType::SpawnOtherPlayerPacket_s2c) return;
+
+    auto packet = reinterpret_cast<S2C_SpawnOtherPlayerPacket*>(buffer);
+    int assignedID = packet->OtherplayerID;
+
+	// OtherPlayer 생성
+	CObjManager::GetInstance()->AddOtherPlayer(assignedID, 0.f, 0.f);
+    string debugMsg = "[Client] Spawn Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
+    OutputDebugStringA(debugMsg.c_str());
+}
+
+void client::handler::DespawnOtherPlayerPacket_s2c(char* buffer)
+{
+    PacketHeader* header = (PacketHeader*)buffer;
+
+    if (header->type != PacketType::DespawnOtherPlayerPacket_s2c) return;
+
+    auto packet = reinterpret_cast<S2C_DespawnOtherPlayerPacket*>(buffer);
+    int assignedID = packet->OtherplayerID;
+
+    // OtherPlayer 삭제
+    CObjManager::GetInstance()->RemoveOtherPlayer(assignedID);
+    string debugMsg = "[Client] Remove Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
+    OutputDebugStringA(debugMsg.c_str());
 }

@@ -28,6 +28,7 @@ CStageOne::CStageOne()
 CStageOne::~CStageOne()
 {
 	Free();
+	
 }
 
 void CStageOne::Initailizer()
@@ -73,7 +74,9 @@ void CStageOne::Render(HDC mDC)
 
 void CStageOne::Free()
 {
-	CObjManager::GetInstance()->Free();
+	//CObjManager::GetInstance()->Free();
+
+	CObjManager::GetInstance()->Free_But_OtherPlayer_Exclude();
 }
 
 void CStageOne::SpawnCamera()

@@ -73,7 +73,8 @@ void CStageTutorial::Render(HDC mDC)
 
 void CStageTutorial::Free()
 {
-	CObjManager::GetInstance()->Free();
+	//CObjManager::GetInstance()->Free();
+	CObjManager::GetInstance()->CObjManager::GetInstance()->Free_But_OtherPlayer_Exclude();
 }
 
 void CStageTutorial::SpawnCamera()
