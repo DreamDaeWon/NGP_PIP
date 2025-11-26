@@ -30,9 +30,7 @@ public:
 	bool isConnected() const { return _state != ClientState::Disconnected; }
 	ClientState getState() const { return _state; }
 	void WorkerLoop();
-	void ProcessPacket();
 	void SendPacket();
-	void RecvPacket();
 	void Disconnect();
 
 	void EnqueuePacket(std::shared_ptr<std::vector<char>> packet);
@@ -42,12 +40,15 @@ public:
 
 	void setCurrentRoom(Room* room) { _currentRoom = room; }
 private:
+	void DoRecv();
+
 	uint32_t _id;
 	SOCKET _socket;
 	std::atomic<ClientState> _state;
 	Room* _currentRoom;
 
 	std::array<char, 1024> _recvBuffer;
+	size_t _recvBufferOffset = 0;
 	std::array<char, 1024> _sendBuffer;
 
 	std::mutex _sendMutex;

@@ -1,7 +1,11 @@
 #pragma once
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
 
+
+
+#include <iostream>
 #include <cstdio>
 #include <vector>
 #include <array>
@@ -12,7 +16,6 @@
 #include <chrono>
 #include <functional>
 
-#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
 
 
 // 소켓 함수 오류 출력 후 종료

@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include <memory>
 #include "Player.h"
 #include "Packet.h"
 // DW예정 : 추후에 추가되면 추가할 예정인 헤더들
@@ -36,7 +37,7 @@ public:
 	void StopGame();
 	void UpdateGame();
 	void BroadcastPacket(common::packet::PacketHeader* packet);
-	void EnqueuePacket(common::packet::PacketHeader* packet);
+	void EnqueuePacket(std::unique_ptr<common::packet::PacketHeader> packet);
 
 	void RegisterHandler(common::packet::PacketType type, PacketHandlerFunc func);
 	void RegisterHandler(common::packet::PacketType type, void(Room::* func)(Session*, char*));
@@ -56,7 +57,7 @@ private:
 
 	Timer* timer = nullptr;
 
-	std::queue<common::packet::PacketHeader*> incomingQueue;
+	std::queue<std::unique_ptr<common::packet::PacketHeader>> incomingQueue;
 
 	RoomGameMode mode{ RoomGameMode::ROOM_MODE_MAX };
 

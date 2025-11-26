@@ -162,6 +162,8 @@ int CPlayer::Update(float fTime)
 	{
         sendPosition(); 
 		_lastSendTime = now_time;
+		std::wstring str = L"now time: " + std::to_wstring(chrono::duration_cast<chrono::milliseconds>(now_time.time_since_epoch()).count()) + L", last send time: " + std::to_wstring(chrono::duration_cast<chrono::milliseconds>(_lastSendTime.time_since_epoch()).count()) + L"\n";
+        OutputDebugStringW(str.c_str());
 	}
 
 	return 0;
@@ -503,12 +505,13 @@ void CPlayer::LoadPlayerSound()
 void CPlayer::sendPosition()
 {
 	common::packet::C2S_MovePacket packet{};
+	packet.size = sizeof(packet);
 	packet.type = common::packet::PacketType::MovePacket_c2s;
 	packet.id = CObjManager::GetInstance()->GetMyPlayerID();
 	packet.x = m_CenterPos.x;
 	packet.y = m_CenterPos.y;
 	packet.rotate = angle;
-	packet.ridius = m_fRidius; // ������ ������
+	packet.ridius = m_fRidius;
     packet.cameraID = 0;
 
 	char* buffer = reinterpret_cast<char*>(&packet);

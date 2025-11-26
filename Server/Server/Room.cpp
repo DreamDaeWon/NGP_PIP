@@ -19,12 +19,8 @@ Room::~Room()
 {
 	delete timer;
 
-	std::lock_guard<std::mutex> lock(_queueMutex);
-	while (!incomingQueue.empty())
-	{
-		delete incomingQueue.front();
-		incomingQueue.pop();
-	}
+	// incomingQueue의 unique_ptr들이 자동으로 메모리를 해제하므로,
+	// 별도의 반복문으로 큐를 비울 필요가 없습니다.
 }
 
 void Room::AddPlayer()
@@ -98,19 +94,18 @@ void Room::BroadcastPacket(common::packet::PacketHeader* packet)
 	}
 }
 
-void Room::EnqueuePacket(common::packet::PacketHeader* packet)
+void Room::EnqueuePacket(std::unique_ptr<common::packet::PacketHeader> packet)
 {
-	_queueMutex.lock();
-	incomingQueue.push(packet);
-	_queueMutex.unlock();
+	std::lock_guard lock(_queueMutex);
+	incomingQueue.push(std::move(packet));
 }
 // KJ: 원래 UpdateLoop의 매 루프마다 해주던 패킷 처리 작업을 함수로 분리
 void Room::ProcessInputs()
 {
 	// 이번 프레임에 처리할 패킷들을 임시 큐로 옮김
-	std::queue<common::packet::PacketHeader*> packetsToProcess;
+	std::queue<std::unique_ptr<common::packet::PacketHeader>> packetsToProcess;
 	{
-		std::lock_guard<std::mutex> lock(_queueMutex);
+		std::lock_guard lock(_queueMutex);
 		packetsToProcess.swap(incomingQueue);
 	} // 여기서 _queue_mutex 락이 해제됩니다.
 
@@ -118,14 +113,14 @@ void Room::ProcessInputs()
 	// 임시 큐의 패킷들을 모두 처리
 	while (!packetsToProcess.empty())
 	{
-		common::packet::PacketHeader* packet = packetsToProcess.front();
+		std::unique_ptr<common::packet::PacketHeader> packet = std::move(packetsToProcess.front());
 		packetsToProcess.pop();
 
 		// C2S_MovePacket만 처리한다고 가정
 		
-		HandlePacket(nullptr, reinterpret_cast<char*>(packet));
+		HandlePacket(nullptr, reinterpret_cast<char*>(packet.get()));
 
-		delete packet;
+		// unique_ptr이 범위를 벗어나면 자동으로 메모리가 해제됩니다.
 	}
 }
 
@@ -138,7 +133,7 @@ void Room::BroadcastState()
 
 	
 	{
-		std::lock_guard<std::mutex> lock(_playerMutex);
+		std::lock_guard lock(_playerMutex);
 		for (const auto& player : Players)
 		{
 			size_t id = player.id;

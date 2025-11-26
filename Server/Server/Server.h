@@ -28,7 +28,6 @@ public:
 private:
 	SOCKET _listenSocket = INVALID_SOCKET;
 	uint32_t _playerCount = 0;
-	std::vector<std::thread> _workers;
 	Room _room;
 	std::thread _roomThread;
 };

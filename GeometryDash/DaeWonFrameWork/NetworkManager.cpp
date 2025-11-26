@@ -67,16 +67,13 @@ bool NetworkManager::initialize_Client()
 
 	_recvBufferSize = 0;
 
-	// 1. 패킷을 담을 버퍼 생성
-	const int packetSize = sizeof(PacketHeader) + sizeof(PacketType::LoginRequestPacket_c2s);
-	char loginPacketBuffer[packetSize];
+	common::packet::C2S_LoginRequestPacket login_request_packet;
 
-	// 2. 헤더 채우기
-	PacketHeader* header = (PacketHeader*)loginPacketBuffer;
-	header->size = packetSize;
-	header->type = PacketType::LoginRequestPacket_c2s;
+	login_request_packet.size = sizeof(login_request_packet);
+	login_request_packet.type = common::packet::PacketType::LoginRequestPacket_c2s;
+	login_request_packet.id = -1; // 임시 ID
 
-	sendPacket(loginPacketBuffer, packetSize);
+	sendPacket(reinterpret_cast<char*>(&login_request_packet), sizeof(login_request_packet));
 
 	return true;
 }

@@ -49,16 +49,10 @@ void Server::end()
 		closesocket(_listenSocket);
 		_listenSocket = INVALID_SOCKET;
 	}
-	for (auto& worker : _workers)
-	{
-		if (worker.joinable())
-			worker.join();
-	}
 	if (_roomThread.joinable())
 	{
 		_roomThread.join();
 	}
-	_workers.clear();
 
 	for (auto & session : _clients._sessions)
 	{
@@ -97,6 +91,15 @@ void Server::acceptLoop()
 			addr,
 			ntohs(clientaddr.sin_port));
 
+		// 소켓을 논블로킹 모드로 설정합니다.
+		u_long mode = 1; // 1 for non-blocking
+		if (ioctlsocket(clientsocket, FIONBIO, &mode) == SOCKET_ERROR)
+		{
+			err_display("ioctlsocket() non-blocking failed");
+			closesocket(clientsocket);
+			continue;
+		}
+
 		uint32_t idx = _playerCount; // 0-based
 		_clients._sessionLock.lock();
 		_clients._sessions[idx].init(idx, clientsocket, ClientState::Connected);
@@ -109,8 +112,10 @@ void Server::acceptLoop()
 
 		_playerCount++;
 
+		// 스레드를 분리하여 독립적으로 실행되게 합니다.
+		// 소멸 시 자동으로 리소스를 해제하므로 수동 관리가 필요 없습니다.
 		std::thread worker{ &Session::WorkerLoop, &_clients._sessions[idx] };
-		_workers.emplace_back(std::move(worker));
+		worker.detach();
 
 		sendClientID((int)idx);
 	}
