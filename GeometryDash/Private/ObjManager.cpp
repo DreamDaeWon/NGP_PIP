@@ -136,6 +136,7 @@ void CObjManager::AddOtherPlayer(int id, float x, float y)
 	// 3. 생성 및 초기화
 	COtherPlayer* newPlayer = new COtherPlayer();
 	newPlayer->SetID(id);
+	newPlayer->LoadOtherPlayerBitMap(id);
 
 	// 4. 리스트에 추가
 	vecAllObj[OBJECT_OTHERPLAYER].emplace_back(newPlayer);

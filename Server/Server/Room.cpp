@@ -60,6 +60,8 @@ void Room::RemovePlayer(int id)
 			printf("Room에서 플레이어 ID %d 제거 및 비활성화.\n", id);
 			Players[id].isActive = false; // 비활성 상태로 설정
 			Players[id].state = common::packet::Player_State::PLAYER_STATE_END; // 상태 초기화
+			Players[id].x = 0; // 위치 초기화
+			Players[id].y = 0;
 			// 나머지 플레이어 데이터(x, y 등)도 초기화할 수 있음
 
 			// 다른 클라이언트들에게 퇴장 패킷 전송
