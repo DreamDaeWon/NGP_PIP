@@ -47,21 +47,21 @@ void COtherPlayer::Initailizer()
 int COtherPlayer::Update(float fTime)
 {
     float ridius{};
-    if (/*이동패킷 받았을 때*/true)
-    {
-        // 위치 적용
-		m_CenterPos.x = 400.f; // x좌표
-		m_CenterPos.y = 300.f; // y좌표
-
-        // 반지름 적용
-        ridius = 100.f; // 반지름
-
-        // 회전 적용
-		angle = 0.f; // 각도
-
-        // 상태 적용
-		m_eStatus = STATUS_NOMAL; // 상태
-    }
+    //if (/*이동패킷 받았을 때*/true)
+    //{
+    //    // 위치 적용
+	//	m_CenterPos.x = 400.f; // x좌표
+	//	m_CenterPos.y = 300.f; // y좌표
+    //
+    //    // 반지름 적용
+    //    ridius = 100.f; // 반지름
+    //
+    //    // 회전 적용
+	//	angle = 0.f; // 각도
+    //
+    //    // 상태 적용
+	//	m_eStatus = STATUS_NOMAL; // 상태
+    //}
 
     m_fTime += fTime * 10.f;
 
