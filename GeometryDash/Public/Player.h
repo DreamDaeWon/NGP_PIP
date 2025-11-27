@@ -54,7 +54,7 @@ public:
     }
 
     void SetJumpHeight() {
-        m_JumpHeight = 25;
+        m_JumpHeight = m_JumpHeight;
         Key[DIR_DOWN] = false;
         m_bMSpace = true;
     }
@@ -88,13 +88,13 @@ private:
 
     float m_fSpeed{ 450.f };
 
-    float m_fJumpSpeed{ 500.f };
+    float m_fJumpSpeed{ 400.f }; // 점프 스피드
 
     DIR m_NowDir{ DIR_RIGHT };
 
-    int m_Jcnt = 50; // 점프 확인용
+    float m_Jcnt = 50; // 점프 확인용
 
-    int m_JumpHeight{ 15 };
+	float m_JumpHeight{ 0.25f }; // 몇 초동안 점프할건지
 
     float m_Fcntx = 0; // 끝 x 확인용
     float m_Fcnty = 0; // 끝 y 확인용
@@ -108,7 +108,7 @@ private:
 private:
     float angle{};
 
-    float fspeed = 1.3f;
+    float fspeed = 1.7f;
 
     POINT m_NowPoint[3]{ {(long)(0),(long)(0) },
        {(long)(m_fRidius * 2),(long)(m_fRidius * 2) },

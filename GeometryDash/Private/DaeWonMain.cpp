@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	WNDCLASSEX WndClass;
 	WndClass.cbSize = sizeof(WndClass);
-	WndClass.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS; // ����Ŭ�� �߰�
+	WndClass.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS; // Ŭ ߰
 	WndClass.lpfnWndProc = (WNDPROC)WndProc;
 	WndClass.cbClsExtra = 0;
 	WndClass.cbWndExtra = 0;
@@ -54,9 +54,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
 	UpdateWindow(g_hWnd);
-	while (GetMessage(&Message, 0, 0, 0)) {
-		TranslateMessage(&Message);
-		DispatchMessage(&Message);
+	
+	// --- 게임 루프와 고정밀 타이머 설정 ---
+	LARGE_INTEGER liFrequency{};
+	LARGE_INTEGER liPrevCount{};
+	LARGE_INTEGER liCurCount{};
+
+	// 초당 클럭 수
+	QueryPerformanceFrequency(&liFrequency);
+	// 이전 클럭 수
+	QueryPerformanceCounter(&liPrevCount);
+
+	while (true)
+	{
+		TimerManager::Instance()->Tick();
+		// 메시지 처리
+		if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
+		{
+			if (Message.message == WM_QUIT)
+				break;
+
+			TranslateMessage(&Message);
+			DispatchMessage(&Message);
+		}
+		// 메시지가 없을 때 게임 로직 및 렌더링 실행
+		else
+		{
+			// 델타 타임 계산
+			QueryPerformanceCounter(&liCurCount);
+			float fTime = float(liCurCount.QuadPart - liPrevCount.QuadPart) / liFrequency.QuadPart;
+			
+			// 디버깅 중단 등으로 fTime이 매우 크게 튀는 것을 방지
+			if (fTime > 0.1f) fTime = 0.1f;
+
+			liPrevCount = liCurCount;
+
+			if (!bStop)
+			{
+				NetworkManager::Instance()->updatePacket();
+				MainGame->Update(TimerManager::Instance()->GetDeltaTime()); // 직접 계산한 fTime 전달
+				MainGame->LateUpdate(TimerManager::Instance()->GetDeltaTime()); // 직접 계산한 fTime 전달
+				InvalidateRect(g_hWnd, nullptr, false); // 화면 갱신 요청 -> WM_PAINT 호출
+			}
+		}
 	}
 
 	return Message.wParam;
@@ -64,6 +104,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
 enum TIME { TIME_PAINT, TIME_MOVE };
+
+// TickTime 콜백 함수는 더 이상 사용되지 않으므로 주석 처리합니다.
 
 void CALLBACK TickTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
@@ -77,6 +119,7 @@ void CALLBACK TickTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		InvalidateRect(hWnd, nullptr, false);
 	}
 }
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -96,10 +139,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		MainGame = new CMainGame{};
-		// Ÿ�̸� �ʱ�ȭ
-		TimerManager::Instance()->init();
-		SetTimer(hWnd, TIME_PAINT, 1, (TIMERPROC)TickTime);
-
+		// Ÿ̸ ʱȭ -> 새로운 게임 루프에서 델타타임을 직접 계산하므로 더 이상 필요 없습니다.
+		// TimerManager::Instance()->init();
+		// SetTimer는 더 이상 사용하지 않으므로 주석 처리합니다.
+		// SetTimer(hWnd, TIME_PAINT, 1, (TIMERPROC)TickTime);
 	}
 		break;
 
@@ -140,7 +183,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		GetClientRect(hWnd, &rt);
 		hDC = BeginPaint(hWnd, &ps);
 		hBackGroundDC = CreateCompatibleDC(hDC);
-		hBackGroundbitmap = CreateCompatibleBitmap(hDC, rt.right, rt.bottom);// ����� �׸� ��
+		hBackGroundbitmap = CreateCompatibleBitmap(hDC, rt.right, rt.bottom);//  ׸ 
 		SelectObject(hBackGroundDC, hBackGroundbitmap);
 
 		mDC = CreateCompatibleDC(hBackGroundDC);
@@ -150,8 +193,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 
 
-		SelectObject(mDC, hBitmap); // mdc�� ���ִ� �� �߿�!
-		// �׵θ� ����� �ڵ� �ֱ�
+		SelectObject(mDC, hBitmap); // mdc ִ  ߿!
+		// ׵θ  ڵ ֱ
 		HPEN hPen = (HPEN)CreatePen(PS_SOLID,2,RGB(255, 0, 255)), OldPen{};
 		OldPen = (HPEN)SelectObject(mDC, hPen);
 
@@ -164,13 +207,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		SelectObject(mDC, OldPen);
 		DeleteObject(hBrush);
 		DeleteObject(hPen);
-		// ���⼭���� �׸��� �ϱ�!
+		// ⼭ ׸ ϱ!
 
 
 		MainGame->Render(mDC);
 
 
-		// ī�޶�
+		// ī޶
 		CCameraManager::GetInstance()->SetBackDC(hBackGroundDC);
 		CCameraManager::GetInstance()->Render(hDC, mDC);
 

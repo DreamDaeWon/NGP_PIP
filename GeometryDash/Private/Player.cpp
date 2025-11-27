@@ -117,16 +117,16 @@ int CPlayer::Update(float fTime)
         break;
     }
     case CPlayer::STATUS_FINISH: {
-        if (m_Fcntx < (90 * fspeed)) {
+        if (m_Fcntx < (150 * fspeed)) {
             m_CenterPos.x += m_fSpeed / fspeed * fTime * (m_Fcntx / (30.f * fspeed));
             angle = angle + (4 / fspeed);
             ++m_Fcntx;
         }
-        if (m_Fcnty < (50 * fspeed)) {
+        if (m_Fcnty < (60 * fspeed)) {
             m_CenterPos.y -= m_fSpeed / fspeed * fTime * (m_Fcnty / (90.f * fspeed));
             ++m_Fcnty;
         }
-        else if (50 * (fspeed <= m_Fcnty) && m_Fcnty < (90 * fspeed)) {
+        else if (60 * (fspeed <= m_Fcnty) && m_Fcnty < (90 * fspeed)) {
             m_CenterPos.y += m_fSpeed / fspeed * fTime * (m_Fcnty / (90.f * fspeed));
             ++m_Fcnty;
         }
@@ -420,7 +420,7 @@ void CPlayer::Collision()
 
                             m_bMSpace = false;
 
-                            m_JumpHeight = 15;
+                            //m_JumpHeight = 1.f;
                         }
                         else {
                             m_eBeforeStatus = m_eStatus;
@@ -471,7 +471,7 @@ void CPlayer::MSpace(float fTime)
         if (m_bMSpace) {
             if (m_Jcnt < m_JumpHeight) {
                 m_CenterPos.y -= m_fJumpSpeed * fTime;
-                ++m_Jcnt;
+                m_Jcnt += fTime;
                 angle = angle + SpinSpeed;
             }
         }
