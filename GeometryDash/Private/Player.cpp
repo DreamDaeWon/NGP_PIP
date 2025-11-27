@@ -25,33 +25,13 @@ void CPlayer::Initailizer()
 {
     HBITMAP* InBitMap{};
     LoadPlayerSound();
-   /* TCHAR Name[50] = {};
-    int Main_id = CObjManager::GetInstance()->GetMyPlayerID();
-    wsprintf(Name, L"../resource/Player/Player%d.bmp", Main_id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Player/Player%d_Ship.bmp", Main_id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Player/Player%d_Zigzag.bmp", Main_id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);*/
-
     CSoundManager::GetInstance()->LoadSound("GeometryDashLevelComplete", "../sound/Geometry Dash Level Complete - djlunatique.mp3");
 
 	CObjManager::GetInstance()->SetMyPlayer(this);
     _id = CObjManager::GetInstance()->GetMyPlayerID();
 
+	
+    m_NowDir = CPlayer::DIR_DOWN;
 }
 
 int CPlayer::Update(float fTime)

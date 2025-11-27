@@ -70,4 +70,6 @@ public:
 	void AddOtherPlayer(int id, float x, float y);   // 다른 플레이어 추가 (RoomStart 패킷 수신 시 삭제)
 	void RemoveOtherPlayer(int id);					 // 플레이어 삭제 (RoomLeave 패킷 수신 시 삭제)
 	void ClearOtherPlayers();						 // 모든 다른 플레이어 삭제 (게임 종료 시 삭제)
+
+	void PlayMultiGame();
 };

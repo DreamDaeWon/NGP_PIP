@@ -52,6 +52,8 @@ void CObjManager::LateUpdate(float fTime)
 			}
 		}
 	}
+
+	PlayMultiGame();
 }
 
 void CObjManager::Render(HDC mDC)
@@ -169,4 +171,12 @@ void CObjManager::ClearOtherPlayers()
 		delete pObj;
 	}
 	vec.clear();
+}
+
+void CObjManager::PlayMultiGame()
+{
+	if (vecAllObj[OBJECT_OTHERPLAYER].size() >= 2 && -1 != GetMyPlayerID())
+	{
+		_MyPlayer->SetDirection(CPlayer::DIR::DIR_RIGHT);
+	}
 }

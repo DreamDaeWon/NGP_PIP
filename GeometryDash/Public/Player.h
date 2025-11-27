@@ -73,6 +73,7 @@ public:
 	void SetID(int id) { _id = id; }
 	int GetID() const { return _id; }
 
+	void SetDirection(DIR dir) { m_NowDir = dir; }
 
 private:
     vector<HBITMAP*> m_vechBitMap{};
