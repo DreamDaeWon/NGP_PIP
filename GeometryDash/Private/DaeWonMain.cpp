@@ -80,14 +80,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// 메시지가 없을 때 게임 로직 및 렌더링 실행
 		else
 		{
-			// 델타 타임 계산
-			QueryPerformanceCounter(&liCurCount);
-			float fTime = float(liCurCount.QuadPart - liPrevCount.QuadPart) / liFrequency.QuadPart;
-			
-			// 디버깅 중단 등으로 fTime이 매우 크게 튀는 것을 방지
-			if (fTime > 0.1f) fTime = 0.1f;
-
-			liPrevCount = liCurCount;
 
 			if (!bStop)
 			{
@@ -139,7 +131,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		MainGame = new CMainGame{};
-		// Ÿ̸ ʱȭ -> 새로운 게임 루프에서 델타타임을 직접 계산하므로 더 이상 필요 없습니다.
+		// -> 새로운 게임 루프에서 델타타임을 직접 계산하므로 더 이상 필요 없습니다.
 		// TimerManager::Instance()->init();
 		// SetTimer는 더 이상 사용하지 않으므로 주석 처리합니다.
 		// SetTimer(hWnd, TIME_PAINT, 1, (TIMERPROC)TickTime);
