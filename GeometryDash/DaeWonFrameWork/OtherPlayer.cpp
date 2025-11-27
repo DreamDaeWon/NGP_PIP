@@ -66,14 +66,20 @@ int COtherPlayer::Update(float fTime)
     m_fTime += fTime * 10.f;
 
     ridius = sqrt((m_fRidius * m_fRidius) + ((m_fRidius) * (m_fRidius)));
-    m_NowPoint[0].x = (m_CenterPos.x) + (ridius * cos(radian(angle - 135)));
-    m_NowPoint[0].y = (m_CenterPos.y) + (ridius * sin(radian(angle - 135)));
+    m_NowPoint[0].x = (m_CenterPos.x - CCameraManager::GetInstance()->GetCenterPos().x) + (ridius * cos(radian(angle -
+        135)));
+    m_NowPoint[0].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle -
+        135)));
 
-    m_NowPoint[1].x = (m_CenterPos.x) + (ridius * cos(radian(angle - 45)));
-    m_NowPoint[1].y = (m_CenterPos.y) + (ridius * sin(radian(angle - 45)));
+    m_NowPoint[1].x = (m_CenterPos.x - CCameraManager::GetInstance()->GetCenterPos().x) + (ridius * cos(radian(angle -
+        45)));
+    m_NowPoint[1].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle -
+        45)));
 
-    m_NowPoint[2].x = (m_CenterPos.x) + (ridius * cos(radian(angle - 225)));
-    m_NowPoint[2].y = (m_CenterPos.y) + (ridius * sin(radian(angle - 225)));
+    m_NowPoint[2].x = (m_CenterPos.x - CCameraManager::GetInstance()->GetCenterPos().x) + (ridius * cos(radian(angle -
+        225)));
+    m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle -
+        225)));
 
     return 0;
 }

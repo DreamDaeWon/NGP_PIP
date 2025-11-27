@@ -106,7 +106,14 @@ void Server::acceptLoop()
 			closesocket(clientsocket);
 			continue;
 		}
-        
+
+		int flag = 1;
+		if (setsockopt(clientsocket, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(flag)) == SOCKET_ERROR)
+		{
+			err_display("TCP_NODELAY failed");
+		}
+
+
         // _freeIds에서 사용 가능한 가장 작은 ID를 가져옴
         int clientID = _freeIds.top();
         _freeIds.pop();
