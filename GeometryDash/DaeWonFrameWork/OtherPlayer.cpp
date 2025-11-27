@@ -171,15 +171,6 @@ void COtherPlayer::KeyDown()
 
 void COtherPlayer::MSpace(float fTime)
 {
-    if (m_eStatus == STATUS_NOMAL) {
-        if (m_bMSpace) {
-            if (m_Jcnt < m_JumpHeight) {
-                m_CenterPos.y -= m_fJumpSpeed * fTime;
-                ++m_Jcnt;
-                angle = angle + SpinSpeed;
-            }
-        }
-    }
 }
 
 float COtherPlayer::radian(float degrees)
