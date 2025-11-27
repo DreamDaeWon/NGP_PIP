@@ -55,8 +55,6 @@ void CPlayer::Initailizer()
 
 int CPlayer::Update(float fTime)
 {
-
-    m_fTime += fTime * 10.f;
     KeyDown();
     float ridius{};
     switch (m_NowDir)
@@ -168,10 +166,10 @@ int CPlayer::Update(float fTime)
 
 void CPlayer::LateUpdate(float fTime)
 {
-    if ((int)m_fTime >= m_vechBitMap.size())
-    {
-        m_fTime = 0.f;
-    }
+    //if ((int)m_fTime >= m_vechBitMap.size())
+    //{
+    //    m_fTime = 0.f;
+    //}
     if (m_eStatus == STATUS_NOMAL) {
         m_eZigzag = ZIGZAG_DOWN;
         if (m_Jcnt >= m_JumpHeight) {

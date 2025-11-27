@@ -55,6 +55,11 @@ void CStageOne::Initailizer()
 
 void CStageOne::RestartStage()
 {
+
+	// 카메라 위치 초기화
+	CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_CAMERA].back()->SetCenterPos(POINT{ 0,0 });
+
+
 	// 플레이어 위치 초기화
 	CObject* pPlayer = CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_PLAYER].back();
 	POINT Pos{ 200,400 };
@@ -65,7 +70,6 @@ void CStageOne::RestartStage()
 	CSoundManager::GetInstance()->LoadSound("StereoMadness", "../sound/StereoMadness.mp3");
 	CSoundManager::GetInstance()->PlayBGM("StereoMadness");
 	CSoundManager::GetInstance()->SetVolume(0, 0.1f);
-
 }
 
 void CStageOne::Update(float fTime)

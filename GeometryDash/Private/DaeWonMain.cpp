@@ -1,6 +1,7 @@
 #include "Default.h"
 #include "MainGame.h"
 #include "CameraManager.h"
+#include "../DaeWonFrameWork/TimerManager.h"
 #include "../DaeWonFrameWork/NetworkManager.h"
 #define WINSIZEX 800
 #define WINSIZEY 600
@@ -19,7 +20,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpszCmdParam, int nCmdShow)
 {
-	
+
+
+
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(2284);
 	MSG Message;
@@ -67,9 +70,10 @@ void CALLBACK TickTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 	
 	if (!bStop)
 	{
+		TimerManager::Instance()->Tick();
 		NetworkManager::Instance()->updatePacket();
-		MainGame->Update(0.01f);
-		MainGame->LateUpdate(0.01f);
+		MainGame->Update(TimerManager::Instance()->GetDeltaTime());
+		MainGame->LateUpdate(TimerManager::Instance()->GetDeltaTime());
 		InvalidateRect(hWnd, nullptr, false);
 	}
 }
@@ -92,6 +96,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		MainGame = new CMainGame{};
+		// 타이머 초기화
+		TimerManager::Instance()->init();
 		SetTimer(hWnd, TIME_PAINT, 1, (TIMERPROC)TickTime);
 
 	}

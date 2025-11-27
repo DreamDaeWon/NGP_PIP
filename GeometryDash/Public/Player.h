@@ -82,13 +82,13 @@ private:
 
     STATUS m_eBeforeStatus{ STATUS_END }; // 전 플레이어 상태
 
-    float m_fTime{};
+    //float m_fTime{};
 
     bool Key[DIR_END]{};
 
-    float m_fSpeed{ 600.f };
+    float m_fSpeed{ 450.f };
 
-    float m_fJumpSpeed{ 800.f };
+    float m_fJumpSpeed{ 500.f };
 
     DIR m_NowDir{ DIR_RIGHT };
 
