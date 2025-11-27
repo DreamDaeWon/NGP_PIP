@@ -54,7 +54,7 @@ int COtherPlayer::Update(float fTime)
 		m_CenterPos.y = 300.f; // y좌표
 
         // 반지름 적용
-        ridius = 0.f; // 반지름
+        ridius = 100.f; // 반지름
 
         // 회전 적용
 		angle = 0.f; // 각도

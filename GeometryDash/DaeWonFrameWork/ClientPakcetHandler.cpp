@@ -110,8 +110,14 @@ void client::handler::SpawnOtherPlayerPacket_s2c(char* buffer)
     PacketHeader* header = (PacketHeader*)buffer;
 
     if (header->type != PacketType::SpawnOtherPlayerPacket_s2c) return;
-
     auto packet = reinterpret_cast<S2C_SpawnOtherPlayerPacket*>(buffer);
+    if (-1 != CObjManager::GetInstance()->GetMyPlayerID())
+    {
+        // 내 ID와 같은지 확인 (나는 OtherPlayer로 만들면 안 됨)
+        
+        if (packet->OtherplayerID == CObjManager::GetInstance()->GetMyPlayerID())
+			return;
+    }
     int assignedID = packet->OtherplayerID;
 
 	// OtherPlayer 생성
