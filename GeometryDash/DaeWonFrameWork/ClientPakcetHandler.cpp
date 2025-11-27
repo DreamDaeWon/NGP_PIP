@@ -108,15 +108,18 @@ void client::handler::Handle_MapRoomEnd_s2c(char* buffer)
 void client::handler::SpawnOtherPlayerPacket_s2c(char* buffer)
 {
     PacketHeader* header = (PacketHeader*)buffer;
-
+    OutputDebugString(L"OtherPlayer handler 들어옴");
     if (header->type != PacketType::SpawnOtherPlayerPacket_s2c) return;
     auto packet = reinterpret_cast<S2C_SpawnOtherPlayerPacket*>(buffer);
-    if (-1 != CObjManager::GetInstance()->GetMyPlayerID())
+    if (-1 == CObjManager::GetInstance()->GetMyPlayerID())
     {
         // 내 ID와 같은지 확인 (나는 OtherPlayer로 만들면 안 됨)
-        
-        if (packet->OtherplayerID == CObjManager::GetInstance()->GetMyPlayerID())
-			return;
+        OutputDebugString(L"플레이어 아이디 등록 안됨 아마 에러임");
+    }
+    if (packet->OtherplayerID == CObjManager::GetInstance()->GetMyPlayerID())
+    {
+        OutputDebugString(L"otherplayer아이디랑 내 플레이어 아이디랑 같음");
+        return;
     }
     int assignedID = packet->OtherplayerID;
 
