@@ -26,17 +26,18 @@ void CPlayer::Initailizer()
     HBITMAP* InBitMap{};
     LoadPlayerSound();
     TCHAR Name[50] = {};
-    wsprintf(Name, L"../resource/Player/player.bmp");
+    int Main_id = CObjManager::GetInstance()->GetMyPlayerID();
+    wsprintf(Name, L"../resource/Player/Player%d.bmp", Main_id);
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Ship.bmp");
+    wsprintf(Name, L"../resource/Player/Player%d_Ship.bmp", Main_id);
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/Zigzag.bmp");
+    wsprintf(Name, L"../resource/Player/Player%d_Zigzag.bmp", Main_id);
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     m_vechBitMap.push_back(InBitMap);
