@@ -38,6 +38,7 @@ public:
     float radian(float degrees);
 
     void LoadPlayerSound();
+    void LoadOtherPlayerBitMap(int id);
 
     //void SetStopSpin();
 

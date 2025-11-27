@@ -10,7 +10,6 @@
 //#pragma comment (lib, "msimg32.lib")
 COtherPlayer::COtherPlayer()
 {
-    Initailizer();
 }
 
 COtherPlayer::~COtherPlayer()
@@ -20,28 +19,7 @@ COtherPlayer::~COtherPlayer()
 
 void COtherPlayer::Initailizer()
 {
-    HBITMAP* InBitMap{};
-    LoadPlayerSound();
-    TCHAR Name[50] = {};
-    wsprintf(Name, L"../resource/Player/OtherPlayer1.bmp");
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Player/OtherPlayer1_Ship.bmp");
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Player/OtherPlayer1_ZigZag.bmp");
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
-
-    wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
+   LoadOtherPlayerBitMap(_OtherPlayerID);
 }
 
 int COtherPlayer::Update(float fTime)
@@ -214,6 +192,36 @@ void COtherPlayer::LoadPlayerSound()
     //CSoundManager::GetInstance()->LoadSound("레벨완료","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
 
 
+}
+
+void COtherPlayer::LoadOtherPlayerBitMap(int id)
+{
+    HBITMAP* InBitMap{};
+    LoadPlayerSound();
+    TCHAR Name[50] = {};
+
+    if (id != 1 && id != 2)
+        id = 1;
+
+    wsprintf(Name, L"../resource/Player/OtherPlayer%d.bmp",id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    wsprintf(Name, L"../resource/Player/OtherPlayer%d_Ship.bmp", id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    wsprintf(Name, L"../resource/Player/OtherPlayer%d_ZigZag.bmp", id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    /*wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);*/
 }
 
 void COtherPlayer::SetTargetPosition(POINT newPos, float newAngle)
