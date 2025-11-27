@@ -105,6 +105,10 @@ void CObjManager::SetMyPlayer(CPlayer* _player)
 void CObjManager::SetMyPlayerID(int id)
 {
 	_MyPlayerID = id;
+	if (_MyPlayer)
+	{
+		_MyPlayer->SetPlayerBitMap();
+	}
 }
 
 int CObjManager::GetMyPlayerID() const 

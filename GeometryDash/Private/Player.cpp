@@ -25,7 +25,7 @@ void CPlayer::Initailizer()
 {
     HBITMAP* InBitMap{};
     LoadPlayerSound();
-    TCHAR Name[50] = {};
+   /* TCHAR Name[50] = {};
     int Main_id = CObjManager::GetInstance()->GetMyPlayerID();
     wsprintf(Name, L"../resource/Player/Player%d.bmp", Main_id);
     InBitMap = new HBITMAP;
@@ -45,7 +45,7 @@ void CPlayer::Initailizer()
     wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
     InBitMap = new HBITMAP;
     *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
+    m_vechBitMap.push_back(InBitMap);*/
 
     CSoundManager::GetInstance()->LoadSound("GeometryDashLevelComplete", "../sound/Geometry Dash Level Complete - djlunatique.mp3");
 
@@ -198,6 +198,10 @@ void CPlayer::LateUpdate(float fTime)
 
 void CPlayer::Render(HDC mDC)
 {
+
+    if(m_vechBitMap.size() == 0)
+		return;
+
     HDC _BackDc{};
     HBITMAP _BackBitmap{};
 
@@ -274,6 +278,32 @@ void CPlayer::Free()
         }
         m_vechBitMap.clear();
     }
+}
+
+void CPlayer::SetPlayerBitMap()
+{
+    HBITMAP* InBitMap{};
+    TCHAR Name[50] = {};
+    int Main_id = CObjManager::GetInstance()->GetMyPlayerID();
+    wsprintf(Name, L"../resource/Player/Player%d.bmp", Main_id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    wsprintf(Name, L"../resource/Player/Player%d_Ship.bmp", Main_id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    wsprintf(Name, L"../resource/Player/Player%d_Zigzag.bmp", Main_id);
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
+
+    wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
+    InBitMap = new HBITMAP;
+    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 800, 600, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    m_vechBitMap.push_back(InBitMap);
 }
 
 void CPlayer::KeyDown()

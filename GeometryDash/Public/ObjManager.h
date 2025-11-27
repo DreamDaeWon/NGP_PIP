@@ -64,7 +64,7 @@ public:
 	void SetMyPlayer(CPlayer* _player);				 // 내 player 설정
 	void SetMyPlayerID(int id);						 // 내 player ID 설정 (Login 패킷 송신 시 사용)
 	int GetMyPlayerID() const;						 // 내 player ID 반환
-	CPlayer* GetMyPlayer() const;					 // 내 player 포인터 반환
+	//CPlayer* GetMyPlayer() const;					 // 내 player 포인터 반환
 
 	COtherPlayer* FindOtherPlayer(int id);			 // ID로 다른 플레이어 찾기 
 	void AddOtherPlayer(int id, float x, float y);   // 다른 플레이어 추가 (RoomStart 패킷 수신 시 삭제)

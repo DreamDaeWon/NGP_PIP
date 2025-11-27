@@ -32,6 +32,8 @@ public:
 
     void Free() override;
 
+	void SetPlayerBitMap();
+
 public:
     void KeyDown();
 
