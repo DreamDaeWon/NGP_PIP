@@ -23,8 +23,7 @@ void client::handler::Handle_AllPlayerMovePacket_s2c(char* buffer)
         {
             // 찾았다! 위치 동기화
 			POINT pos = { static_cast<LONG>(packet->x[i]), static_cast<LONG>(packet->y[i]) };
-            pTarget->SetCenterPos(pos);
-            pTarget->SetAngle(packet->Rotate[i]);
+            pTarget->SetTargetPosition(pos, packet->Rotate[i]);
             pTarget->SetRidius(packet->ridius[i]);
             pTarget->Set_Status(static_cast<int>(packet->state[i]));
         }

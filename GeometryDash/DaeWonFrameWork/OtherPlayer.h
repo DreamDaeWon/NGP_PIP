@@ -57,6 +57,7 @@ public:
 
 
 
+    void SetTargetPosition(POINT newPos, float newAngle);
     //  void SetbMSpace(bool _Jump) { m_bMSpace = _Jump; }
 
 
@@ -110,5 +111,9 @@ private:
     HDC m_CompleteDc{};
 
 	int _OtherPlayerID{};
+
+    POINT _targetPos{};
+    float _targetAngle{};
+    const float LERP_SPEED = 0.5f;
 };
 

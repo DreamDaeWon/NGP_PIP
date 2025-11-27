@@ -116,7 +116,7 @@ private:
 
     HDC m_CompleteDc{};
 
-	const unsigned int SEND_DELAY = 50; // 50ms
+	const unsigned int SEND_DELAY = 50;
     chrono::steady_clock::time_point _lastSendTime;
 };
 

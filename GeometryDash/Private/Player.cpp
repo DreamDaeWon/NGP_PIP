@@ -161,12 +161,7 @@ int CPlayer::Update(float fTime)
     m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle - 225)));
 
 
-	auto now_time = chrono::steady_clock::now();
-	if (now_time >= _lastSendTime + chrono::milliseconds(SEND_DELAY))
-	{
-        sendPosition(); 
-		_lastSendTime = now_time;
-	}
+	
 
 	return 0;
 }
@@ -194,7 +189,12 @@ void CPlayer::LateUpdate(float fTime)
 
     }
     Collision();
-
+    auto now_time = chrono::steady_clock::now();
+    if (now_time >= _lastSendTime + chrono::milliseconds(SEND_DELAY))
+    {
+        sendPosition();
+        _lastSendTime = now_time;
+    }
 }
 
 void CPlayer::Render(HDC mDC)
@@ -209,35 +209,23 @@ void CPlayer::Render(HDC mDC)
 
     m_PalyerDc = CreateCompatibleDC(_BackDc);
 
-    if (m_eBeforeStatus == STATUS_END)
+    switch (m_eStatus)  // 항상 현재 상태로 스프라이트 선택
     {
-        switch (m_eStatus)
-        {
-        case CPlayer::STATUS_NOMAL:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_NOMAL]));
-            break;
-        case CPlayer::STATUS_AIRPLANE:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_AIRPLANE]));
-            break;
-        case CPlayer::STATUS_ZIGZAG:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_ZIGZAG]));
-            break;
-        }
-    }
-    else
-    {
-        switch (m_eBeforeStatus)
-        {
-        case CPlayer::STATUS_NOMAL:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_NOMAL]));
-            break;
-        case CPlayer::STATUS_AIRPLANE:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_AIRPLANE]));
-            break;
-        case CPlayer::STATUS_ZIGZAG:
-            SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_ZIGZAG]));
-            break;
-        }
+    case CPlayer::STATUS_NOMAL:
+        SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_NOMAL]));
+        break;
+    case CPlayer::STATUS_AIRPLANE:
+        SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_AIRPLANE]));
+        break;
+    case CPlayer::STATUS_ZIGZAG:
+        SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_ZIGZAG]));
+        break;
+    case CPlayer::STATUS_FINISH:
+        SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_NOMAL])); // 또는 적절한 스프라이트
+        break;
+    case CPlayer::STATUS_DIE:
+        SelectObject(m_PalyerDc, (BITMAP*)*(m_vechBitMap[STATUS_NOMAL])); // 또는 적절한 스프라이트
+        break;
     }
 
 

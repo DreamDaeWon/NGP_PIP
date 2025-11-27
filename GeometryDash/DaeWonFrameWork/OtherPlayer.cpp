@@ -47,21 +47,17 @@ void COtherPlayer::Initailizer()
 int COtherPlayer::Update(float fTime)
 {
     float ridius{};
-    //if (/*이동패킷 받았을 때*/true)
-    //{
-    //    // 위치 적용
-	//	m_CenterPos.x = 400.f; // x좌표
-	//	m_CenterPos.y = 300.f; // y좌표
-    //
-    //    // 반지름 적용
-    //    ridius = 100.f; // 반지름
-    //
-    //    // 회전 적용
-	//	angle = 0.f; // 각도
-    //
-    //    // 상태 적용
-	//	m_eStatus = STATUS_NOMAL; // 상태
-    //}
+    // 부드러운 보간으로 목표 위치로 이동
+    float lerpFactor = LERP_SPEED;
+
+    m_CenterPos.x += (_targetPos.x - m_CenterPos.x) * lerpFactor;
+    m_CenterPos.y += (_targetPos.y - m_CenterPos.y) * lerpFactor;
+
+    // 각도 보간
+    float angleDiff = _targetAngle - angle;
+    if (angleDiff > 180) angleDiff -= 360;
+    else if (angleDiff < -180) angleDiff += 360;
+    angle += angleDiff * lerpFactor;
 
     m_fTime += fTime * 10.f;
 
@@ -218,6 +214,12 @@ void COtherPlayer::LoadPlayerSound()
     //CSoundManager::GetInstance()->LoadSound("레벨완료","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
 
 
+}
+
+void COtherPlayer::SetTargetPosition(POINT newPos, float newAngle)
+{
+    _targetPos = newPos;
+	_targetAngle = newAngle;
 }
 
 //void COtherPlayer::SetStopSpin()
