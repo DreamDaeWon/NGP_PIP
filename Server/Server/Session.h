@@ -47,9 +47,9 @@ private:
 	std::atomic<ClientState> _state;
 	Room* _currentRoom;
 
-	std::array<char, 1024> _recvBuffer;
+	std::array<char, 4096> _recvBuffer;  // 버퍼 크기 증가
 	size_t _recvBufferOffset = 0;
-	std::array<char, 1024> _sendBuffer;
+	// _sendBuffer 제거 (사용하지 않음, _sendQueue 사용)
 
 	std::mutex _sendMutex;
 	std::queue<std::shared_ptr<std::vector<char>>> _sendQueue;

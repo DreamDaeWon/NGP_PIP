@@ -49,5 +49,6 @@ void ClientPacketManager::RegisterHandler()
 	//_handlers[PacketType::RoomEnterAcceptPacket_s2c] = Handle_RoomEnterAccept_s2c;
 	_handlers[PacketType::RoomStartPacket_s2c] = Handle_RoomStart_s2c;
 	_handlers[PacketType::SpawnOtherPlayerPacket_s2c] = SpawnOtherPlayerPacket_s2c;
+	_handlers[PacketType::DespawnOtherPlayerPacket_s2c] = DespawnOtherPlayerPacket_s2c;
 	//_handlers[PacketType::MapRoomEndPacket_s2c] = Handle_MapRoomEnd_s2c;
 }

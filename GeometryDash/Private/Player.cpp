@@ -511,6 +511,29 @@ void CPlayer::sendPosition()
 	packet.y = m_CenterPos.y;
 	packet.rotate = angle;
 	packet.ridius = m_fRidius;
+	
+	// 상태 매핑을 명확하게 처리
+	switch (m_eStatus) {
+		case STATUS_NOMAL:
+			packet.player_state = common::packet::Player_State::IDLE;
+			break;
+		case STATUS_AIRPLANE:
+			packet.player_state = common::packet::Player_State::SPACESHIP;
+			break;
+		case STATUS_ZIGZAG:
+			packet.player_state = common::packet::Player_State::ZIGZAG;
+			break;
+		case STATUS_FINISH:
+			packet.player_state = common::packet::Player_State::FINISH;
+			break;
+		case STATUS_DIE:
+			packet.player_state = common::packet::Player_State::DIE;
+			break;
+		default:
+			packet.player_state = common::packet::Player_State::IDLE;
+			break;
+	}
+	
     packet.cameraID = 0;
 
 	char* buffer = reinterpret_cast<char*>(&packet);

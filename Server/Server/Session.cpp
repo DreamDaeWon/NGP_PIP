@@ -39,6 +39,14 @@ void Session::WorkerLoop()
 
 void Session::DoRecv()
 {
+	// 버퍼 오버플로우 방지
+	if (_recvBufferOffset >= _recvBuffer.size())
+	{
+		printf("[오류] Session %d: 수신 버퍼 오버플로우, 연결 종료\n", _id);
+		Disconnect();
+		return;
+	}
+
 	// 1. 데이터 수신
 	int retval = recv(_socket, _recvBuffer.data() + _recvBufferOffset,
 		_recvBuffer.size() - _recvBufferOffset, 0);

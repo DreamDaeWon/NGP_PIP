@@ -80,7 +80,21 @@ void NetworkManager::sendPacket(char* buffer, int size)
 {
 	if (_clientSocket == INVALID_SOCKET)
 	{
-		err_display("sendPacket()");
+		err_display("sendPacket() - Invalid socket");
+		return;
+	}
+
+	// 버퍼 크기 검증
+	if (size <= 0 || size > 4096) // 최대 패킷 크기 제한
+	{
+		err_display("sendPacket() - Invalid packet size");
+		return;
+	}
+
+	// 송신 버퍼 크기 제한 (메모리 보호)
+	if (_sendBuffer.size() > 65536) // 64KB 제한
+	{
+		err_display("sendPacket() - Send buffer overflow");
 		return;
 	}
 
