@@ -192,22 +192,43 @@ void COtherPlayer::LoadOtherPlayerBitMap(int id)
     TCHAR Name[50] = {};
 
     if (id != 1 && id != 2)
-        id = 1;
+        id = 0;
 
-    wsprintf(Name, L"../resource/Player/OtherPlayer%d.bmp",id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
+    if (id != 0)
+    {
+        wsprintf(Name, L"../resource/Player/OtherPlayer%d.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/OtherPlayer%d_Ship.bmp", id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
+        wsprintf(Name, L"../resource/Player/OtherPlayer%d_Ship.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
 
-    wsprintf(Name, L"../resource/Player/OtherPlayer%d_ZigZag.bmp", id);
-    InBitMap = new HBITMAP;
-    *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    m_vechBitMap.push_back(InBitMap);
+        wsprintf(Name, L"../resource/Player/OtherPlayer%d_ZigZag.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
+    }
+    else
+    {
+        wsprintf(Name, L"../resource/Player/player.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
+
+        wsprintf(Name, L"../resource/Player/Ship.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
+
+        wsprintf(Name, L"../resource/Player/ZigZag.bmp", id);
+        InBitMap = new HBITMAP;
+        *InBitMap = (HBITMAP)LoadImage(g_hInst, Name, IMAGE_BITMAP, 128, 128, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        m_vechBitMap.push_back(InBitMap);
+    }
+    
 
     /*wsprintf(Name, L"../resource/Mainmenu/StageComplete.bmp");
     InBitMap = new HBITMAP;
