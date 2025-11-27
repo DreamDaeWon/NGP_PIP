@@ -92,7 +92,7 @@ void Room::StopGame()
 void Room::UpdateGame() 
 {
 	StartGame(); // 게임 루프 시작
-	const float FPS = 120.0f;
+	const float FPS = 240.0f;
 	const float FRAME_TIME = 1.0f / FPS;
 
 	while (_isGameRunning)

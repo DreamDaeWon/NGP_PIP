@@ -227,7 +227,6 @@ void CPlayer::Render(HDC mDC)
     }
 
 
-    // �׵θ� ����� �ڵ� �ֱ�
     HPEN hPen = (HPEN)CreatePen(PS_SOLID, 2, RGB(255, 0, 255)), OldPen{};
     OldPen = (HPEN)SelectObject(_BackDc, hPen);
 
