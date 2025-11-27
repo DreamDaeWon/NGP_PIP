@@ -104,15 +104,12 @@ void CObjManager::SetMyPlayer(CPlayer* _player)
 
 void CObjManager::SetMyPlayerID(int id)
 {
-	if (_MyPlayer)
-		_MyPlayer->SetID(id);
+	_MyPlayerID = id;
 }
 
 int CObjManager::GetMyPlayerID() const 
 {
-	if (_MyPlayer)
-		return _MyPlayer->GetID();
-	return -1; 
+	return _MyPlayerID;
 }
 
 // --- 다른 플레이어 관련 ---

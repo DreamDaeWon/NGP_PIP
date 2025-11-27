@@ -58,6 +58,8 @@ private:
 
 	CPlayer* _MyPlayer;
 
+	int _MyPlayerID{ -1 };
+
 public:
 	void SetMyPlayer(CPlayer* _player);				 // 내 player 설정
 	void SetMyPlayerID(int id);						 // 내 player ID 설정 (Login 패킷 송신 시 사용)

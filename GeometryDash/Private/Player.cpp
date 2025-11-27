@@ -48,6 +48,9 @@ void CPlayer::Initailizer()
 
     CSoundManager::GetInstance()->LoadSound("GeometryDashLevelComplete", "../sound/Geometry Dash Level Complete - djlunatique.mp3");
 
+	CObjManager::GetInstance()->SetMyPlayer(this);
+    _id = CObjManager::GetInstance()->GetMyPlayerID();
+
 }
 
 int CPlayer::Update(float fTime)
