@@ -3,7 +3,7 @@
 
 // CJ : 공용 구조체, 패킷 정의하는 곳
 constexpr uint32_t MAX_PLAYERS = 3;
-constexpr char SERVER_IP[] = "25.8.1.172";
+constexpr char SERVER_IP[] = "192.168.65.82";
 constexpr short SERVER_PORT = 9000;
 
 namespace common::packet 
