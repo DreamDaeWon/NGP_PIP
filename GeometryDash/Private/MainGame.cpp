@@ -33,8 +33,6 @@ void CMainGame::Initailizer()
 	CSoundManager::GetInstance();
 	CStageManager::GetInstance();
 	NetworkManager::Instance()->initialize_Client();
-	
-	//NowStage = new CToolStage{};
 }
 
 void CMainGame::Update(float fTime)

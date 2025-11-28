@@ -51,6 +51,8 @@ public:
 private:
 	void ProcessInputs();
 	void BroadcastState();
+	void BroadcastWaitPacket(int playerCount);
+	void BroadcastStartPacket();
 
     // Server에서 이동된 함수들 (내부에서 호출됨)
     void SendClientID(int clientID);

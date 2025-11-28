@@ -91,7 +91,35 @@ void Room::StopGame()
 // 플레이어 상태 갱신
 void Room::UpdateGame() 
 {
-	StartGame(); // 게임 루프 시작
+	while (!_isGameRunning)
+	{
+		int activePlayerCount = 0;
+		{
+			std::lock_guard<std::mutex> lock(_playerMutex);
+			for (const auto& player : Players)
+			{
+				if (player.isActive)
+				{
+					activePlayerCount++;
+				}
+			}
+		}
+
+		if (activePlayerCount < MAX_PLAYERS)
+		{
+			// 플레이어가 부족하면 대기 패킷을 보냅니다.
+			BroadcastWaitPacket(activePlayerCount);
+			// 0.5초마다 반복합니다.
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		}
+		else
+		{
+			// 모든 플레이어가 접속하면 시작 패킷을 보내고 게임을 시작합니다.
+			BroadcastStartPacket();
+			StartGame(); // _isGameRunning을 true로 설정합니다.
+		}
+	}
+
 	const float FPS = 240.0f;
 	const float FRAME_TIME = 1.0f / FPS;
 
@@ -212,6 +240,61 @@ void Room::BroadcastState()
 	// BroadcastPacket 함수를 통해 모든 플레이어에게 전송
 	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&allPlayerStatePacket));
 }
+
+void Room::BroadcastWaitPacket(int playerCount)
+{
+	common::packet::S2C_RoomWaitPacket waitPacket{};
+	waitPacket.size = sizeof(common::packet::S2C_RoomWaitPacket);
+	waitPacket.type = common::packet::PacketType::RoomWaitPacket_s2c;
+	waitPacket.playerCount = playerCount;
+
+	{
+		std::lock_guard<std::mutex> lock(_playerMutex);
+		// playerIDs 배열 채우기
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (Players[i].isActive)
+			{
+				waitPacket.playerIDs[i] = Players[i].id;
+			}
+			else
+			{
+				waitPacket.playerIDs[i] = -1; // 비활성 슬롯은 -1로 표시
+			}
+		}
+	}
+
+	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&waitPacket));
+}
+
+void Room::BroadcastStartPacket()
+{
+	common::packet::S2C_RoomStartPacket startPacket{};
+	startPacket.size = sizeof(common::packet::S2C_RoomStartPacket);
+	startPacket.type = common::packet::PacketType::RoomStartPacket_s2c;
+
+	int playerCount = 0;
+	{
+		std::lock_guard<std::mutex> lock(_playerMutex);
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (Players[i].isActive)
+			{
+				startPacket.playerIDs[i] = Players[i].id;
+				playerCount++;
+			}
+			else
+			{
+				startPacket.playerIDs[i] = -1;
+			}
+		}
+	}
+	startPacket.playerCount = playerCount;
+
+	BroadcastPacket(reinterpret_cast<common::packet::PacketHeader*>(&startPacket));
+	printf("%d명의 플레이어가 모두 접속하여 게임을 시작합니다.\n", playerCount);
+}
+
 
 void Room::RegisterHandler(common::packet::PacketType type, PacketHandlerFunc func)
 {
