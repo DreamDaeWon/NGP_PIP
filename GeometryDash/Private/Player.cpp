@@ -62,7 +62,7 @@ int CPlayer::Update(float fTime)
         MSpace(fTime);
         if (Key[DIR_DOWN]) {
             m_CenterPos.y += m_fJumpSpeed * fTime;
-            angle = angle + SpinSpeed;
+            angle = angle + SpinSpeed * fTime;
         }
         break;
     }
@@ -482,7 +482,7 @@ void CPlayer::MSpace(float fTime)
             if (m_Jcnt < m_JumpHeight) {
                 m_CenterPos.y -= m_fJumpSpeed * fTime;
                 m_Jcnt += fTime;
-                angle = angle + SpinSpeed;
+                angle = angle + SpinSpeed * fTime;
             }
         }
     }

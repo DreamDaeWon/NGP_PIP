@@ -6,7 +6,7 @@
 #include "CSoundManager.h"
 
 #define PI 3.141592
-#define SpinSpeed 6
+#define SpinSpeed 600
 
 class CPlayer : public CObject
 {

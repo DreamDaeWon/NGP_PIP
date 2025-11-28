@@ -29,8 +29,14 @@ void CStageManager::Initailizer()
     //m_eNowStage = STAGE_MAIN;
 
     // 처음부터 게임시작
-    m_NowStage = new CStageOne{};
-    m_eNowStage = STAGE_ONE;
+    //m_NowStage = new CStageOne{};
+    //m_eNowStage = STAGE_ONE;
+
+
+    // 1단계
+    m_NowStage = new CStageTutorial{};
+    m_eNowStage = STAGE_TUTORIAL;
+
 }
 
 int CStageManager::Update(float fTime)
