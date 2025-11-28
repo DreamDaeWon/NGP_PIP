@@ -185,6 +185,9 @@ void CStageTutorial::SpawnPlayer()
 	POINT Pos{ 200,400 };
 	pPlayer->SetCenterPos(Pos);
 	pPlayer->SetRidius(25.f);
+
+	static_cast<CPlayer*>(pPlayer)->now_X = 200.f;
+	static_cast<CPlayer*>(pPlayer)->now_Y = 400.f;
 }
 
 void CStageTutorial::CreatEscMenu()

@@ -38,18 +38,22 @@ int CPlayer::Update(float fTime)
 {
     KeyDown();
     float ridius{};
+
     switch (m_NowDir)
     {
     case CPlayer::DIR_LEFT:
-        m_CenterPos.x -= m_fSpeed * fTime;
+        now_X -= m_fSpeed * fTime;
+        m_CenterPos.x = now_X;
         break;
     case CPlayer::DIR_RIGHT:
         if (m_eStatus != STATUS_FINISH && m_eStatus != STATUS_DIE) {
-            m_CenterPos.x += m_fSpeed * fTime;
+            now_X += m_fSpeed * fTime;
+            m_CenterPos.x = now_X;
         }
         break;
     case CPlayer::DIR_UP:
-        m_CenterPos.y -= m_fSpeed * fTime;
+        now_Y -= m_fSpeed * fTime;
+        m_CenterPos.y = now_Y;
         break;
         /*case CPlayer::DIR_DOWN:
            m_CenterPos.y += m_fSpeed * fTime;

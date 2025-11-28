@@ -75,6 +75,11 @@ public:
 
 	void SetDirection(DIR dir) { m_NowDir = dir; }
 
+
+    // 위치 누적위해서 추가
+    float now_X{};
+    float now_Y{};
+
 private:
     vector<HBITMAP*> m_vechBitMap{};
     HDC m_PalyerDc{};
@@ -108,10 +113,13 @@ private:
 
     int _id = -1;
 
+
 private:
     float angle{};
 
     float fspeed = 1.7f;
+
+ 
 
     POINT m_NowPoint[3]{ {(long)(0),(long)(0) },
        {(long)(m_fRidius * 2),(long)(m_fRidius * 2) },

@@ -65,6 +65,9 @@ void CStageOne::RestartStage()
 	POINT Pos{ 200,400 };
 	pPlayer->SetCenterPos(Pos);
 	pPlayer->SetRidius(25.f);
+	
+	static_cast<CPlayer*>(pPlayer)->now_X = 200.f;
+	static_cast<CPlayer*>(pPlayer)->now_Y = 400.f;
 
 	// À½¾Ç ¸®¼Â
 	CSoundManager::GetInstance()->LoadSound("StereoMadness", "../sound/StereoMadness.mp3");
