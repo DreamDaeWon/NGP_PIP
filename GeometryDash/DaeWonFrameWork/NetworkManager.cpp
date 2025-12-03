@@ -85,7 +85,7 @@ void NetworkManager::sendPacket(char* buffer, int size)
 	}
 
 	// 버퍼 크기 검증
-	if (size <= 0 || size > 4096) // 최대 패킷 크기 제한
+	if (size <= 0 || size > 4096) // 최대 패킷 4KB로 크기 제한
 	{
 		err_display("sendPacket() - Invalid packet size");
 		return;

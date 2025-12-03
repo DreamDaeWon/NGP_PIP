@@ -26,48 +26,45 @@ void COtherPlayer::Initailizer()
 
 int COtherPlayer::Update(float fTime)
 {
-    // Calculate elapsed time since last packet for prediction
+    // 1. 예측 시간 계산
     auto now = chrono::steady_clock::now();
     chrono::duration<float> timeSinceLastPacket = now - _lastPacketTime;
-    float dtPrediction = timeSinceLastPacket.count();
+    float dtPrediction = timeSinceLastPacket.count(); // 마지막 패킷 이후 경과 시간
 
-    // Cap prediction time to prevent massive overshooting during lag spikes (e.g., max 500ms)
+    // 최대 500ms까지만 예측 (네트워크 끊김 방지)
     if (dtPrediction > 0.5f) dtPrediction = 0.5f;
 
-    const float LERP_ALPHA = 8.0f; // Adjust this value for desired smoothness vs. responsiveness
+    const float LERP_ALPHA = 8.0f;
 
-    // Predict current position based on last received authoritative position and velocity
-    // This is the point we want to move towards
+	// 2. 예측 위치 계산
     float predictedX = _targetPos.x + (_currentVx * dtPrediction);
     float predictedY = _targetPos.y + (_currentVy * dtPrediction);
-    
-    // Teleport Threshold: If the discrepancy is too large, snap immediately
+
+	// 3. 위치 보간
     float distSq = pow(predictedX - m_CenterPos.x, 2) + pow(predictedY - m_CenterPos.y, 2);
-    if (distSq > 10000.0f) // 100 pixels squared
+    if (distSq > 10000.0f) // 100 픽셀 이상 차이나면 순간이동
     {
         m_CenterPos.x = predictedX;
         m_CenterPos.y = predictedY;
     }
     else
     {
-        // Smoothly interpolate towards the predicted position.
-        // Use a fixed interpolation factor that is applied per second (time-based)
-        // A common value for `lerpAlpha` is between 5.0f and 10.0f for responsive smoothing.
+        // 부드럽게 보간      
         m_CenterPos.x += (predictedX - m_CenterPos.x) * LERP_ALPHA * fTime;
         m_CenterPos.y += (predictedY - m_CenterPos.y) * LERP_ALPHA * fTime;
     }
 
-    // Angle interpolation (time-based)
-    if (m_eStatus != STATUS_ZIGZAG || m_eStatus != STATUS_AIRPLANE) // Only interpolate angle if not in AIRPLANE status
+    // 4. 회전 각 보간
+    if (m_eStatus != STATUS_ZIGZAG || m_eStatus != STATUS_AIRPLANE) 
     {
         float angleDiff = _targetAngle - angle;
         if (angleDiff > 180) angleDiff -= 360;
         else if (angleDiff < -180) angleDiff += 360;
         angle += angleDiff * LERP_ALPHA * fTime;
     }
-    else // If in AIRPLANE status, snap to the target angle or set to a default (e.g. 0)
+    else 
     {
-        angle = _targetAngle; // Use the target angle directly from the server
+        angle = _targetAngle; 
     }
 
     float ridius{}; 

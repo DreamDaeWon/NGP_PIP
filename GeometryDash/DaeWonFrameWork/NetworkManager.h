@@ -27,15 +27,14 @@ public:
 	void shutdown(); // 접속 종료
 
 private:
-	
 
-	ClientPacketManager* _packetManager;
-	SOCKET _clientSocket;
+	ClientPacketManager* _packetManager; // 패킷 라우터
+	SOCKET _clientSocket;				 // 서버 연결 소켓
 
-	char _recvBuffer[BUFFER_SIZE];
-	unsigned long long _recvBufferSize;
+	char _recvBuffer[BUFFER_SIZE];		 // 고정 크기 버퍼
+	unsigned long long _recvBufferSize;  // 현재 버퍼에 쌓인 데이터 크기
 
-	std::vector<char> _sendBuffer;
-	size_t _sendBufferOffset = 0;
+	std::vector<char> _sendBuffer;		 // 동적 송신 버퍼
+	size_t _sendBufferOffset = 0;		 // 현재까지 보낸 위치
 };
 
