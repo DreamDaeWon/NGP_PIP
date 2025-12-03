@@ -147,10 +147,16 @@ int CPlayer::Update(float fTime)
     m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle - 225)));
 
 
-	if (fTime > 0)
+	if (fTime > 0.001f)
 	{
 		_currentVx = (m_CenterPos.x - _prevPos.x) / fTime;
 		_currentVy = (m_CenterPos.y - _prevPos.y) / fTime;
+
+        // Clamp velocity to prevent garbage values
+        if (_currentVx > 2000.f) _currentVx = 2000.f;
+        if (_currentVx < -2000.f) _currentVx = -2000.f;
+        if (_currentVy > 2000.f) _currentVy = 2000.f;
+        if (_currentVy < -2000.f) _currentVy = -2000.f;
 	}
 	else
 	{

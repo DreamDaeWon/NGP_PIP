@@ -6,10 +6,12 @@
 #include "Tile.h"
 #include "CSoundManager.h"
 #include "StageManager.h"
+#include <chrono> // Added for time-based prediction
 
 //#pragma comment (lib, "msimg32.lib")
 COtherPlayer::COtherPlayer()
 {
+    _lastPacketTime = chrono::steady_clock::now();
 }
 
 COtherPlayer::~COtherPlayer()
@@ -29,24 +31,44 @@ int COtherPlayer::Update(float fTime)
     chrono::duration<float> timeSinceLastPacket = now - _lastPacketTime;
     float dtPrediction = timeSinceLastPacket.count();
 
+    // Cap prediction time to prevent massive overshooting during lag spikes (e.g., max 500ms)
+    if (dtPrediction > 0.5f) dtPrediction = 0.5f;
+
+    const float LERP_ALPHA = 8.0f; // Adjust this value for desired smoothness vs. responsiveness
+
     // Predict current position based on last received authoritative position and velocity
     // This is the point we want to move towards
     float predictedX = _targetPos.x + (_currentVx * dtPrediction);
     float predictedY = _targetPos.y + (_currentVy * dtPrediction);
     
-    // Smoothly interpolate towards the predicted position.
-    // Use a fixed interpolation factor that is applied per second (time-based)
-    // A common value for `lerpAlpha` is between 5.0f and 10.0f for responsive smoothing.
-    const float LERP_ALPHA = 8.0f; // Adjust this value for desired smoothness vs. responsiveness
-
-    m_CenterPos.x += (predictedX - m_CenterPos.x) * LERP_ALPHA * fTime;
-    m_CenterPos.y += (predictedY - m_CenterPos.y) * LERP_ALPHA * fTime;
+    // Teleport Threshold: If the discrepancy is too large, snap immediately
+    float distSq = pow(predictedX - m_CenterPos.x, 2) + pow(predictedY - m_CenterPos.y, 2);
+    if (distSq > 10000.0f) // 100 pixels squared
+    {
+        m_CenterPos.x = predictedX;
+        m_CenterPos.y = predictedY;
+    }
+    else
+    {
+        // Smoothly interpolate towards the predicted position.
+        // Use a fixed interpolation factor that is applied per second (time-based)
+        // A common value for `lerpAlpha` is between 5.0f and 10.0f for responsive smoothing.
+        m_CenterPos.x += (predictedX - m_CenterPos.x) * LERP_ALPHA * fTime;
+        m_CenterPos.y += (predictedY - m_CenterPos.y) * LERP_ALPHA * fTime;
+    }
 
     // Angle interpolation (time-based)
-    float angleDiff = _targetAngle - angle;
-    if (angleDiff > 180) angleDiff -= 360;
-    else if (angleDiff < -180) angleDiff += 360;
-    angle += angleDiff * LERP_ALPHA * fTime;
+    if (m_eStatus != STATUS_ZIGZAG || m_eStatus != STATUS_AIRPLANE) // Only interpolate angle if not in AIRPLANE status
+    {
+        float angleDiff = _targetAngle - angle;
+        if (angleDiff > 180) angleDiff -= 360;
+        else if (angleDiff < -180) angleDiff += 360;
+        angle += angleDiff * LERP_ALPHA * fTime;
+    }
+    else // If in AIRPLANE status, snap to the target angle or set to a default (e.g. 0)
+    {
+        angle = _targetAngle; // Use the target angle directly from the server
+    }
 
     float ridius{}; 
     m_fTime += fTime * 10.f;
