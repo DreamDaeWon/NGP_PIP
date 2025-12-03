@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <cstdint> 
 
-// CJ : °ø¿ë ±¸Á¶Ã¼, ÆĞÅ¶ Á¤ÀÇÇÏ´Â °÷
+// CJ : ê³µìš© êµ¬ì¡°ì²´, íŒ¨í‚· ì •ì˜í•˜ëŠ” ê³³
 constexpr uint32_t MAX_PLAYERS = 3;
-constexpr char SERVER_IP[] = "192.168.65.85";
+constexpr char SERVER_IP[] = "127.0.0.1"; //"192.168.28.109";
 constexpr short SERVER_PORT = 9000;
 
 namespace common::packet 
@@ -11,15 +11,15 @@ namespace common::packet
 	enum class PacketType : uint16_t {
 		ErrorPacket = 0,
 		
-		// s2c´Â Â¦¼ö, c2s´Â È¦¼ö
+		// s2cëŠ” ì§ìˆ˜, c2sëŠ” í™€ìˆ˜
 
-		// Move°ü·Ã ÆĞÅ¶Àº 10¹ø ´ë
+		// Moveê´€ë ¨ íŒ¨í‚·ì€ 10ë²ˆ ëŒ€
 		MovePacket_s2c = 10, 
 		AllPlayerMovePacket_s2c = 11,
 		MovePacket_c2s = 12, 
 
 
-		// Login/out°ü·Ã ÆĞÅ¶Àº 20¹ø ´ë
+		// Login/outê´€ë ¨ íŒ¨í‚·ì€ 20ë²ˆ ëŒ€
 		LoginAcceptPacket_s2c = 20,
 		LoginRequestPacket_c2s = 21,
 		LogoutPacket_c2s = 23,
@@ -27,9 +27,9 @@ namespace common::packet
 		SpawnOtherPlayerPacket_s2c = 24,
 		DespawnOtherPlayerPacket_s2c = 25,
 
-		// Map°ü·Ã ÆĞÅ¶Àº 30¹ø ´ë
+		// Mapê´€ë ¨ íŒ¨í‚·ì€ 30ë²ˆ ëŒ€
 
-		// Room°ü·Ã ÆĞÅ¶Àº 40¹ø ´ë
+		// Roomê´€ë ¨ íŒ¨í‚·ì€ 40ë²ˆ ëŒ€
 		RoomWaitPacket_s2c = 40,
 		RoomStartPacket_s2c = 42
 	};
@@ -42,13 +42,13 @@ namespace common::packet
 		DIE					= 4,
 		PLAYER_STATE_END	= 5
 	};
-	// 1¹ÙÀÌÆ® Å©±â·Î Á¤·Ä
+	// 1ë°”ì´íŠ¸ í¬ê¸°ë¡œ ì •ë ¬
 #pragma pack(push, 1)
 
 	struct PacketHeader
 	{
-		long long size; // ÇØ´ç Çì´õ¸¦ Æ÷ÇÔÇÑ ÆĞÅ¶ÀÇ ÀüÃ¼ Å©±â
-		PacketType type; // ÆĞÅ¶ Å¸ÀÔ
+		long long size; // í•´ë‹¹ í—¤ë”ë¥¼ í¬í•¨í•œ íŒ¨í‚·ì˜ ì „ì²´ í¬ê¸°
+		PacketType type; // íŒ¨í‚· íƒ€ì…
 	};
 	
 	// -------------------------------------------Client to Server-------------------------------------------
@@ -56,8 +56,9 @@ namespace common::packet
 	struct C2S_MovePacket : public PacketHeader {
 		int id;
 		long x, y;
+		float vx, vy;
 		float rotate;
-		float ridius; // ¹İÁö¸§ º¸³»±â
+		float ridius; // ë°˜ì§€ë¦„ ë³´ë‚´ê¸°
 		int cameraID;
 		Player_State player_state;
 	};
@@ -71,15 +72,18 @@ namespace common::packet
 	struct S2C_MovePacket : public PacketHeader {
 		int id;
 		float x, y;
+		float vx, vy;
 		float rotate;
 		Player_State player_state; 
-		float minMapPercentage; // ÀÌ°Å´Â minMapÀ» ÅëÇØ ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ÁüÀÛÇÒ ¼ö ÀÖµµ·Ï Á¦ÀÛÇÏ±â + ¹éºĞÀ²·Î!
+		float minMapPercentage; // ì´ê±°ëŠ” minMapì„ í†µí•´ í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜ë¥¼ ì§ì‘í•  ìˆ˜ ìˆë„ë¡ ì œì‘í•˜ê¸° + ë°±ë¶„ìœ¨ë¡œ!
 	};
 
 	struct S2C_AllPlayerMovePacket : public PacketHeader
 	{
 		float x[3]{ 0.f,0.f,0.f };
 		float y[3]{ 0.f,0.f,0.f };
+		float vx[3]{ 0.f,0.f,0.f };
+		float vy[3]{ 0.f,0.f,0.f };
 		float ridius[3]{ 0.f,0.f,0.f };
 		Player_State state[3]
 		{
@@ -92,7 +96,7 @@ namespace common::packet
 
 	struct S2C_RoomWaitPacket : public PacketHeader {
 		int playerCount;
-		int playerIDs[MAX_PLAYERS]; // ºó ½½·ÔÀº -1
+		int playerIDs[MAX_PLAYERS]; // ë¹ˆ ìŠ¬ë¡¯ì€ -1
 	};
 
 	struct S2C_RoomStartPacket : public PacketHeader {

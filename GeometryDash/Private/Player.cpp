@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "ObjManager.h"
 #include "CameraManager.h"
 #include "KeyManager.h"
@@ -36,6 +36,9 @@ void CPlayer::Initailizer()
 
 int CPlayer::Update(float fTime)
 {
+    // 이전 위치 저장
+    _prevPos = m_CenterPos;
+
     KeyDown();
     float ridius{};
 
@@ -144,7 +147,16 @@ int CPlayer::Update(float fTime)
     m_NowPoint[2].y = (m_CenterPos.y - CCameraManager::GetInstance()->GetCenterPos().y) + (ridius * sin(radian(angle - 225)));
 
 
-	
+	if (fTime > 0)
+	{
+		_currentVx = (m_CenterPos.x - _prevPos.x) / fTime;
+		_currentVy = (m_CenterPos.y - _prevPos.y) / fTime;
+	}
+	else
+	{
+		_currentVx = 0.f;
+		_currentVy = 0.f;
+	}
 
 	return 0;
 }
@@ -512,6 +524,8 @@ void CPlayer::sendPosition()
 	packet.id = CObjManager::GetInstance()->GetMyPlayerID();
 	packet.x = m_CenterPos.x;
 	packet.y = m_CenterPos.y;
+	packet.vx = _currentVx;
+	packet.vy = _currentVy;
 	packet.rotate = angle;
 	packet.ridius = m_fRidius;
 	

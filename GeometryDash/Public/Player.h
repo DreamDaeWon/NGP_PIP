@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <chrono>
 
 #include "Object.h"
@@ -11,64 +11,64 @@
 class CPlayer : public CObject
 {
 public:
-    CPlayer();
-    ~CPlayer() override;
+	CPlayer();
+	~CPlayer() override;
 
-    enum DIR { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_SPACE, DIR_END };
+	enum DIR { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_SPACE, DIR_END };
 
-    enum STATUS { STATUS_NOMAL, STATUS_AIRPLANE, STATUS_ZIGZAG, STATUS_FINISH, STATUS_DIE, STATUS_END };
+	enum STATUS { STATUS_NOMAL, STATUS_AIRPLANE, STATUS_ZIGZAG, STATUS_FINISH, STATUS_DIE, STATUS_END };
 
-    enum ZIGZIG_MODE { ZIGZAG_UP, ZIGZAG_DOWN };
+	enum ZIGZIG_MODE { ZIGZAG_UP, ZIGZAG_DOWN };
 
 public:
 
-    void Initailizer() override;
+	void Initailizer() override;
 
-    int Update(float fTime) override;
+	int Update(float fTime) override;
 
-    void LateUpdate(float fTime) override;
+	void LateUpdate(float fTime) override;
 
-    void Render(HDC mDC) override;
+	void Render(HDC mDC) override;
 
-    void Free() override;
+	void Free() override;
 
 	void SetPlayerBitMap();
 
 public:
-    void KeyDown();
+	void KeyDown();
 
-    void Collision();
+	void Collision();
 
-    void MSpace(float fTime);
+	void MSpace(float fTime);
 
-    float radian(float degrees);
+	float radian(float degrees);
 
-    void LoadPlayerSound();
+	void LoadPlayerSound();
 
-    //void SetStopSpin();
+	//void SetStopSpin();
 
-    void Set_Status(int _Status) { m_eStatus = (STATUS)_Status; }
-    int Get_Status() { return  m_eStatus; }
-    void SetAngle(float fDegrees) { angle = fDegrees; }
+	void Set_Status(int _Status) { m_eStatus = (STATUS)_Status; }
+	int Get_Status() { return  m_eStatus; }
+	void SetAngle(float fDegrees) { angle = fDegrees; }
 
-    void SetJump() {
-        m_Jcnt = 0;
-    }
+	void SetJump() {
+		m_Jcnt = 0;
+	}
 
-    void SetJumpHeight() {
-        m_JumpHeight = m_JumpHeight;
-        Key[DIR_DOWN] = false;
-        m_bMSpace = true;
-    }
+	void SetJumpHeight() {
+		m_JumpHeight = m_JumpHeight;
+		Key[DIR_DOWN] = false;
+		m_bMSpace = true;
+	}
 
-    void sendPosition();
+	void sendPosition();
 
-    //  void SetbMSpace(bool _Jump) { m_bMSpace = _Jump; }
+	//  void SetbMSpace(bool _Jump) { m_bMSpace = _Jump; }
 
 
-    void Set_BeforeStatus(int _Status) {
-        m_eBeforeStatus = (STATUS)_Status;
-    }
+	void Set_BeforeStatus(int _Status) {
+		m_eBeforeStatus = (STATUS)_Status;
+	}
 
 	void SetID(int id) { _id = id; }
 	int GetID() const { return _id; }
@@ -76,58 +76,62 @@ public:
 	void SetDirection(DIR dir) { m_NowDir = dir; }
 
 
-    // À§Ä¡ ´©ÀûÀ§ÇØ¼­ Ãß°¡
-    float now_X{};
-    float now_Y{};
+    // ìœ„ì¹˜ ëˆ„ì ìœ„í•´ì„œ ì¶”ê°€
+	float now_X{};
+	float now_Y{};
 
 private:
-    vector<HBITMAP*> m_vechBitMap{};
-    HDC m_PalyerDc{};
+	vector<HBITMAP*> m_vechBitMap{};
+	HDC m_PalyerDc{};
 
-    STATUS m_eStatus{ STATUS_NOMAL }; // ÇöÀç ÇÃ·¹ÀÌ¾î »óÅÂ
+    STATUS m_eStatus{ STATUS_NOMAL }; // í˜„ì¬ í”Œë ˆì´ì–´ ìƒíƒœ
 
-    ZIGZIG_MODE m_eZigzag{ ZIGZAG_DOWN };
+	ZIGZIG_MODE m_eZigzag{ ZIGZAG_DOWN };
 
-    STATUS m_eBeforeStatus{ STATUS_END }; // Àü ÇÃ·¹ÀÌ¾î »óÅÂ
+    STATUS m_eBeforeStatus{ STATUS_END }; // ì „ í”Œë ˆì´ì–´ ìƒíƒœ
 
-    //float m_fTime{};
+	//float m_fTime{};
 
-    bool Key[DIR_END]{};
+	bool Key[DIR_END]{};
 
-    float m_fSpeed{ 450.f };
+	float m_fSpeed{ 450.f };
 
-    float m_fJumpSpeed{ 400.f }; // Á¡ÇÁ ½ºÇÇµå
+    float m_fJumpSpeed{ 400.f }; // ì í”„ ìŠ¤í”¼ë“œ
 
-    DIR m_NowDir{ DIR_RIGHT };
+	DIR m_NowDir{ DIR_RIGHT };
 
-    float m_Jcnt = 50; // Á¡ÇÁ È®ÀÎ¿ë
+    float m_Jcnt = 50; // ì í”„ í™•ì¸ìš©
 
-	float m_JumpHeight{ 0.25f }; // ¸î ÃÊµ¿¾È Á¡ÇÁÇÒ°ÇÁö
+	float m_JumpHeight{ 0.25f }; // ëª‡ ì´ˆë™ì•ˆ ì í”„í• ê±´ì§€
 
-    float m_Fcntx = 0; // ³¡ x È®ÀÎ¿ë
-    float m_Fcnty = 0; // ³¡ y È®ÀÎ¿ë
+    float m_Fcntx = 0; // ë x í™•ì¸ìš©
+    float m_Fcnty = 0; // ë y í™•ì¸ìš©
 
-    bool m_bMSpace = false; // ´ë¿ø Ãß°¡ Á¡ÇÁ È®ÀÎ¿ë
+    bool m_bMSpace = false; // ëŒ€ì› ì¶”ê°€ ì í”„ í™•ì¸ìš©
 
-    bool m_bFinish = false;
+	bool m_bFinish = false;
 
-    int _id = -1;
+	int _id = -1;
 
 
 private:
-    float angle{};
+	float angle{};
 
-    float fspeed = 1.7f;
+	float fspeed = 1.7f;
 
  
 
-    POINT m_NowPoint[3]{ {(long)(0),(long)(0) },
-       {(long)(m_fRidius * 2),(long)(m_fRidius * 2) },
-       {(long)(0),(long)(m_fRidius * 2)} }; // ÇöÀç ¿ŞÂÊ À§ ¿À¸¥ÂÊ À§ ¿ŞÂÊ¾Æ·¡ ÀÇ ÁÂÇ¥
+	POINT m_NowPoint[3]{ {(long)(0),(long)(0) },
+	   {(long)(m_fRidius * 2),(long)(m_fRidius * 2) },
+       {(long)(0),(long)(m_fRidius * 2)} }; // í˜„ì¬ ì™¼ìª½ ìœ„ ì˜¤ë¥¸ìª½ ìœ„ ì™¼ìª½ì•„ë˜ ì˜ ì¢Œí‘œ
 
-    HDC m_CompleteDc{};
+	HDC m_CompleteDc{};
 
 	const unsigned int SEND_DELAY = 10;
-    chrono::steady_clock::time_point _lastSendTime;
+	chrono::steady_clock::time_point _lastSendTime;
+
+	POINT _prevPos{};
+	float _currentVx = 0.f;
+	float _currentVy = 0.f;
 };
 

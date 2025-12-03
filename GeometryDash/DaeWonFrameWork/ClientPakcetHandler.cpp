@@ -1,4 +1,4 @@
-#include "ClientPakcetHandler.h"
+ï»¿#include "ClientPakcetHandler.h"
 
 #include <string>
 
@@ -9,64 +9,64 @@
 using namespace common::packet;
 void client::handler::Handle_AllPlayerMovePacket_s2c(char* buffer)
 {
-    S2C_AllPlayerMovePacket* packet = reinterpret_cast<S2C_AllPlayerMovePacket*>(buffer);
-    auto players = CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_OTHERPLAYER];
-    for (size_t i = 0; i < 3; ++i)
-    {
-        int targetID = i;
-        // ³» Ä³¸¯ÅÍÀÇ ¿òÁ÷ÀÓÀº ¼­¹ö¿¡¼­ ¹Ş¾Æµµ ¹«½Ã (Å¬¶ó ÁÖµµ)
-        if (targetID == CObjManager::GetInstance()->GetMyPlayerID())
-            continue;
-        // ´Ù¸¥ ÇÃ·¹ÀÌ¾î Ã£±â
-        COtherPlayer* pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
-        if (pTarget != nullptr)
-        {
-            // Ã£¾Ò´Ù! À§Ä¡ µ¿±âÈ­
+	S2C_AllPlayerMovePacket* packet = reinterpret_cast<S2C_AllPlayerMovePacket*>(buffer);
+	auto players = CObjManager::GetInstance()->GetAllVector()[CObjManager::OBJECT_OTHERPLAYER];
+	for (size_t i = 0; i < 3; ++i)
+	{
+		int targetID = i;
+		// ë‚´ ìºë¦­í„°ì˜ ì›€ì§ì„ì€ ì„œë²„ì—ì„œ ë°›ì•„ë„ ë¬´ì‹œ (í´ë¼ ì£¼ë„)
+		if (targetID == CObjManager::GetInstance()->GetMyPlayerID())
+			continue;
+		// ë‹¤ë¥¸ í”Œë ˆì´ì–´ ì°¾ê¸°
+		COtherPlayer* pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
+		if (pTarget != nullptr)
+		{
+			// ì°¾ì•˜ë‹¤! ìœ„ì¹˜ ë™ê¸°í™”
 			POINT pos = { static_cast<LONG>(packet->x[i]), static_cast<LONG>(packet->y[i]) };
-            pTarget->SetTargetPosition(pos, packet->Rotate[i]);
-            pTarget->SetRidius(packet->ridius[i]);
-            pTarget->Set_Status(static_cast<int>(packet->state[i]));
-        }
+			pTarget->SetTargetPosition(pos, packet->vx[i], packet->vy[i], packet->Rotate[i]);
+			pTarget->SetRidius(packet->ridius[i]);
+			pTarget->Set_Status(static_cast<int>(packet->state[i]));
+		}
 	}
 }
 
 
 void client::handler::Handle_MovePacket_s2c(char* buffer)
 {
-    // À§Ä¡ ³ªÁß¿¡ Ãß°¡ ÇÒ°Å¶ó ÀÏ´Ü ÁÖ¼®
-    //PacketHeader* header = (PacketHeader*)buffer;
-    //auto packet = reinterpret_cast<S2C_MovePacket*>(buffer); // MovePacket_s2c ±¸Á¶Ã¼ ÀÌ¸§ È®ÀÎ ÇÊ¿ä
+	// ìœ„ì¹˜ ë‚˜ì¤‘ì— ì¶”ê°€ í• ê±°ë¼ ì¼ë‹¨ ì£¼ì„
+	//PacketHeader* header = (PacketHeader*)buffer;
+	//auto packet = reinterpret_cast<S2C_MovePacket*>(buffer); // MovePacket_s2c êµ¬ì¡°ì²´ ì´ë¦„ í™•ì¸ í•„ìš”
 
-    //int targetID = packet->playerID;
+	//int targetID = packet->playerID;
 
-    //// ³» Ä³¸¯ÅÍÀÇ ¿òÁ÷ÀÓÀº ¼­¹ö¿¡¼­ ¹Ş¾Æµµ ¹«½Ã (Å¬¶ó ÁÖµµ)
-    //if (targetID == CObjManager::GetInstance()->GetMyPlayerID())
-    //    return;
+	//// ë‚´ ìºë¦­í„°ì˜ ì›€ì§ì„ì€ ì„œë²„ì—ì„œ ë°›ì•„ë„ ë¬´ì‹œ (í´ë¼ ì£¼ë„)
+	//if (targetID == CObjManager::GetInstance()->GetMyPlayerID())
+	//    return;
 
-    //// ´Ù¸¥ ÇÃ·¹ÀÌ¾î Ã£±â
-    //COtherPlayer* pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
+	//// ë‹¤ë¥¸ í”Œë ˆì´ì–´ ì°¾ê¸°
+	//COtherPlayer* pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
 
-    //if (pTarget != nullptr)
-    //{
-    //    // Ã£¾Ò´Ù! À§Ä¡ µ¿±âÈ­
-    //    pTarget->SetPos(packet->x, packet->y);
-    //    pTarget->SetAngle(packet->rotate);
-    //    // »óÅÂ µ¿±âÈ­ µî Ãß°¡ °¡´É
-    //}
-    //else
-    //{
-    //  
-    //    // »ı¼ºÇÏ°í À§Ä¡ ¼³Á¤
-    //    CObjManager::GetInstance()->AddOtherPlayer(targetID);
+	//if (pTarget != nullptr)
+	//{
+	//    // ì°¾ì•˜ë‹¤! ìœ„ì¹˜ ë™ê¸°í™”
+	//    pTarget->SetPos(packet->x, packet->y);
+	//    pTarget->SetAngle(packet->rotate);
+	//    // ìƒíƒœ ë™ê¸°í™” ë“± ì¶”ê°€ ê°€ëŠ¥
+	//}
+	//else
+	//{
+	//  
+	//    // ìƒì„±í•˜ê³  ìœ„ì¹˜ ì„¤ì •
+	//    CObjManager::GetInstance()->AddOtherPlayer(targetID);
 
-    //    // ¹æ±İ »ı¼ºµÈ ¾Ö ´Ù½Ã Ã£¾Æ¼­ À§Ä¡ ¼³Á¤
-    //    pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
-    //    if (pTarget)
-    //    {
-    //        pTarget->SetPos(packet->x, packet->y);
-    //        pTarget->SetAngle(packet->rotate);
-    //    }
-    //}
+	//    // ë°©ê¸ˆ ìƒì„±ëœ ì•  ë‹¤ì‹œ ì°¾ì•„ì„œ ìœ„ì¹˜ ì„¤ì •
+	//    pTarget = CObjManager::GetInstance()->FindOtherPlayer(targetID);
+	//    if (pTarget)
+	//    {
+	//        pTarget->SetPos(packet->x, packet->y);
+	//        pTarget->SetAngle(packet->rotate);
+	//    }
+	//}
 }
 
 void client::handler::AllPlayer_MovePacket_s2c(char* buffer)
@@ -78,27 +78,27 @@ void client::handler::AllPlayer_MovePacket_s2c(char* buffer)
 
 void client::handler::Handle_LoginAccept_s2c(char* buffer)
 {
-    PacketHeader* header = (PacketHeader*)buffer;
+	PacketHeader* header = (PacketHeader*)buffer;
 
-    if (header->type != PacketType::LoginAcceptPacket_s2c) return;
+	if (header->type != PacketType::LoginAcceptPacket_s2c) return;
 
-    auto packet = reinterpret_cast<S2C_LoginAcceptPacket*>(buffer);
-    int assignedID = packet->playerID;
+	auto packet = reinterpret_cast<S2C_LoginAcceptPacket*>(buffer);
+	int assignedID = packet->playerID;
 
-    // ³» ID ¼³Á¤
-    CObjManager::GetInstance()->SetMyPlayerID(assignedID);
+	// ë‚´ ID ì„¤ì •
+	CObjManager::GetInstance()->SetMyPlayerID(assignedID);
 	string debugMsg = "[Client] Login Success! My ID: " + to_string(assignedID) + "\n";
-    OutputDebugStringA(debugMsg.c_str());
+	OutputDebugStringA(debugMsg.c_str());
 }
 
 void client::handler::Handle_RoomWait_s2c(char* buffer)
 {
-    std::printf("[Client] Waiting for players...\n");
+	std::printf("[Client] Waiting for players...\n");
 }
 
 void client::handler::Handle_RoomStart_s2c(char* buffer)
 {
-    std::printf("[Client] Room Start!\n");
+	std::printf("[Client] Room Start!\n");
 }
 void client::handler::Handle_MapRoomEnd_s2c(char* buffer)
 {
@@ -106,39 +106,39 @@ void client::handler::Handle_MapRoomEnd_s2c(char* buffer)
 
 void client::handler::SpawnOtherPlayerPacket_s2c(char* buffer)
 {
-    PacketHeader* header = (PacketHeader*)buffer;
-    OutputDebugString(L"OtherPlayer handler µé¾î¿È");
-    if (header->type != PacketType::SpawnOtherPlayerPacket_s2c) return;
-    auto packet = reinterpret_cast<S2C_SpawnOtherPlayerPacket*>(buffer);
-    if (-1 == CObjManager::GetInstance()->GetMyPlayerID())
-    {
-        // ³» ID¿Í °°ÀºÁö È®ÀÎ (³ª´Â OtherPlayer·Î ¸¸µé¸é ¾È µÊ)
-        OutputDebugString(L"ÇÃ·¹ÀÌ¾î ¾ÆÀÌµğ µî·Ï ¾ÈµÊ ¾Æ¸¶ ¿¡·¯ÀÓ");
-    }
-    if (packet->OtherplayerID == CObjManager::GetInstance()->GetMyPlayerID())
-    {
-        OutputDebugString(L"otherplayer¾ÆÀÌµğ¶û ³» ÇÃ·¹ÀÌ¾î ¾ÆÀÌµğ¶û °°À½");
-        return;
-    }
-    int assignedID = packet->OtherplayerID;
+	PacketHeader* header = (PacketHeader*)buffer;
+	OutputDebugString(L"OtherPlayer handler ë“¤ì–´ì˜´");
+	if (header->type != PacketType::SpawnOtherPlayerPacket_s2c) return;
+	auto packet = reinterpret_cast<S2C_SpawnOtherPlayerPacket*>(buffer);
+	if (-1 == CObjManager::GetInstance()->GetMyPlayerID())
+	{
+		// ë‚´ IDì™€ ê°™ì€ì§€ í™•ì¸ (ë‚˜ëŠ” OtherPlayerë¡œ ë§Œë“¤ë©´ ì•ˆ ë¨)
+		OutputDebugString(L"í”Œë ˆì´ì–´ ì•„ì´ë”” ë“±ë¡ ì•ˆë¨ ì•„ë§ˆ ì—ëŸ¬ì„");
+	}
+	if (packet->OtherplayerID == CObjManager::GetInstance()->GetMyPlayerID())
+	{
+		OutputDebugString(L"otherplayerì•„ì´ë””ë‘ ë‚´ í”Œë ˆì´ì–´ ì•„ì´ë””ë‘ ê°™ìŒ");
+		return;
+	}
+	int assignedID = packet->OtherplayerID;
 
-	// OtherPlayer »ı¼º
+	// OtherPlayer ìƒì„±
 	CObjManager::GetInstance()->AddOtherPlayer(assignedID, 0.f, 0.f);
-    string debugMsg = "[Client] Spawn Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
-    OutputDebugStringA(debugMsg.c_str());
+	string debugMsg = "[Client] Spawn Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
+	OutputDebugStringA(debugMsg.c_str());
 }
 
 void client::handler::DespawnOtherPlayerPacket_s2c(char* buffer)
 {
-    PacketHeader* header = (PacketHeader*)buffer;
+	PacketHeader* header = (PacketHeader*)buffer;
 
-    if (header->type != PacketType::DespawnOtherPlayerPacket_s2c) return;
+	if (header->type != PacketType::DespawnOtherPlayerPacket_s2c) return;
 
-    auto packet = reinterpret_cast<S2C_DespawnOtherPlayerPacket*>(buffer);
-    int assignedID = packet->OtherplayerID;
+	auto packet = reinterpret_cast<S2C_DespawnOtherPlayerPacket*>(buffer);
+	int assignedID = packet->OtherplayerID;
 
-    // OtherPlayer »èÁ¦
-    CObjManager::GetInstance()->RemoveOtherPlayer(assignedID);
-    string debugMsg = "[Client] Remove Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
-    OutputDebugStringA(debugMsg.c_str());
+	// OtherPlayer ì‚­ì œ
+	CObjManager::GetInstance()->RemoveOtherPlayer(assignedID);
+	string debugMsg = "[Client] Remove Other Player Success!! OtherPlayer ID: " + to_string(assignedID) + "\n";
+	OutputDebugStringA(debugMsg.c_str());
 }

@@ -24,19 +24,31 @@ void COtherPlayer::Initailizer()
 
 int COtherPlayer::Update(float fTime)
 {
-    float ridius{};
-    // ºÎµå·¯¿î º¸°£À¸·Î ¸ñÇ¥ À§Ä¡·Î ÀÌµ¿
-    float lerpFactor = LERP_SPEED;
+    // Calculate elapsed time since last packet for prediction
+    auto now = chrono::steady_clock::now();
+    chrono::duration<float> timeSinceLastPacket = now - _lastPacketTime;
+    float dtPrediction = timeSinceLastPacket.count();
 
-    m_CenterPos.x += (_targetPos.x - m_CenterPos.x) * lerpFactor;
-    m_CenterPos.y += (_targetPos.y - m_CenterPos.y) * lerpFactor;
+    // Predict current position based on last received authoritative position and velocity
+    // This is the point we want to move towards
+    float predictedX = _targetPos.x + (_currentVx * dtPrediction);
+    float predictedY = _targetPos.y + (_currentVy * dtPrediction);
+    
+    // Smoothly interpolate towards the predicted position.
+    // Use a fixed interpolation factor that is applied per second (time-based)
+    // A common value for `lerpAlpha` is between 5.0f and 10.0f for responsive smoothing.
+    const float LERP_ALPHA = 8.0f; // Adjust this value for desired smoothness vs. responsiveness
 
-    // °¢µµ º¸°£
+    m_CenterPos.x += (predictedX - m_CenterPos.x) * LERP_ALPHA * fTime;
+    m_CenterPos.y += (predictedY - m_CenterPos.y) * LERP_ALPHA * fTime;
+
+    // Angle interpolation (time-based)
     float angleDiff = _targetAngle - angle;
     if (angleDiff > 180) angleDiff -= 360;
     else if (angleDiff < -180) angleDiff += 360;
-    angle += angleDiff * lerpFactor;
+    angle += angleDiff * LERP_ALPHA * fTime;
 
+    float ridius{}; 
     m_fTime += fTime * 10.f;
 
     ridius = sqrt((m_fRidius * m_fRidius) + ((m_fRidius) * (m_fRidius)));
@@ -122,7 +134,7 @@ void COtherPlayer::Render(HDC mDC)
     }
 
 
-    // Å×µÎ¸® Áö¿ì´Â ÄÚµå ³Ö±â
+    // ×µÎ¸  Úµ Ö±
     HPEN hPen = (HPEN)CreatePen(PS_SOLID, 2, RGB(255, 0, 255)), OldPen{};
     OldPen = (HPEN)SelectObject(_BackDc, hPen);
 
@@ -180,7 +192,7 @@ float COtherPlayer::radian(float degrees)
 
 void COtherPlayer::LoadPlayerSound()
 {
-    //CSoundManager::GetInstance()->LoadSound("·¹º§¿Ï·á","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
+    //CSoundManager::GetInstance()->LoadSound("ë ˆë²¨ì™„ë£Œ","../sound/Geometry Dash Level Complete - djlunatique.com.mp3");
 
 
 }
@@ -207,10 +219,13 @@ void COtherPlayer::LoadOtherPlayerBitMap(int id)
     m_vechBitMap.push_back(InBitMap);
 }
 
-void COtherPlayer::SetTargetPosition(POINT newPos, float newAngle)
+void COtherPlayer::SetTargetPosition(POINT newPos, float newVx, float newVy, float newAngle)
 {
     _targetPos = newPos;
+	_currentVx = newVx;
+	_currentVy = newVy;
 	_targetAngle = newAngle;
+	_lastPacketTime = chrono::steady_clock::now();
 }
 
 //void COtherPlayer::SetStopSpin()

@@ -1,4 +1,6 @@
-#pragma once
+ï»¿#pragma once
+#include <chrono>
+
 #include "Object.h"
 #include "math.h"
 #include "CSoundManager.h"
@@ -58,7 +60,7 @@ public:
 
 
 
-    void SetTargetPosition(POINT newPos, float newAngle);
+    void COtherPlayer::SetTargetPosition(POINT newPos, float newVx, float newVy, float newAngle);
     //  void SetbMSpace(bool _Jump) { m_bMSpace = _Jump; }
 
 
@@ -73,11 +75,11 @@ private:
     vector<HBITMAP*> m_vechBitMap{};
     HDC m_PalyerDc{};
 
-    STATUS m_eStatus{ STATUS_NOMAL }; // ÇöÀç ÇÃ·¹ÀÌ¾î »óÅÂ
+    STATUS m_eStatus{ STATUS_NOMAL }; // í˜„ì¬ í”Œë ˆì´ì–´ ìƒíƒœ
 
     ZIGZIG_MODE m_eZigzag{ ZIGZAG_DOWN };
 
-    STATUS m_eBeforeStatus{ STATUS_END }; // Àü ÇÃ·¹ÀÌ¾î »óÅÂ
+    STATUS m_eBeforeStatus{ STATUS_END }; // ì „ í”Œë ˆì´ì–´ ìƒíƒœ
 
     float m_fTime{};
 
@@ -89,14 +91,14 @@ private:
 
     DIR m_NowDir{ DIR_RIGHT };
 
-    int m_Jcnt = 50; // Á¡ÇÁ È®ÀÎ¿ë
+    int m_Jcnt = 50; // ì í”„ í™•ì¸ìš©
 
     int m_JumpHeight{ 15 };
 
-    float m_Fcntx = 0; // ³¡ x È®ÀÎ¿ë
-    float m_Fcnty = 0; // ³¡ y È®ÀÎ¿ë
+    float m_Fcntx = 0; // ë x í™•ì¸ìš©
+    float m_Fcnty = 0; // ë y í™•ì¸ìš©
 
-    bool m_bMSpace = false; // ´ë¿ø Ãß°¡ Á¡ÇÁ È®ÀÎ¿ë
+    bool m_bMSpace = false; // ëŒ€ì› ì¶”ê°€ ì í”„ í™•ì¸ìš©
 
     bool m_bFinish = false;
 
@@ -107,7 +109,7 @@ private:
 
     POINT m_NowPoint[3]{ {(long)(0),(long)(0) },
        {(long)(m_fRidius * 2),(long)(m_fRidius * 2) },
-       {(long)(0),(long)(m_fRidius * 2)} }; // ÇöÀç ¿ŞÂÊ À§ ¿À¸¥ÂÊ À§ ¿ŞÂÊ¾Æ·¡ ÀÇ ÁÂÇ¥
+       {(long)(0),(long)(m_fRidius * 2)} }; // í˜„ì¬ ì™¼ìª½ ìœ„ ì˜¤ë¥¸ìª½ ìœ„ ì™¼ìª½ì•„ë˜ ì˜ ì¢Œí‘œ
 
     HDC m_CompleteDc{};
 
@@ -115,6 +117,8 @@ private:
 
     POINT _targetPos{};
     float _targetAngle{};
-    const float LERP_SPEED = 0.5f;
+	float _currentVx = 0.f;
+	float _currentVy = 0.f;
+	chrono::steady_clock::time_point _lastPacketTime; // ë§ˆì§€ë§‰ íŒ¨í‚· ìˆ˜ì‹  ì‹œê°„
 };
 
