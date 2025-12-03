@@ -34,11 +34,11 @@ int COtherPlayer::Update(float fTime)
     // 최대 500ms까지만 예측 (네트워크 끊김 방지)
     if (dtPrediction > 0.5f) dtPrediction = 0.5f;
 
-    const float LERP_ALPHA = 8.0f;
+    const float LERP_ALPHA = 15.0f; // Increased for tighter sync
 
-	// 2. 예측 위치 계산
-    float predictedX = _targetPos.x + (_currentVx * dtPrediction);
-    float predictedY = _targetPos.y + (_currentVy * dtPrediction);
+    
+    float predictedX = _targetPos.x + (_currentVx * dtPrediction * 1.2f);
+    float predictedY = _targetPos.y + (_currentVy * dtPrediction * 1.2f);
 
 	// 3. 위치 보간
     float distSq = pow(predictedX - m_CenterPos.x, 2) + pow(predictedY - m_CenterPos.y, 2);
