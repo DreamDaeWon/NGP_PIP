@@ -186,20 +186,6 @@ void Room::ProcessInputs()
 		std::unique_ptr<common::packet::PacketHeader> packet = std::move(packetsToProcess.front());
 		packetsToProcess.pop();
 
-		// Session 포인터는 현재 구조상 패킷에 포함되어 있지 않으므로,
-		// HandlePacket 호출 시 nullptr를 넘기거나, 
-		// incomingQueue에 Session 정보를 함께 저장하는 구조 변경이 필요할 수 있습니다.
-		// 하지만 현재는 Session* 인자가 필요한 핸들러(LoginRequest 등)를 위해 
-		// incomingQueue에 넣을 때 세션 정보도 함께 저장하거나,
-		// 단순히 ID 기반으로 처리하는 방식을 써야 합니다.
-		
-		// [중요] 현재 코드 구조상 ProcessInputs()에서 꺼낸 패킷은 어떤 세션이 보냈는지 알 수 없습니다.
-		// 이를 해결하기 위해 Room::EnqueuePacket이 Session*를 받거나, 
-		// 패킷 헤더에 SessionID를 포함시켜야 합니다. 
-		// 또는 당장은 nullptr로 호출하고 핸들러 내부에서 Session을 사용하지 않도록 해야 합니다.
-		// 하지만 LoginRequest_c2s는 Session*를 사용하므로 문제가 될 수 있습니다.
-		
-		// 우선은 기존 코드대로 nullptr로 호출합니다.
 		HandlePacket(nullptr, reinterpret_cast<char*>(packet.get()));
 
 		// unique_ptr이 범위를 벗어나면 자동으로 메모리가 해제됩니다.
