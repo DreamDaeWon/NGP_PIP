@@ -13,27 +13,88 @@ bool bZoom{};
 bool bStop{};
 bool bCombo{};
 int iScore{};
-std::wstring SERVER_IP;
 LPCTSTR lpszClass = L"Window Class Name";
 LPCTSTR lpszWindowName = L"Window Programming Lab";
+std::wstring SERVER_IP = L"127.0.0.1";
 CMainGame* MainGame;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
+LRESULT CALLBACK IPWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+
+void DoIPInput(HINSTANCE hInstance) {
+	WNDCLASSEX wc = { sizeof(WNDCLASSEX),
+		CS_HREDRAW | CS_VREDRAW, 
+		IPWndProc,0, 0,
+		hInstance, NULL,
+		LoadCursor(NULL,IDC_ARROW),
+		(HBRUSH)(COLOR_WINDOW + 1),
+		NULL,
+		L"IPInputClass", 
+		NULL };
+	RegisterClassEx(&wc);
+
+	int scrWidth = GetSystemMetrics(SM_CXSCREEN);
+	int scrHeight = GetSystemMetrics(SM_CYSCREEN);
+	int w = 300, h = 150;
+	int x = (scrWidth - w) / 2;
+	int y = (scrHeight - h) / 2;
+
+	HWND hWnd = CreateWindow(L"IPInputClass", L"Enter Server IP", 
+		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+		x, y, w, h, NULL, NULL, hInstance, NULL);
+
+	// 이 부분에서 InputBox가 모달(modal)로 동작하도록 메시지 루프를 실행합니다.
+	MSG msg;
+	while (GetMessage(&msg, NULL, 0, 0)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+		if (msg.message == WM_QUIT) break;
+	}
+	UnregisterClass(L"IPInputClass", hInstance);
+}
+
+LRESULT CALLBACK IPWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
+	static HWND hEdit; // EDIT 컨트롤 핸들
+	switch (iMessage) {
+	case WM_CREATE:
+		// IP 주소 텍스트 라벨 생성
+		CreateWindow(L"STATIC", L"IP Address:", WS_CHILD | WS_VISIBLE, 20, 25, 80, 20, hWnd, NULL, NULL, NULL);
+		// IP 주소 입력 에디트 컨트롤 생성
+		hEdit = CreateWindowW(L"EDIT", SERVER_IP.c_str(), WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL, 100, 25, 160,
+			20, hWnd, (HMENU)101, NULL, NULL);
+		// 확인 버튼 생성
+		CreateWindow(L"BUTTON", L"Connect", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON ,
+			10, 60, 100, 30, hWnd, (HMENU)IDOK,
+			NULL, NULL);
+		return 0;
+	case WM_COMMAND:
+		// 버튼 클릭 처리
+		if (LOWORD(wParam) == IDOK) { // Connect 버튼이 눌렸을 때
+			int len = GetWindowTextLength(hEdit);
+			if (len > 0) {
+				std::vector<wchar_t> buf(len + 1); // 입력된 텍스트를 저장할 버퍼
+				GetWindowText(hEdit, buf.data(), len + 1);
+				SERVER_IP = buf.data(); // 전역 변수 SERVER_IP에 저장
+			}
+			DestroyWindow(hWnd); // [수정됨] 창을 파괴합니다
+		}
+		return 0;
+	case WM_CLOSE:
+		DestroyWindow(hWnd); // [수정됨] 닫기 버튼(X)을 눌러도 창을 파괴합니다.
+		return 0;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+	return DefWindowProc(hWnd, iMessage, wParam, lParam);
+}
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpszCmdParam, int nCmdShow)
 {
 	int argc = 0;
 
-	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	/*LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
-	//if (argv != NULL)
-	//{
-	//	for (int i = 0; i < argc; i++)
-	//	{
-	//		MessageBox(NULL, argv[i], L"Argv Check", MB_OK);
-	//	}
-	//	//LocalFree(argv);
-	//}
 	if (argv == NULL)
 	{
 		for (int i = 0; i < argc; i++)
@@ -45,9 +106,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	else
 	{
 		SERVER_IP = argv[1];
-	}
+	}*/
 	
-
+	DoIPInput(hInstance);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	MSG Message;
 
