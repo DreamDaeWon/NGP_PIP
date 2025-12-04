@@ -1,0 +1,43 @@
+﻿#pragma once
+
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+#include "tchar.h"
+#include <vector>
+#include <list>
+#include <map>
+#include <cstdio>
+#include <iostream>
+extern std::wstring SERVER_IP;
+#include "Packet.h"
+#include "Singleton.h"
+#define WINSIZEX 800
+#define WINSIZEY 600
+
+
+#define TileSizeX 50 // 타일의 가로 길이
+#define TileSizeY 50 // 타일의 세로 길이
+
+#define VK_MAX 0xff
+
+#define AllTileNum 17 // 모든 사용 타일 종류의 수
+
+
+using namespace std;
+
+extern HWND g_hWnd;
+
+extern HINSTANCE g_hInst;
+
+extern bool bShake;
+
+extern bool bCombo;
+
+extern int iScore;
+
+extern void  CALLBACK TickTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime);
