@@ -1,5 +1,6 @@
 ﻿#include "Default.h"
 #include "MainGame.h"
+#include "Packet.h"
 #include "CameraManager.h"
 #include "../DaeWonFrameWork/TimerManager.h"
 #include "../DaeWonFrameWork/NetworkManager.h"
@@ -20,11 +21,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpszCmdParam, int nCmdShow)
 {
+	int argc = 0;
 
+	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
+	if (argv != NULL)
+	{
+		for (int i = 0; i < argc; i++)
+		{
+			MessageBox(NULL, argv[i], L"Argv Check", MB_OK);
+		}
+		LocalFree(argv);
+	}
+
+	SERVER_IP = argv[0];
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(2284);
 	MSG Message;
 
 	g_hInst = hInstance;
