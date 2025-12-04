@@ -31,7 +31,7 @@ void CPlayer::Initailizer()
     _id = CObjManager::GetInstance()->GetMyPlayerID();
 
 	
-    m_NowDir = CPlayer::DIR_DOWN;
+    m_NowDir = CPlayer::DIR_RIGHT;
 }
 
 int CPlayer::Update(float fTime)

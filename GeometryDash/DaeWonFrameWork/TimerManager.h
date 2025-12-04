@@ -7,7 +7,7 @@ class TimerManager : public Singleton<TimerManager>
 {
 public:
 	TimerManager();
-	~TimerManager();
+	virtual ~TimerManager();
 
 public:
 	void init();
