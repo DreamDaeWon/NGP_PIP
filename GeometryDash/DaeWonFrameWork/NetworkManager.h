@@ -13,7 +13,7 @@ private:
 	friend class Singleton<NetworkManager>;
 
 	NetworkManager();
-	~NetworkManager();
+	virtual ~NetworkManager();
 
 public:
 	/*void GetInstance();

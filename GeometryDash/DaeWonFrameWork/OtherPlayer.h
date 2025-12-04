@@ -12,7 +12,7 @@ class COtherPlayer : public CObject
 {
 public:
     COtherPlayer();
-    ~COtherPlayer() override;
+    virtual ~COtherPlayer() override;
 
     enum DIR { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_SPACE, DIR_END };
 
