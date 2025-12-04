@@ -1,5 +1,8 @@
 ﻿#include "NetworkHeader.h"
 #include "NetworkManager.h"
+
+#include <string>
+
 #include "ClientPacketManager.h"
 
 using namespace common::packet;
@@ -43,7 +46,8 @@ bool NetworkManager::initialize_Client()
 	sockaddr_in server_address {};
 	server_address.sin_family = AF_INET;
 	server_address.sin_port = htons(SERVER_PORT);
-	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
+	std::string server_ip{ SERVER_IP.begin(), SERVER_IP.end() };
+	inet_pton(AF_INET, server_ip.c_str(), &server_address.sin_addr);
 
 	// 서버 접속
 	if (connect(_clientSocket, (sockaddr*)&server_address, sizeof(server_address)) == SOCKET_ERROR)

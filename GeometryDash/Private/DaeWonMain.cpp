@@ -13,6 +13,7 @@ bool bZoom{};
 bool bStop{};
 bool bCombo{};
 int iScore{};
+std::wstring SERVER_IP;
 LPCTSTR lpszClass = L"Window Class Name";
 LPCTSTR lpszWindowName = L"Window Programming Lab";
 CMainGame* MainGame;
@@ -25,16 +26,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
-	if (argv != NULL)
+	//if (argv != NULL)
+	//{
+	//	for (int i = 0; i < argc; i++)
+	//	{
+	//		MessageBox(NULL, argv[i], L"Argv Check", MB_OK);
+	//	}
+	//	//LocalFree(argv);
+	//}
+	if (argv == NULL)
 	{
 		for (int i = 0; i < argc; i++)
 		{
-			MessageBox(NULL, argv[i], L"Argv Check", MB_OK);
+			MessageBox(NULL, L"로컬 호스트로 connect 시도", L"Argv Check", MB_OK);
 		}
-		LocalFree(argv);
+		SERVER_IP = L"127.0.0.1";
 	}
-
-	SERVER_IP = argv[0];
+	else
+	{
+		SERVER_IP = argv[1];
+	}
+	
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	MSG Message;

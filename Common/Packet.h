@@ -2,7 +2,7 @@
 #include <cstdint> 
 
 // CJ : 공용 구조체, 패킷 정의하는 
-string SERVER_IP = "127.0.0.1";
+
 constexpr uint32_t MAX_PLAYERS = 3;
 constexpr short SERVER_PORT = 9000;
 

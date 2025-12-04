@@ -13,7 +13,7 @@
 #include <map>
 #include <cstdio>
 #include <iostream>
-
+extern std::wstring SERVER_IP;
 #include "Packet.h"
 #include "Singleton.h"
 #define WINSIZEX 800
