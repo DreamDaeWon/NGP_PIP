@@ -222,19 +222,22 @@ void Room::BroadcastState()
 			if (Players[i].isActive) // 활성 상태인 플레이어만 처리
 			{
 				size_t id = Players[i].id; // id와 인덱스가 일치하므로
-				                allPlayerStatePacket.x[id] = Players[id].x;
-				                allPlayerStatePacket.y[id] = Players[id].y;
-				                allPlayerStatePacket.vx[id] = Players[id].vx;
-				                allPlayerStatePacket.vy[id] = Players[id].vy;
-				                allPlayerStatePacket.state[id] = Players[id].state;
-				                allPlayerStatePacket.Rotate[id] = Players[id].Rotate;
-				                allPlayerStatePacket.ridius[id] = Players[id].ridius;
-				            } else { // 비활성 플레이어는 상태를 PLAYER_STATE_END로 설정하여 클라이언트에 알림
-				                allPlayerStatePacket.x[i] = 0; // 또는 기본값
-				                allPlayerStatePacket.y[i] = 0;
-				                allPlayerStatePacket.vx[i] = 0.f;
-				                allPlayerStatePacket.vy[i] = 0.f;
-				                allPlayerStatePacket.state[i] = common::packet::Player_State::PLAYER_STATE_END;			}
+                allPlayerStatePacket.x[id] = Players[id].x;
+                allPlayerStatePacket.y[id] = Players[id].y;
+                allPlayerStatePacket.vx[id] = Players[id].vx;
+                allPlayerStatePacket.vy[id] = Players[id].vy;
+                allPlayerStatePacket.state[id] = Players[id].state;
+                allPlayerStatePacket.Rotate[id] = Players[id].Rotate;
+                allPlayerStatePacket.ridius[id] = Players[id].ridius;
+            } 
+			else 
+			{ // 비활성 플레이어는 상태를 PLAYER_STATE_END로 설정하여 클라이언트에 알림
+                allPlayerStatePacket.x[i] = 0; // 또는 기본값
+                allPlayerStatePacket.y[i] = 0;
+                allPlayerStatePacket.vx[i] = 0.f;
+                allPlayerStatePacket.vy[i] = 0.f;
+                allPlayerStatePacket.state[i] = common::packet::Player_State::PLAYER_STATE_END;			
+			}
 		}
 	}
 
